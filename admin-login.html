@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - TechHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">TechHub Admin</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Back to Store</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin Login Section -->
+    <section class="auth-section">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h2>Admin Login</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 20px;">Demo Credentials:<br><strong>admin@techhub.com / admin123</strong></p>
+                <form id="admin-login-form">
+                    <div class="form-group">
+                        <label for="admin-email">Admin Email:</label>
+                        <input type="email" id="admin-email" name="admin-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-password">Admin Password:</label>
+                        <input type="password" id="admin-password" name="admin-password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Admin Login</button>
+                </form>
+                <div id="admin-login-message" class="message"></div>
+                <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #ecf0f1;">
+                    <p style="color: #666; font-size: 14px; margin-bottom: 10px;">Need to create a new admin account?</p>
+                    <a href="admin-create.html" style="color: #3498db; text-decoration: none; font-weight: bold;">Go to Admin Creation Page</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TechHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Check master admin password
+        function verifyAdminAccess() {
+            const currentAdmin = localStorage.getItem('current_admin');
+            if (!currentAdmin) {
+                const password = prompt('Enter Master Admin Password:');
+                if (password !== 'moheidin2015') {
+                    alert('Incorrect password! Access denied.');
+                    window.location.href = 'index.html';
+                    return;
+                }
+            }
+        }
+
+        // Verify access on page load
+        verifyAdminAccess();
+
+        // Initialize default admin account
+        function initializeAdmin() {
+            const admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
+            if (admins.length === 0) {
+                const defaultAdmin = {
+                    id: 1,
+                    email: 'admin@techhub.com',
+                    password: 'admin123',
+                    name: 'Default Admin',
+                    createdAt: new Date().toISOString()
+                };
+                admins.push(defaultAdmin);
+                localStorage.setItem('techhub_admins', JSON.stringify(admins));
+            }
+        }
+
+        initializeAdmin();
+
+        document.getElementById('admin-login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            try {
+                // Try backend API first
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.user.is_admin) {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        localStorage.setItem('current_admin', JSON.stringify(data.user));
+                        showMessage('Login successful! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'admin-dashboard.html';
+                        }, 1500);
+                        return;
+                    } else {
+                        showMessage('This account is not an admin!', 'error');
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.log('Backend not available, using localStorage');
+            }
+            
+            // Fallback to localStorage
+            const admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
+            const admin = admins.find(a => a.email === email && a.password === password);
+            
+            if (admin) {
+                localStorage.setItem('current_admin', JSON.stringify(admin));
+                // Create a fake token for localStorage-based auth
+                localStorage.setItem('token', 'local-admin-token');
+                localStorage.setItem('user', JSON.stringify({ ...admin, is_admin: true }));
+                showMessage('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 1500);
+            } else {
+                showMessage('Invalid admin email or password!', 'error');
+            }
+        });
+
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('admin-login-message');
+            msgDiv.textContent = msg;
+            msgDiv.className = 'message ' + type;
+        }
+    </script>
+</body>
+</html>

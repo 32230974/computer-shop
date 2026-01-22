@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - TechHub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .orders-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .orders-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .orders-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .orders-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 10px 25px;
+            border: 2px solid #eee;
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        .order-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .order-info {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .order-info-item {
+            text-align: left;
+        }
+        .order-info-item .label {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 3px;
+        }
+        .order-info-item .value {
+            font-weight: 600;
+            color: #333;
+        }
+        .order-status {
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-processing {
+            background: #cce5ff;
+            color: #004085;
+        }
+        .status-shipped {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-delivered {
+            background: #28a745;
+            color: white;
+        }
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .order-items {
+            padding: 20px 30px;
+        }
+        .order-item {
+            display: flex;
+            gap: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .order-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f5f7fa;
+        }
+        .order-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .order-item-details {
+            flex: 1;
+        }
+        .order-item-details h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .order-item-details span {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .order-item-price {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .order-total {
+            font-size: 1.2rem;
+        }
+        .order-total span {
+            font-weight: 700;
+            color: #333;
+        }
+        .order-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-track {
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-track:hover {
+            transform: translateY(-2px);
+        }
+        .btn-reorder {
+            padding: 10px 25px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-reorder:hover {
+            background: #f8f9ff;
+        }
+        .empty-orders {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .empty-orders i {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        .empty-orders h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .tracking-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .tracking-modal.active {
+            display: flex;
+        }
+        .tracking-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+        }
+        .tracking-timeline {
+            margin-top: 30px;
+        }
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            padding-bottom: 30px;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 35px;
+            bottom: 0;
+            width: 2px;
+            background: #eee;
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        .timeline-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            z-index: 1;
+        }
+        .timeline-item.completed .timeline-icon {
+            background: #28a745;
+            color: white;
+        }
+        .timeline-item.current .timeline-icon {
+            background: #667eea;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+        }
+        .timeline-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .timeline-info span {
+            color: #888;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">TechHub</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="offers.html">Offers</a></li>
+                <li><a href="index.html#products">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="auth-links">
+                <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i></a>
+                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="orders-container">
+        <div class="orders-header">
+            <h1><i class="fas fa-box"></i> My Orders</h1>
+            <p>Track and manage your orders</p>
+        </div>
+
+        <div class="orders-filters">
+            <button class="filter-btn active" data-status="all">All Orders</button>
+            <button class="filter-btn" data-status="pending">Pending</button>
+            <button class="filter-btn" data-status="processing">Processing</button>
+            <button class="filter-btn" data-status="shipped">Shipped</button>
+            <button class="filter-btn" data-status="delivered">Delivered</button>
+        </div>
+
+        <div id="orders-list">
+            <!-- Orders loaded dynamically -->
+        </div>
+
+        <div class="empty-orders" id="empty-orders" style="display: none;">
+            <i class="fas fa-box-open"></i>
+            <h2>No orders yet</h2>
+            <p>When you place an order, it will appear here</p>
+            <a href="index.html" class="btn-track" style="display: inline-block; margin-top: 20px; text-decoration: none;">
+                Start Shopping
+            </a>
+        </div>
+    </div>
+
+    <!-- Tracking Modal -->
+    <div class="tracking-modal" id="tracking-modal">
+        <div class="tracking-content">
+            <h2><i class="fas fa-shipping-fast"></i> Order Tracking</h2>
+            <p>Order #<span id="tracking-order-id"></span></p>
+            <div class="tracking-timeline" id="tracking-timeline">
+                <!-- Timeline loaded dynamically -->
+            </div>
+            <button class="btn-track" style="width: 100%; margin-top: 20px;" onclick="closeTracking()">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let orders = [];
+
+        function isUserLoggedIn() {
+            return localStorage.getItem('token') || localStorage.getItem('current_user');
+        }
+
+        async function loadOrders() {
+            if (!isUserLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const token = localStorage.getItem('token');
+
+            try {
+                if (token) {
+                    const response = await fetch(`${API_URL}/orders`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (response.ok) {
+                        orders = await response.json();
+                    } else {
+                        throw new Error('API error');
+                    }
+                } else {
+                    throw new Error('No token');
+                }
+            } catch (error) {
+                console.log('Using localStorage orders');
+                // Fallback to localStorage
+                orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            }
+
+            if (orders.length === 0) {
+                document.getElementById('orders-list').style.display = 'none';
+                document.getElementById('empty-orders').style.display = 'block';
+            } else {
+                document.getElementById('orders-list').style.display = 'block';
+                document.getElementById('empty-orders').style.display = 'none';
+                renderOrders(orders);
+            }
+        }
+
+        function renderOrders(ordersToShow) {
+            const container = document.getElementById('orders-list');
+            container.innerHTML = ordersToShow.map(order => `
+                <div class="order-card" data-status="${order.status}">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <div class="order-info-item">
+                                <div class="label">Order ID</div>
+                                <div class="value">#${order.id}</div>
+                            </div>
+                            <div class="order-info-item">
+                                <div class="label">Date</div>
+                                <div class="value">${new Date(order.created_at).toLocaleDateString()}</div>
+                            </div>
+                            <div class="order-info-item">
+                                <div class="label">Items</div>
+                                <div class="value">${order.items ? order.items.length : 0} items</div>
+                            </div>
+                        </div>
+                        <span class="order-status status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+                    </div>
+                    <div class="order-items">
+                        ${order.items ? order.items.map(item => `
+                            <div class="order-item">
+                                <div class="order-item-image">
+                                    <img src="${item.image_url || 'https://via.placeholder.com/80'}" alt="${item.name}">
+                                </div>
+                                <div class="order-item-details">
+                                    <h4>${item.name || 'Product'}</h4>
+                                    <span>Qty: ${item.quantity}</span>
+                                </div>
+                                <div class="order-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                            </div>
+                        `).join('') : '<p>No items</p>'}
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">
+                            Total: <span>$${order.total_amount.toFixed(2)}</span>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn-track" onclick="trackOrder(${order.id}, '${order.status}')">
+                                <i class="fas fa-map-marker-alt"></i> Track Order
+                            </button>
+                            <button class="btn-reorder" onclick="reorder(${order.id})">
+                                <i class="fas fa-redo"></i> Reorder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter orders
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const status = btn.dataset.status;
+                if (status === 'all') {
+                    renderOrders(orders);
+                } else {
+                    renderOrders(orders.filter(o => o.status === status));
+                }
+            });
+        });
+
+        function trackOrder(orderId, status) {
+            document.getElementById('tracking-order-id').textContent = orderId;
+            
+            const statuses = ['pending', 'processing', 'shipped', 'delivered'];
+            const currentIndex = statuses.indexOf(status);
+
+            const timeline = document.getElementById('tracking-timeline');
+            timeline.innerHTML = [
+                { status: 'pending', icon: 'fa-clock', title: 'Order Placed', desc: 'Your order has been received' },
+                { status: 'processing', icon: 'fa-cog', title: 'Processing', desc: 'Your order is being prepared' },
+                { status: 'shipped', icon: 'fa-truck', title: 'Shipped', desc: 'Your order is on the way' },
+                { status: 'delivered', icon: 'fa-check', title: 'Delivered', desc: 'Your order has been delivered' }
+            ].map((item, index) => {
+                let className = '';
+                if (index < currentIndex) className = 'completed';
+                else if (index === currentIndex) className = 'current';
+
+                return `
+                    <div class="timeline-item ${className}">
+                        <div class="timeline-icon"><i class="fas ${item.icon}"></i></div>
+                        <div class="timeline-info">
+                            <h4>${item.title}</h4>
+                            <span>${item.desc}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('tracking-modal').classList.add('active');
+        }
+
+        function closeTracking() {
+            document.getElementById('tracking-modal').classList.remove('active');
+        }
+
+        function reorder(orderId) {
+            showNotification('Items added to cart!', 'success');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                border-radius: 10px;
+                z-index: 9999;
+            `;
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        loadOrders();
+    </script>
+</body>
+</html>

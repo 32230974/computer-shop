@@ -1,0 +1,222 @@
+/* Dark Mode Toggle Button */
+.btn-dark-mode {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.btn-dark-mode:hover {
+    background: white;
+    color: #667eea;
+    transform: rotate(20deg) scale(1.1);
+}
+
+.dark-mode-icon {
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #ecf0f1;
+}
+
+body.dark-mode .navbar {
+    background: linear-gradient(135deg, #0f3460 0%, #533483 100%);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .nav-links a {
+    color: white;
+}
+
+body.dark-mode .nav-links a:hover,
+body.dark-mode .nav-links a.active {
+    color: #ffd700;
+}
+
+body.dark-mode .hero {
+    background: linear-gradient(135deg, #0f3460 0%, #533483 100%);
+}
+
+body.dark-mode .categories {
+    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+}
+
+body.dark-mode .categories h2 {
+    color: #ecf0f1;
+}
+
+body.dark-mode .category-card {
+    background: #1a1a2e;
+    border-color: #667eea;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .category-card h3 {
+    color: #ecf0f1;
+}
+
+body.dark-mode .featured-products {
+    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+}
+
+body.dark-mode .featured-products h2 {
+    color: #ecf0f1;
+}
+
+body.dark-mode .filter-btn {
+    border-color: #667eea;
+    color: #667eea;
+    background: #1a1a2e;
+}
+
+body.dark-mode .filter-btn:hover,
+body.dark-mode .filter-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+}
+
+body.dark-mode .product-card {
+    background: #1a1a2e;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .product-name {
+    color: #ecf0f1;
+}
+
+body.dark-mode .product-category {
+    color: #9b59b6;
+}
+
+body.dark-mode .product-description {
+    color: #bdc3c7;
+}
+
+body.dark-mode .product-price {
+    color: #667eea;
+}
+
+body.dark-mode .about {
+    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+}
+
+body.dark-mode .about h2 {
+    color: #ecf0f1;
+}
+
+body.dark-mode .about p {
+    color: #bdc3c7;
+}
+
+body.dark-mode .contact {
+    background: linear-gradient(135deg, #0f3460 0%, #533483 100%);
+}
+
+body.dark-mode .contact h2 {
+    color: #ecf0f1;
+}
+
+body.dark-mode .contact-info {
+    background: rgba(26, 26, 46, 0.95);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .contact-info p {
+    color: #ecf0f1;
+}
+
+body.dark-mode .auth-box {
+    background: #1a1a2e;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .auth-box h2 {
+    color: #ecf0f1;
+}
+
+body.dark-mode .form-group label {
+    color: #ecf0f1;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+    background-color: #16213e;
+    color: #ecf0f1;
+    border-color: #667eea;
+}
+
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+    background-color: #0f3460;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+body.dark-mode .footer {
+    background: linear-gradient(135deg, #0a0e27 0%, #16213e 100%);
+    border-top-color: #667eea;
+}
+
+body.dark-mode .message {
+    background-color: #16213e;
+    color: #ecf0f1;
+}
+
+body.dark-mode .message.success {
+    background-color: #1b4332;
+    color: #81c784;
+    border-color: #52b788;
+}
+
+body.dark-mode .message.error {
+    background-color: #4a1a1a;
+    color: #ef9a9a;
+    border-color: #e57373;
+}
+
+body.dark-mode .user-dropdown {
+    background: #1a1a2e;
+    border-color: #667eea;
+}
+
+body.dark-mode .user-dropdown a {
+    color: #ecf0f1;
+}
+
+body.dark-mode .user-dropdown a:hover {
+    background: #16213e;
+    color: #667eea;
+}
+
+body.dark-mode .contact-info a {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .contact-info a:hover {
+    color: #667eea !important;
+    text-decoration: underline !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    body.auto-dark-mode {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: #ecf0f1;
+    }
+}

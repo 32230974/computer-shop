@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Products - TechHub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .compare-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+        }
+        .compare-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .compare-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .compare-empty {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .compare-empty i {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 25px;
+        }
+        .compare-empty h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .compare-empty p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .compare-empty a {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        .add-product-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        .add-product-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .product-search {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .product-search select {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 20px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .product-search select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        .add-btn {
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .compare-table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        .compare-table th, .compare-table td {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .compare-table th:first-child, .compare-table td:first-child {
+            text-align: left;
+            background: #f8f9fa;
+            font-weight: 600;
+            width: 180px;
+            position: sticky;
+            left: 0;
+        }
+        .compare-table thead th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        .product-header {
+            position: relative;
+            padding: 20px;
+        }
+        .remove-product {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ff4444;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        .remove-product:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .product-image {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            margin: 0 auto 15px;
+            display: block;
+        }
+        .product-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .product-price .original-price {
+            font-size: 0.9rem;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 8px;
+            font-weight: 400;
+        }
+        .feature-check {
+            color: #28a745;
+            font-size: 1.3rem;
+        }
+        .feature-cross {
+            color: #dc3545;
+            font-size: 1.3rem;
+        }
+        .rating-stars {
+            color: #ffc107;
+        }
+        .add-to-cart-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .highlight-best {
+            background: rgba(102, 126, 234, 0.1);
+            font-weight: 600;
+            color: #667eea;
+        }
+        .spec-value {
+            color: #333;
+        }
+        @media (max-width: 768px) {
+            .product-search {
+                flex-direction: column;
+            }
+            .product-image {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">TechHub</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="offers.html">Offers</a></li>
+                <li><a href="index.html#products">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="auth-links">
+                <button id="dark-mode-toggle" class="btn-dark-mode" onclick="toggleDarkMode()">
+                    <span class="dark-mode-icon">🌙</span>
+                </button>
+                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
+                <a href="login.html" class="btn-login">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="compare-hero">
+        <h1><i class="fas fa-balance-scale"></i> Compare Products</h1>
+        <p>Compare up to 4 products side by side</p>
+    </section>
+
+    <div class="compare-container">
+        <!-- Add Product Section -->
+        <div class="add-product-section">
+            <h3><i class="fas fa-plus-circle"></i> Add Products to Compare</h3>
+            <div class="product-search">
+                <select id="product-select">
+                    <option value="">Select a product...</option>
+                </select>
+                <button class="add-btn" onclick="addToCompare()">
+                    <i class="fas fa-plus"></i> Add to Compare
+                </button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="compare-empty" id="compare-empty">
+            <i class="fas fa-columns"></i>
+            <h2>No Products to Compare</h2>
+            <p>Add at least 2 products to start comparing their features and specifications.</p>
+            <a href="index.html#products"><i class="fas fa-shopping-bag"></i> Browse Products</a>
+        </div>
+
+        <!-- Compare Table -->
+        <div class="compare-table-wrapper" id="compare-table-wrapper" style="display: none;">
+            <table class="compare-table" id="compare-table">
+                <thead>
+                    <tr id="product-headers">
+                        <th>Product</th>
+                    </tr>
+                </thead>
+                <tbody id="compare-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 TechHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let allProducts = [];
+        let compareProducts = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+            loadCompareFromStorage();
+        });
+
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products`);
+                const data = await response.json();
+                allProducts = data.products || data;
+                populateProductSelect();
+            } catch (error) {
+                console.error('Error loading products:', error);
+                // Demo products
+                allProducts = [
+                    { id: 1, name: 'iPhone 15 Pro', price: 999, image: 'https://via.placeholder.com/300x300?text=iPhone+15', category: 'Phones', rating: 4.8 },
+                    { id: 2, name: 'Samsung Galaxy S24', price: 899, image: 'https://via.placeholder.com/300x300?text=Galaxy+S24', category: 'Phones', rating: 4.7 },
+                    { id: 3, name: 'MacBook Pro 14"', price: 1999, image: 'https://via.placeholder.com/300x300?text=MacBook+Pro', category: 'Laptops', rating: 4.9 },
+                    { id: 4, name: 'Dell XPS 15', price: 1599, image: 'https://via.placeholder.com/300x300?text=Dell+XPS', category: 'Laptops', rating: 4.6 },
+                    { id: 5, name: 'AirPods Pro 2', price: 249, image: 'https://via.placeholder.com/300x300?text=AirPods', category: 'Audio', rating: 4.8 },
+                    { id: 6, name: 'Sony WH-1000XM5', price: 349, image: 'https://via.placeholder.com/300x300?text=Sony+XM5', category: 'Audio', rating: 4.9 }
+                ];
+                populateProductSelect();
+            }
+        }
+
+        function populateProductSelect() {
+            const select = document.getElementById('product-select');
+            select.innerHTML = '<option value="">Select a product...</option>';
+            
+            allProducts.forEach(product => {
+                if (!compareProducts.find(p => p.id === product.id)) {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = `${product.name} - $${product.price}`;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        function addToCompare() {
+            if (compareProducts.length >= 4) {
+                showNotification('Maximum 4 products can be compared', 'error');
+                return;
+            }
+
+            const select = document.getElementById('product-select');
+            const productId = parseInt(select.value);
+            
+            if (!productId) {
+                showNotification('Please select a product', 'error');
+                return;
+            }
+
+            const product = allProducts.find(p => p.id === productId);
+            if (product && !compareProducts.find(p => p.id === productId)) {
+                compareProducts.push(product);
+                saveCompareToStorage();
+                renderCompareTable();
+                populateProductSelect();
+                showNotification(`${product.name} added to compare`, 'success');
+            }
+        }
+
+        function removeFromCompare(productId) {
+            compareProducts = compareProducts.filter(p => p.id !== productId);
+            saveCompareToStorage();
+            renderCompareTable();
+            populateProductSelect();
+        }
+
+        function renderCompareTable() {
+            const empty = document.getElementById('compare-empty');
+            const wrapper = document.getElementById('compare-table-wrapper');
+            
+            if (compareProducts.length < 1) {
+                empty.style.display = 'block';
+                wrapper.style.display = 'none';
+                return;
+            }
+
+            empty.style.display = 'none';
+            wrapper.style.display = 'block';
+
+            // Build headers
+            const headers = document.getElementById('product-headers');
+            headers.innerHTML = '<th>Specifications</th>';
+            
+            compareProducts.forEach(product => {
+                headers.innerHTML += `
+                    <th>
+                        <div class="product-header">
+                            <button class="remove-product" onclick="removeFromCompare(${product.id})">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <img src="${product.image}" alt="${product.name}" class="product-image">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-price">$${product.price}</div>
+                        </div>
+                    </th>
+                `;
+            });
+
+            // Build body with specifications
+            const body = document.getElementById('compare-body');
+            const specs = [
+                { label: 'Price', key: 'price', format: val => `$${val}`, highlight: 'lowest' },
+                { label: 'Category', key: 'category' },
+                { label: 'Rating', key: 'rating', format: val => `<span class="rating-stars">${'★'.repeat(Math.floor(val))}</span> ${val}/5`, highlight: 'highest' },
+                { label: 'In Stock', key: 'stock', format: val => val !== 0 ? '<i class="fas fa-check feature-check"></i>' : '<i class="fas fa-times feature-cross"></i>' },
+                { label: 'Free Shipping', format: () => '<i class="fas fa-check feature-check"></i>' },
+                { label: 'Warranty', format: () => '1 Year' },
+                { label: 'Returns', format: () => '30 Days' },
+                { label: 'Action', isAction: true }
+            ];
+
+            body.innerHTML = '';
+            specs.forEach(spec => {
+                let row = `<tr><td>${spec.label}</td>`;
+                
+                let values = compareProducts.map(p => spec.key ? p[spec.key] : null);
+                let bestValue = null;
+                
+                if (spec.highlight === 'lowest') {
+                    bestValue = Math.min(...values.filter(v => v !== null && v !== undefined));
+                } else if (spec.highlight === 'highest') {
+                    bestValue = Math.max(...values.filter(v => v !== null && v !== undefined));
+                }
+
+                compareProducts.forEach(product => {
+                    let value = spec.key ? product[spec.key] : '';
+                    let displayValue = spec.format ? spec.format(value) : value;
+                    let isBest = spec.highlight && value === bestValue;
+                    
+                    if (spec.isAction) {
+                        row += `
+                            <td>
+                                <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </td>
+                        `;
+                    } else {
+                        row += `<td class="${isBest ? 'highlight-best' : ''}">${displayValue || '-'}</td>`;
+                    }
+                });
+                
+                row += '</tr>';
+                body.innerHTML += row;
+            });
+        }
+
+        async function addToCart(productId) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showNotification('Please login to add items to cart', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/cart/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ product_id: productId, quantity: 1 })
+                });
+
+                if (response.ok) {
+                    showNotification('Product added to cart!', 'success');
+                } else {
+                    throw new Error('Failed to add to cart');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Added to cart!', 'success');
+            }
+        }
+
+        function saveCompareToStorage() {
+            localStorage.setItem('compareProducts', JSON.stringify(compareProducts.map(p => p.id)));
+        }
+
+        function loadCompareFromStorage() {
+            const saved = localStorage.getItem('compareProducts');
+            if (saved) {
+                const ids = JSON.parse(saved);
+                setTimeout(() => {
+                    compareProducts = allProducts.filter(p => ids.includes(p.id));
+                    renderCompareTable();
+                    populateProductSelect();
+                }, 500);
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                border-radius: 10px;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+    </script>
+</body>
+</html>

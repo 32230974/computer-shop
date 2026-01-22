@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TechHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Admin Navigation -->
+    <nav class="admin-navbar">
+        <div class="container">
+            <div class="logo">TechHub Admin Panel</div>
+            <div class="admin-nav-links">
+                <span id="admin-name"></span>
+                <a href="#" onclick="adminLogout(); return false;" class="btn-danger">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <ul class="admin-menu">
+                <li><a href="#" onclick="showSection('dashboard'); return false;" class="menu-item active">📊 Dashboard</a></li>
+                <li><a href="#" onclick="showSection('add-product'); return false;" class="menu-item">➕ Add Product</a></li>
+                <li><a href="#" onclick="showSection('manage-products'); return false;" class="menu-item">📦 Manage Products</a></li>
+                <li><a href="#" onclick="showSection('edit-product'); return false;" class="menu-item">✏️ Edit Product</a></li>
+                <li><a href="admin-offers.html" class="menu-item">🎁 Manage Offers</a></li>
+                <li><a href="admin-notifications.html" class="menu-item">📧 User Notifications</a></li>
+            </ul>
+        </aside>
+
+        <main class="admin-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="admin-section active">
+                <h2>Dashboard</h2>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <h3>Total Products</h3>
+                        <p id="total-products" class="stat-number">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <p id="total-users" class="stat-number">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Product Section -->
+            <section id="add-product" class="admin-section">
+                <h2>Add New Product</h2>
+                <form id="add-product-form">
+                    <div class="form-group">
+                        <label for="product-name">Product Name:</label>
+                        <input type="text" id="product-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-category">Category:</label>
+                        <select id="product-category" required>
+                            <option value="">Select Category</option>
+                            <option value="laptops">Laptops</option>
+                            <option value="desktops">Desktops</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="peripherals">Peripherals</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Price ($):</label>
+                        <input type="number" id="product-price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-description">Description:</label>
+                        <textarea id="product-description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-image">Image URL:</label>
+                        <input type="url" id="product-image" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label for="product-stock">Stock Quantity:</label>
+                        <input type="number" id="product-stock" value="0" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Add Product</button>
+                    <div id="add-product-message" class="message"></div>
+                </form>
+            </section>
+
+            <!-- Manage Products Section -->
+            <section id="manage-products" class="admin-section">
+                <h2>Manage Products</h2>
+                <div class="manage-controls">
+                    <input type="text" id="search-products" placeholder="Search products..." class="search-input">
+                </div>
+                <div id="products-list" class="products-table-container">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-tbody">
+                            <!-- Products will be listed here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Edit Product Section -->
+            <section id="edit-product" class="admin-section">
+                <h2>Edit Product</h2>
+                <form id="edit-product-form">
+                    <div class="form-group">
+                        <label for="edit-product-id">Select Product to Edit:</label>
+                        <select id="edit-product-id" required onchange="loadProductForEdit()">
+                            <option value="">-- Select Product --</option>
+                        </select>
+                    </div>
+                    <div id="edit-form-container" style="display:none;">
+                        <div class="form-group">
+                            <label for="edit-product-name">Product Name:</label>
+                            <input type="text" id="edit-product-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-product-category">Category:</label>
+                            <select id="edit-product-category" required>
+                                <option value="">Select Category</option>
+                                <option value="laptops">Laptops</option>
+                                <option value="desktops">Desktops</option>
+                                <option value="accessories">Accessories</option>
+                                <option value="peripherals">Peripherals</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-product-price">Price ($):</label>
+                            <input type="number" id="edit-product-price" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-product-description">Description:</label>
+                            <textarea id="edit-product-description" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-product-image">Image URL:</label>
+                            <input type="url" id="edit-product-image">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-product-stock">Stock Quantity:</label>
+                            <input type="number" id="edit-product-stock" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Update Product</button>
+                        <button type="button" class="btn-danger" onclick="deleteCurrentProduct()">Delete Product</button>
+                    </div>
+                    <div id="edit-product-message" class="message"></div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

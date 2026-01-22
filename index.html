@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHub - Computer & Laptop Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">TechHub</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="offers.html">Offers</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="auth-links">
+                <button id="dark-mode-toggle" class="btn-dark-mode" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                    <span class="dark-mode-icon">🌙</span>
+                </button>
+                <a href="login.html" class="btn-login">Login</a>
+                <a href="signup.html" class="btn-signup">Sign Up</a>
+                <a href="cart.html" class="nav-icon" style="margin-right: 15px; font-size: 1.2rem; color: #667eea;"><i class="fas fa-shopping-cart"></i></a>
+                <div id="user-profile" class="user-profile-container" style="display:none; position: relative;">
+                    <button type="button" onclick="showUserMenu(event)" class="user-menu-btn"><i class="fas fa-user-circle"></i> <span id="user-name-display">User</span> <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></button>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                        <a href="my-orders.html"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                        <a href="wishlist.html"><i class="fas fa-heart"></i> Wishlist</a>
+                        <a href="addresses.html"><i class="fas fa-map-marker-alt"></i> Addresses</a>
+                        <hr style="margin: 8px 0; border-color: #eee;">
+                        <a href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+                <a href="#" id="admin-btn" class="btn-admin" onclick="checkAdminPassword(event)" style="display:none;">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-particles"></div>
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fas fa-bolt"></i> New Collection 2026</span>
+            <h1>Welcome to <span class="gradient-text">TechHub</span></h1>
+            <p>Your Ultimate Destination for Premium Computers & Laptops</p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn-primary"><i class="fas fa-shopping-bag"></i> Shop Now</a>
+                <a href="#about" class="btn-secondary"><i class="fas fa-play-circle"></i> Learn More</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Products</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Customers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">99%</span>
+                    <span class="stat-label">Satisfaction</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="floating-card card-1"><i class="fas fa-laptop"></i></div>
+            <div class="floating-card card-2"><i class="fas fa-microchip"></i></div>
+            <div class="floating-card card-3"><i class="fas fa-headphones"></i></div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-th-large"></i> Categories</span>
+                <h2>Browse by Category</h2>
+                <p class="section-subtitle">Find exactly what you're looking for</p>
+            </div>
+            <div class="category-grid">
+                <a href="category.html?category=laptops" class="category-card">
+                    <div class="category-icon-wrapper">
+                        <i class="fas fa-laptop category-icon"></i>
+                    </div>
+                    <h3>Laptops</h3>
+                    <p class="category-count">120+ Products</p>
+                    <span class="category-arrow"><i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="category.html?category=desktops" class="category-card">
+                    <div class="category-icon-wrapper">
+                        <i class="fas fa-desktop category-icon"></i>
+                    </div>
+                    <h3>Desktops</h3>
+                    <p class="category-count">85+ Products</p>
+                    <span class="category-arrow"><i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="category.html?category=accessories" class="category-card">
+                    <div class="category-icon-wrapper">
+                        <i class="fas fa-headphones category-icon"></i>
+                    </div>
+                    <h3>Accessories</h3>
+                    <p class="category-count">200+ Products</p>
+                    <span class="category-arrow"><i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="category.html?category=peripherals" class="category-card">
+                    <div class="category-icon-wrapper">
+                        <i class="fas fa-mouse category-icon"></i>
+                    </div>
+                    <h3>Peripherals</h3>
+                    <p class="category-count">150+ Products</p>
+                    <span class="category-arrow"><i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shipping-fast"></i></div>
+                    <h3>Free Shipping</h3>
+                    <p>Free delivery on orders over $50</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Secure Payment</h3>
+                    <p>100% secure payment methods</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-undo"></i></div>
+                    <h3>Easy Returns</h3>
+                    <p>30-day return policy</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                    <h3>24/7 Support</h3>
+                    <p>Dedicated customer support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-products" id="products">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-star"></i> Featured</span>
+                <h2>Featured Products</h2>
+                <p class="section-subtitle">Discover our handpicked selection of premium tech</p>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterProducts('all')">
+                    <i class="fas fa-border-all"></i> All
+                </button>
+                <button class="filter-btn" onclick="filterProducts('laptops')">
+                    <i class="fas fa-laptop"></i> Laptops
+                </button>
+                <button class="filter-btn" onclick="filterProducts('desktops')">
+                    <i class="fas fa-desktop"></i> Desktops
+                </button>
+                <button class="filter-btn" onclick="filterProducts('accessories')">
+                    <i class="fas fa-headphones"></i> Accessories
+                </button>
+            </div>
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-wrapper">
+                <div class="about-content">
+                    <span class="section-tag"><i class="fas fa-info-circle"></i> About Us</span>
+                    <h2>Why Choose <span class="gradient-text">TechHub</span>?</h2>
+                    <p>At TechHub, we bring you the latest and greatest in computer technology. From cutting-edge laptops to powerful desktops, we offer premium quality products at competitive prices.</p>
+                    <ul class="about-features">
+                        <li><i class="fas fa-check-circle"></i> Premium Quality Products</li>
+                        <li><i class="fas fa-check-circle"></i> Competitive Pricing</li>
+                        <li><i class="fas fa-check-circle"></i> Expert Technical Support</li>
+                        <li><i class="fas fa-check-circle"></i> Fast & Reliable Shipping</li>
+                    </ul>
+                    <a href="#contact" class="btn-primary"><i class="fas fa-envelope"></i> Get in Touch</a>
+                </div>
+                <div class="about-image">
+                    <div class="about-img-wrapper">
+                        <i class="fas fa-microchip about-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-paper-plane"></i> Contact</span>
+                <h2>Get in Touch</h2>
+                <p class="section-subtitle">We'd love to hear from you</p>
+            </div>
+            <div class="contact-wrapper">
+                <div class="contact-cards">
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                        <h3>Phone</h3>
+                        <a href="tel:+96179157621">+961 79 157 621</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <h3>Email</h3>
+                        <a href="mailto:aliyo.aoub@gmail.com">aliyo.aoub@gmail.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <h3>Address</h3>
+                        <p>123 Tech Street, Silicon Valley, CA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2><i class="fas fa-bell"></i> Stay Updated</h2>
+                <p>Subscribe to our newsletter for the latest deals and tech news</p>
+                <form class="newsletter-form" onsubmit="return false;">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 class="footer-logo"><i class="fas fa-bolt"></i> TechHub</h3>
+                    <p>Your ultimate destination for premium computers and tech accessories.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#products"><i class="fas fa-chevron-right"></i> Products</a></li>
+                        <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="category.html?category=laptops"><i class="fas fa-chevron-right"></i> Laptops</a></li>
+                        <li><a href="category.html?category=desktops"><i class="fas fa-chevron-right"></i> Desktops</a></li>
+                        <li><a href="category.html?category=accessories"><i class="fas fa-chevron-right"></i> Accessories</a></li>
+                        <li><a href="category.html?category=peripherals"><i class="fas fa-chevron-right"></i> Peripherals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Shipping Info</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Returns</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TechHub. All rights reserved. Made with <i class="fas fa-heart"></i> by TechHub Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

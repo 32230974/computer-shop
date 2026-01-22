@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Offers - TechHub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .offers-hero {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #f39c12 100%);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .offers-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔥</text></svg>') repeat;
+            opacity: 0.1;
+            animation: float 20s linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+        .offers-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .offers-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .countdown-banner {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .countdown-banner span {
+            display: inline-block;
+            margin: 0 10px;
+            text-align: center;
+        }
+        .countdown-banner .number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+        .offers-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .offer-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .offer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        .offer-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 10;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .offer-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        .offer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .offer-content {
+            padding: 25px;
+        }
+        .offer-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .offer-product {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        .offer-prices {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .original-price {
+            font-size: 1.1rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+        .offer-price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ee5a24;
+        }
+        .savings {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .offer-timer {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .offer-timer-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .offer-timer-countdown {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ee5a24;
+        }
+        .offer-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .offer-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .no-offers {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+        .no-offers i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        .flash-sale-banner {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24, #f39c12, #ee5a24, #ff6b6b);
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 10px 25px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        .admin-add-offer-btn {
+            display: none;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        .admin-add-offer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+        .admin-add-offer-btn i {
+            margin-right: 8px;
+        }
+        .offers-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .category-filter {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">TechHub</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="offers.html" class="active">Offers</a></li>
+                <li><a href="index.html#products">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="auth-links">
+                <button id="dark-mode-toggle" class="btn-dark-mode" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                    <span class="dark-mode-icon">🌙</span>
+                </button>
+                <a href="wishlist.html" class="btn-wishlist" title="Wishlist"><i class="fas fa-heart"></i></a>
+                <a href="cart.html" class="btn-cart" title="Cart"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
+                <a href="login.html" class="btn-login" id="login-btn">Login</a>
+                <a href="signup.html" class="btn-signup" id="signup-btn">Sign Up</a>
+                <div id="user-menu" style="display:none;">
+                    <a href="profile.html" class="btn-profile"><i class="fas fa-user"></i> <span id="user-name"></span></a>
+                    <a href="#" class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Sale Banner -->
+    <div class="flash-sale-banner">
+        🔥 FLASH SALE! Limited Time Offers - Up to 70% OFF on Selected Items! 🔥
+    </div>
+
+    <!-- Offers Hero -->
+    <section class="offers-hero">
+        <h1>🎉 Special Offers</h1>
+        <p>Grab the best deals before they're gone!</p>
+        <div class="countdown-banner">
+            <span><span class="number" id="days">00</span>Days</span>
+            <span><span class="number" id="hours">00</span>Hours</span>
+            <span><span class="number" id="minutes">00</span>Mins</span>
+            <span><span class="number" id="seconds">00</span>Secs</span>
+        </div>
+    </section>
+
+    <!-- Offers Container -->
+    <div class="offers-container">
+        <div class="offers-header">
+            <div class="category-filter">
+                <button class="filter-btn active" data-category="all">All Offers</button>
+                <button class="filter-btn" data-category="laptops">Laptops</button>
+                <button class="filter-btn" data-category="desktops">Desktops</button>
+                <button class="filter-btn" data-category="accessories">Accessories</button>
+                <button class="filter-btn" data-category="gaming">Gaming</button>
+            </div>
+            <button class="admin-add-offer-btn" id="admin-add-offer-btn" onclick="window.location.href='admin-offers.html'">
+                <i class="fas fa-plus-circle"></i> Add New Offer
+            </button>
+        </div>
+
+        <div class="offers-grid" id="offers-grid">
+            <!-- Offers will be loaded here -->
+        </div>
+
+        <div class="no-offers" id="no-offers" style="display: none;">
+            <i class="fas fa-tag"></i>
+            <h2>No Active Offers</h2>
+            <p>Check back soon for amazing deals!</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TechHub</h3>
+                    <p>Your ultimate destination for premium computers and laptops.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="offers.html">Offers</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="my-orders.html">Track Order</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TechHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date();
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+            const diff = endOfDay - now;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Load offers
+        async function loadOffers() {
+            let offers = [];
+            
+            try {
+                const response = await fetch(`${API_URL}/offers/active`);
+                if (response.ok) {
+                    offers = await response.json();
+                } else {
+                    throw new Error('API not available');
+                }
+            } catch (error) {
+                console.error('Error loading from API, using localStorage:', error);
+                // Fallback: Load from localStorage
+                const localOffers = JSON.parse(localStorage.getItem('techhub_offers') || '[]');
+                const now = new Date();
+                offers = localOffers.filter(o => {
+                    const startDate = new Date(o.start_date);
+                    const endDate = new Date(o.end_date);
+                    return o.is_active && startDate <= now && endDate >= now;
+                });
+            }
+
+            const grid = document.getElementById('offers-grid');
+            const noOffers = document.getElementById('no-offers');
+
+            if (!offers || offers.length === 0) {
+                grid.style.display = 'none';
+                noOffers.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noOffers.style.display = 'none';
+
+            grid.innerHTML = offers.map(offer => `
+                <div class="offer-card" data-category="${offer.category || 'all'}">
+                    <div class="offer-badge">-${offer.discount_percent}%</div>
+                    <div class="offer-image">
+                        <img src="${offer.image_url || 'https://via.placeholder.com/400x250?text=TechHub+Offer'}" alt="${offer.product_name}">
+                    </div>
+                    <div class="offer-content">
+                        <h3 class="offer-title">${offer.title || 'Special Offer'}</h3>
+                        <p class="offer-product">${offer.product_name}</p>
+                        <div class="offer-prices">
+                            <span class="original-price">$${offer.original_price.toFixed(2)}</span>
+                            <span class="offer-price">$${offer.offer_price.toFixed(2)}</span>
+                            <span class="savings">Save $${(offer.original_price - offer.offer_price).toFixed(2)}</span>
+                        </div>
+                        <div class="offer-timer">
+                            <div class="offer-timer-label">Offer ends:</div>
+                            <div class="offer-timer-countdown">${new Date(offer.end_date).toLocaleDateString()}</div>
+                        </div>
+                        <button class="offer-btn" onclick="addToCart(${offer.product_id})">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter offers
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const category = btn.dataset.category;
+                document.querySelectorAll('.offer-card').forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Add to cart
+        async function addToCart(productId) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/cart`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ productId, quantity: 1 })
+                });
+
+                if (response.ok) {
+                    showNotification('Added to cart!', 'success');
+                    updateCartCount();
+                }
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Check if user is admin and show add offer button
+        function checkAdminStatus() {
+            const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const adminBtn = document.getElementById('admin-add-offer-btn');
+            
+            if (currentUser.isAdmin || currentUser.is_admin || user.isAdmin || user.is_admin) {
+                if (adminBtn) adminBtn.style.display = 'inline-flex';
+            }
+        }
+
+        // Initialize
+        loadOffers();
+        checkAuth();
+        checkAdminStatus();
+    </script>
+</body>
+</html>

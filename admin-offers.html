@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Offers - Admin | TechHub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+        .sidebar-menu a i {
+            width: 20px;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+            background: #f5f7fa;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            color: #333;
+        }
+        .btn-add {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .offers-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+            border-bottom: 2px solid #eee;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        td {
+            border-bottom: 1px solid #eee;
+        }
+        .offer-product-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .discount-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btns button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-edit {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .btn-delete {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        .btn-toggle {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .stat-card p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .stat-card.highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .stat-card.highlight h3, .stat-card.highlight p {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">🛡️ Admin Panel</div>
+            <div class="sidebar-menu">
+                <a href="admin-dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="admin-create.html"><i class="fas fa-box"></i> Products</a>
+                <a href="admin-offers.html" class="active"><i class="fas fa-tags"></i> Offers</a>
+                <a href="admin-notifications.html"><i class="fas fa-bell"></i> Notifications</a>
+                <a href="admin-contacts.html"><i class="fas fa-envelope"></i> Messages</a>
+                <a href="index.html"><i class="fas fa-store"></i> View Store</a>
+                <a href="#" onclick="adminLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fas fa-tags"></i> Manage Offers</h1>
+                <button class="btn-add" onclick="openModal()">
+                    <i class="fas fa-plus"></i> Add New Offer
+                </button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card highlight">
+                    <h3 id="total-offers">0</h3>
+                    <p>Total Offers</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="active-offers">0</h3>
+                    <p>Active Offers</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="avg-discount">0%</h3>
+                    <p>Avg. Discount</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-savings">$0</h3>
+                    <p>Total Savings</p>
+                </div>
+            </div>
+
+            <!-- Offers Table -->
+            <div class="offers-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Title</th>
+                            <th>Original Price</th>
+                            <th>Offer Price</th>
+                            <th>Discount</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="offers-tbody">
+                        <!-- Offers will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Offer Modal -->
+    <div class="modal" id="offer-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add New Offer</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="offer-form" onsubmit="saveOffer(event)">
+                <input type="hidden" id="offer-id">
+                <div class="form-group">
+                    <label>Select Product</label>
+                    <select id="product-id" required>
+                        <option value="">Choose a product...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Offer Title</label>
+                    <input type="text" id="offer-title" placeholder="e.g., Black Friday Sale!" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Offer Price ($)</label>
+                        <input type="number" id="offer-price" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Discount %</label>
+                        <input type="number" id="discount-percent" min="1" max="99" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="start-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="end-date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description (Optional)</label>
+                    <textarea id="offer-description" rows="3" placeholder="Describe the offer..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Save Offer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let products = [];
+        let offers = [];
+
+        // Check admin auth
+        function checkAdminAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const currentAdmin = localStorage.getItem('current_admin');
+            
+            // Allow access if admin token or current_admin exists
+            if (!token && !currentAdmin) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // If using token-based auth, verify is_admin
+            if (token && !user.is_admin && !currentAdmin) {
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        // Load products for dropdown
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products`);
+                if (response.ok) {
+                    products = await response.json();
+                    if (products.products) products = products.products;
+                } else {
+                    throw new Error('Failed to load');
+                }
+            } catch (error) {
+                console.error('Error loading products, using demo data:', error);
+                // Demo products
+                products = [
+                    { id: 1, name: 'MacBook Pro 14"', price: 1999 },
+                    { id: 2, name: 'iPhone 15 Pro', price: 999 },
+                    { id: 3, name: 'iPad Air', price: 599 },
+                    { id: 4, name: 'Apple Watch Ultra', price: 799 },
+                    { id: 5, name: 'AirPods Pro', price: 249 },
+                    { id: 6, name: 'Dell XPS 15', price: 1599 },
+                    { id: 7, name: 'Samsung Galaxy S24', price: 899 },
+                    { id: 8, name: 'Sony WH-1000XM5', price: 349 }
+                ];
+            }
+            
+            const select = document.getElementById('product-id');
+            select.innerHTML = '<option value="">Choose a product...</option>';
+            products.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p.id;
+                option.textContent = `${p.name} - $${p.price}`;
+                select.appendChild(option);
+            });
+        }
+
+        // Load offers
+        async function loadOffers() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/offers`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    offers = await response.json();
+                } else {
+                    throw new Error('Failed to load');
+                }
+            } catch (error) {
+                console.error('Error loading offers:', error);
+                // Load from localStorage as fallback
+                offers = JSON.parse(localStorage.getItem('techhub_offers') || '[]');
+            }
+            renderOffers();
+            updateStats();
+        }
+
+        // Render offers table
+        function renderOffers() {
+            const tbody = document.getElementById('offers-tbody');
+            tbody.innerHTML = offers.map(offer => `
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <img src="${offer.image_url || 'https://via.placeholder.com/50'}" class="offer-product-img" alt="">
+                            <span>${offer.product_name}</span>
+                        </div>
+                    </td>
+                    <td>${offer.title || '-'}</td>
+                    <td>$${offer.original_price.toFixed(2)}</td>
+                    <td><strong style="color: #28a745;">$${offer.offer_price.toFixed(2)}</strong></td>
+                    <td><span class="discount-badge">-${offer.discount_percent}%</span></td>
+                    <td>${new Date(offer.end_date).toLocaleDateString()}</td>
+                    <td>
+                        <span class="status-badge ${offer.is_active ? 'status-active' : 'status-inactive'}">
+                            ${offer.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-edit" onclick="editOffer(${offer.id})" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-toggle" onclick="toggleOffer(${offer.id})" title="Toggle Status">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                            <button class="btn-delete" onclick="deleteOffer(${offer.id})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Update stats
+        function updateStats() {
+            const activeOffers = offers.filter(o => o.is_active);
+            const avgDiscount = offers.length > 0 
+                ? Math.round(offers.reduce((sum, o) => sum + o.discount_percent, 0) / offers.length)
+                : 0;
+            const totalSavings = offers.reduce((sum, o) => sum + (o.original_price - o.offer_price), 0);
+
+            document.getElementById('total-offers').textContent = offers.length;
+            document.getElementById('active-offers').textContent = activeOffers.length;
+            document.getElementById('avg-discount').textContent = avgDiscount + '%';
+            document.getElementById('total-savings').textContent = '$' + totalSavings.toFixed(2);
+        }
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('offer-modal').classList.add('active');
+            document.getElementById('modal-title').textContent = 'Add New Offer';
+            document.getElementById('offer-form').reset();
+            document.getElementById('offer-id').value = '';
+            
+            // Set default dates
+            const today = new Date().toISOString().split('T')[0];
+            const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            document.getElementById('start-date').value = today;
+            document.getElementById('end-date').value = nextWeek;
+        }
+
+        function closeModal() {
+            document.getElementById('offer-modal').classList.remove('active');
+        }
+
+        // Edit offer
+        function editOffer(id) {
+            const offer = offers.find(o => o.id === id);
+            if (!offer) return;
+
+            document.getElementById('modal-title').textContent = 'Edit Offer';
+            document.getElementById('offer-id').value = offer.id;
+            document.getElementById('product-id').value = offer.product_id;
+            document.getElementById('offer-title').value = offer.title || '';
+            document.getElementById('offer-price').value = offer.offer_price;
+            document.getElementById('discount-percent').value = offer.discount_percent;
+            document.getElementById('start-date').value = offer.start_date ? offer.start_date.split('T')[0] : '';
+            document.getElementById('end-date').value = offer.end_date ? offer.end_date.split('T')[0] : '';
+            document.getElementById('offer-description').value = offer.description || '';
+
+            document.getElementById('offer-modal').classList.add('active');
+        }
+
+        // Save offer
+        async function saveOffer(event) {
+            event.preventDefault();
+            const token = localStorage.getItem('token');
+            const offerId = document.getElementById('offer-id').value;
+            const productId = parseInt(document.getElementById('product-id').value);
+            const product = products.find(p => p.id == productId);
+
+            const data = {
+                productId: productId,
+                title: document.getElementById('offer-title').value,
+                offerPrice: parseFloat(document.getElementById('offer-price').value),
+                discountPercent: parseInt(document.getElementById('discount-percent').value),
+                startDate: document.getElementById('start-date').value,
+                endDate: document.getElementById('end-date').value,
+                description: document.getElementById('offer-description').value,
+                isActive: 1
+            };
+
+            try {
+                const url = offerId ? `${API_URL}/offers/${offerId}` : `${API_URL}/offers`;
+                const method = offerId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    closeModal();
+                    loadOffers();
+                    showNotification(offerId ? 'Offer updated!' : 'Offer created!', 'success');
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (error) {
+                console.error('Error saving to API, using localStorage:', error);
+                
+                // Fallback: Save to localStorage
+                let localOffers = JSON.parse(localStorage.getItem('techhub_offers') || '[]');
+                
+                const offerData = {
+                    id: offerId ? parseInt(offerId) : Date.now(),
+                    product_id: productId,
+                    product_name: product ? product.name : 'Unknown Product',
+                    original_price: product ? product.price : 0,
+                    offer_price: data.offerPrice,
+                    discount_percent: data.discountPercent,
+                    title: data.title,
+                    description: data.description,
+                    start_date: data.startDate,
+                    end_date: data.endDate,
+                    is_active: 1,
+                    image_url: 'https://via.placeholder.com/300x200?text=' + encodeURIComponent(product ? product.name : 'Offer'),
+                    created_at: new Date().toISOString()
+                };
+
+                if (offerId) {
+                    const index = localOffers.findIndex(o => o.id == offerId);
+                    if (index !== -1) {
+                        localOffers[index] = { ...localOffers[index], ...offerData };
+                    }
+                } else {
+                    localOffers.push(offerData);
+                }
+
+                localStorage.setItem('techhub_offers', JSON.stringify(localOffers));
+                offers = localOffers;
+                
+                closeModal();
+                renderOffers();
+                updateStats();
+                showNotification(offerId ? 'Offer updated!' : 'Offer created!', 'success');
+            }
+        }
+
+        // Toggle offer status
+        async function toggleOffer(id) {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_URL}/offers/${id}/toggle`, {
+                    method: 'PATCH',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('API error');
+                loadOffers();
+            } catch (error) {
+                console.error('Error toggling via API, using localStorage:', error);
+                // Fallback: Toggle in localStorage
+                let localOffers = JSON.parse(localStorage.getItem('techhub_offers') || '[]');
+                const index = localOffers.findIndex(o => o.id == id);
+                if (index !== -1) {
+                    localOffers[index].is_active = localOffers[index].is_active ? 0 : 1;
+                    localStorage.setItem('techhub_offers', JSON.stringify(localOffers));
+                    offers = localOffers;
+                    renderOffers();
+                    updateStats();
+                }
+            }
+        }
+
+        // Delete offer
+        async function deleteOffer(id) {
+            if (!confirm('Are you sure you want to delete this offer?')) return;
+            
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_URL}/offers/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('API error');
+                loadOffers();
+                showNotification('Offer deleted!', 'success');
+            } catch (error) {
+                console.error('Error deleting via API, using localStorage:', error);
+                // Fallback: Delete from localStorage
+                let localOffers = JSON.parse(localStorage.getItem('techhub_offers') || '[]');
+                localOffers = localOffers.filter(o => o.id != id);
+                localStorage.setItem('techhub_offers', JSON.stringify(localOffers));
+                offers = localOffers;
+                renderOffers();
+                updateStats();
+                showNotification('Offer deleted!', 'success');
+            }
+        }
+
+        // Calculate offer price from discount
+        document.getElementById('product-id').addEventListener('change', function() {
+            const product = products.find(p => p.id == this.value);
+            if (product) {
+                const discount = document.getElementById('discount-percent').value || 10;
+                const offerPrice = product.price * (1 - discount / 100);
+                document.getElementById('offer-price').value = offerPrice.toFixed(2);
+            }
+        });
+
+        document.getElementById('discount-percent').addEventListener('input', function() {
+            const productId = document.getElementById('product-id').value;
+            const product = products.find(p => p.id == productId);
+            if (product) {
+                const offerPrice = product.price * (1 - this.value / 100);
+                document.getElementById('offer-price').value = offerPrice.toFixed(2);
+            }
+        });
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                border-radius: 10px;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'times'}-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function adminLogout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'admin-login.html';
+        }
+
+        // Auto-calculate offer price based on discount percentage
+        function calculateOfferPrice() {
+            const productId = document.getElementById('product-id').value;
+            const discountPercent = parseFloat(document.getElementById('discount-percent').value);
+            
+            if (!productId || isNaN(discountPercent)) return;
+            
+            const product = products.find(p => p.id == productId);
+            if (!product) return;
+            
+            const originalPrice = product.price;
+            const discountAmount = (originalPrice * discountPercent) / 100;
+            const offerPrice = originalPrice - discountAmount;
+            
+            document.getElementById('offer-price').value = offerPrice.toFixed(2);
+        }
+
+        // Auto-calculate discount percentage based on offer price
+        function calculateDiscountPercent() {
+            const productId = document.getElementById('product-id').value;
+            const offerPrice = parseFloat(document.getElementById('offer-price').value);
+            
+            if (!productId || isNaN(offerPrice)) return;
+            
+            const product = products.find(p => p.id == productId);
+            if (!product) return;
+            
+            const originalPrice = product.price;
+            const discountPercent = ((originalPrice - offerPrice) / originalPrice) * 100;
+            
+            if (discountPercent >= 0 && discountPercent <= 100) {
+                document.getElementById('discount-percent').value = Math.round(discountPercent);
+            }
+        }
+
+        // Add event listeners for auto-calculation
+        document.getElementById('discount-percent').addEventListener('input', calculateOfferPrice);
+        document.getElementById('offer-price').addEventListener('input', calculateDiscountPercent);
+        document.getElementById('product-id').addEventListener('change', function() {
+            // Recalculate when product changes if discount is set
+            if (document.getElementById('discount-percent').value) {
+                calculateOfferPrice();
+            }
+        });
+
+        // Initialize
+        checkAdminAuth();
+        loadProducts();
+        loadOffers();
+    </script>
+</body>
+</html>

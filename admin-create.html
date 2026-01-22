@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Admin - TechHub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-creation-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-creation-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-creation-header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .admin-creation-header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .password-requirement {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .admin-list {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+
+        .admin-list h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 3px;
+            margin-bottom: 8px;
+            border-left: 3px solid #3498db;
+        }
+
+        .admin-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .admin-item-info {
+            flex: 1;
+        }
+
+        .admin-item-email {
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .admin-item-date {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 3px;
+        }
+
+        .admin-item-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: 15px;
+        }
+
+        .btn-delete-admin {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .btn-delete-admin:hover {
+            background: #c0392b;
+        }
+
+        .actions-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-create-admin {
+            background: #27ae60;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-create-admin:hover {
+            background: #229954;
+        }
+
+        .btn-back {
+            background: #95a5a6;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-back:hover {
+            background: #7f8c8d;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+
+        .empty-admin-list {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .admin-creation-container {
+                margin: 20px 10px;
+                padding: 20px;
+            }
+
+            .admin-creation-header h1 {
+                font-size: 22px;
+            }
+
+            .actions-container {
+                flex-direction: column;
+            }
+
+            .btn-create-admin,
+            .btn-back {
+                width: 100%;
+            }
+
+            .admin-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .admin-item-actions {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            .btn-delete-admin {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">TechHub Admin</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Back to Store</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin Creation Section -->
+    <section class="admin-creation-container">
+        <div class="admin-creation-header">
+            <h1>Create Admin Account</h1>
+            <p>Manage admin accounts for TechHub</p>
+        </div>
+
+        <div id="admin-creation-message" class="message"></div>
+
+        <!-- Create New Admin Form -->
+        <div class="form-section">
+            <h3>Create New Admin</h3>
+            <form id="create-admin-form">
+                <div class="form-group">
+                    <label for="new-admin-email">Admin Email:</label>
+                    <input type="email" id="new-admin-email" name="new-admin-email" placeholder="admin@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="new-admin-password">Admin Password:</label>
+                    <input type="password" id="new-admin-password" name="new-admin-password" placeholder="Enter a strong password" required>
+                    <div class="password-requirement">Password must be at least 6 characters long</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="new-admin-confirm-password">Confirm Password:</label>
+                    <input type="password" id="new-admin-confirm-password" name="new-admin-confirm-password" placeholder="Confirm your password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="admin-full-name">Full Name (Optional):</label>
+                    <input type="text" id="admin-full-name" name="admin-full-name" placeholder="Admin name">
+                </div>
+
+                <div class="actions-container">
+                    <button type="submit" class="btn-create-admin">Create Admin</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Admin List -->
+        <div class="form-section">
+            <h3>Existing Admins</h3>
+            <div class="admin-list" id="admin-list">
+                <div class="empty-admin-list">No admins created yet.</div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="actions-container">
+            <a href="admin-login.html" class="btn-back">Back to Admin Login</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TechHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Check master admin password
+        function verifyAdminAccess() {
+            const currentAdmin = localStorage.getItem('current_admin');
+            if (!currentAdmin) {
+                const password = prompt('Enter Master Admin Password:');
+                if (password !== 'moheidin2015') {
+                    alert('Incorrect password! Access denied.');
+                    window.location.href = 'index.html';
+                    return;
+                }
+            }
+        }
+
+        // Verify access on page load
+        verifyAdminAccess();
+
+        // Initialize admin list
+        function initializeAdminAccounts() {
+            const admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
+            if (admins.length === 0) {
+                const defaultAdmin = {
+                    id: 1,
+                    email: 'admin@techhub.com',
+                    password: 'admin123',
+                    name: 'Default Admin',
+                    createdAt: new Date().toISOString()
+                };
+                admins.push(defaultAdmin);
+                localStorage.setItem('techhub_admins', JSON.stringify(admins));
+            }
+        }
+
+        // Load and display admin list
+        function loadAdminList() {
+            const admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
+            const adminList = document.getElementById('admin-list');
+
+            if (admins.length === 0) {
+                adminList.innerHTML = '<div class="empty-admin-list">No admins created yet.</div>';
+                return;
+            }
+
+            adminList.innerHTML = '';
+            admins.forEach(admin => {
+                const createdDate = new Date(admin.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                const adminItemHTML = `
+                    <div class="admin-item">
+                        <div class="admin-item-info">
+                            <div class="admin-item-email">📧 ${admin.email}</div>
+                            ${admin.name ? `<div class="admin-item-date">Name: ${admin.name}</div>` : ''}
+                            <div class="admin-item-date">Created: ${createdDate}</div>
+                        </div>
+                        <div class="admin-item-actions">
+                            <button type="button" class="btn-delete-admin" onclick="deleteAdmin(${admin.id})">Delete</button>
+                        </div>
+                    </div>
+                `;
+                adminList.innerHTML += adminItemHTML;
+            });
+        }
+
+        // Create admin
+        document.getElementById('create-admin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('new-admin-email').value.trim();
+            const password = document.getElementById('new-admin-password').value;
+            const confirmPassword = document.getElementById('new-admin-confirm-password').value;
+            const fullName = document.getElementById('admin-full-name').value.trim();
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('Please enter a valid email address!', 'error');
+                return;
+            }
+
+            // Validate password length
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters long!', 'error');
+                return;
+            }
+
+            // Validate password match
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match!', 'error');
+                return;
+            }
+
+            // Check if email already exists
+            const admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
+            if (admins.some(admin => admin.email.toLowerCase() === email.toLowerCase())) {
+                showMessage('An admin with this email already exists!', 'error');
+                return;
+            }
+
+            // Create new admin
+            const newAdmin = {
+                id: Date.now(),
+                email: email,
+                password: password,
+                name: fullName || 'Admin User',
+                createdAt: new Date().toISOString()
+            };
+
+            admins.push(newAdmin);
+            localStorage.setItem('techhub_admins', JSON.stringify(admins));
+
+            showMessage('Admin account created successfully!', 'success');
+            document.getElementById('create-admin-form').reset();
+            loadAdminList();
+
+            setTimeout(() => {
+                const msgDiv = document.getElementById('admin-creation-message');
+                msgDiv.innerHTML = '';
+                msgDiv.className = 'message';
+            }, 3000);
+        });
+
+        // Delete admin
+        function deleteAdmin(adminId) {
+            if (confirm('Are you sure you want to delete this admin account?')) {
+                let admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
+                
+                if (admins.length <= 1) {
+                    showMessage('You cannot delete the last admin account!', 'error');
+                    return;
+                }
+
+                admins = admins.filter(admin => admin.id !== adminId);
+                localStorage.setItem('techhub_admins', JSON.stringify(admins));
+                showMessage('Admin account deleted successfully!', 'success');
+                loadAdminList();
+
+                setTimeout(() => {
+                    const msgDiv = document.getElementById('admin-creation-message');
+                    msgDiv.innerHTML = '';
+                    msgDiv.className = 'message';
+                }, 3000);
+            }
+        }
+
+        // Show message
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('admin-creation-message');
+            msgDiv.textContent = msg;
+            msgDiv.className = 'message ' + type;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAdminAccounts();
+            loadAdminList();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TechHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">TechHub</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="auth-section">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h2>User Login</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Login</button>
+                    <p class="form-footer" style="margin-top: 15px;"><a href="forgot-password.html" style="color: #667eea;">Forgot Password?</a></p>
+                    <p class="form-footer">Don't have an account? <a href="signup.html">Sign up here</a></p>
+                </form>
+                <div id="login-message" class="message"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TechHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Get all users from localStorage
+            const users = JSON.parse(localStorage.getItem('techhub_users') || '[]');
+            
+            // Check if user exists and password is correct
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('current_user', JSON.stringify(user));
+                
+                // Log login event for admin notification
+                const loginEvents = JSON.parse(localStorage.getItem('login_events') || '[]');
+                loginEvents.push({
+                    type: 'login',
+                    name: user.name,
+                    email: user.email,
+                    timestamp: new Date().toISOString(),
+                    date: new Date().toLocaleString()
+                });
+                localStorage.setItem('login_events', JSON.stringify(loginEvents));
+                
+                showMessage('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                showMessage('Invalid email or password!', 'error');
+            }
+        });
+
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('login-message');
+            msgDiv.textContent = msg;
+            msgDiv.className = 'message ' + type;
+        }
+    </script>
+</body>
+</html>

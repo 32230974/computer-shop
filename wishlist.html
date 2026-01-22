@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - TechHub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .wishlist-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .wishlist-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .wishlist-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .wishlist-header h1 i {
+            color: #ff6b6b;
+        }
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .wishlist-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .wishlist-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+        }
+        .remove-wishlist {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .remove-wishlist:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+        .wishlist-image {
+            height: 200px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            position: relative;
+        }
+        .wishlist-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .offer-badge {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .wishlist-content {
+            padding: 20px;
+        }
+        .wishlist-content h3 {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .wishlist-content h3 a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .wishlist-content h3 a:hover {
+            color: #667eea;
+        }
+        .category-badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+        .price-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .current-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+        .original-price {
+            font-size: 1rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+        .stock-status {
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+        .in-stock {
+            color: #28a745;
+        }
+        .out-of-stock {
+            color: #dc3545;
+        }
+        .wishlist-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-add-cart {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-add-cart:hover {
+            transform: scale(1.02);
+        }
+        .btn-add-cart:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .empty-wishlist {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .empty-wishlist i {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        .empty-wishlist h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .empty-wishlist p {
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .browse-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .browse-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .wishlist-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-item .number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .stat-item .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">TechHub</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="offers.html">Offers</a></li>
+                <li><a href="index.html#products">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="auth-links">
+                <button id="dark-mode-toggle" class="btn-dark-mode" onclick="toggleDarkMode()">
+                    <span class="dark-mode-icon">🌙</span>
+                </button>
+                <a href="wishlist.html" class="nav-icon active"><i class="fas fa-heart"></i></a>
+                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wishlist-container">
+        <div class="wishlist-header">
+            <h1><i class="fas fa-heart"></i> My Wishlist</h1>
+            <p id="wishlist-count">0 items saved</p>
+        </div>
+
+        <div class="wishlist-stats" id="wishlist-stats" style="display: none;">
+            <div class="stat-item">
+                <div class="number" id="total-items">0</div>
+                <div class="label">Items Saved</div>
+            </div>
+            <div class="stat-item">
+                <div class="number" id="total-value">$0</div>
+                <div class="label">Total Value</div>
+            </div>
+            <div class="stat-item">
+                <div class="number" id="total-savings">$0</div>
+                <div class="label">Potential Savings</div>
+            </div>
+        </div>
+
+        <div class="wishlist-grid" id="wishlist-grid">
+            <!-- Items loaded dynamically -->
+        </div>
+
+        <div class="empty-wishlist" id="empty-wishlist" style="display: none;">
+            <i class="fas fa-heart"></i>
+            <h2>Your wishlist is empty</h2>
+            <p>Save items you love by clicking the heart icon on products</p>
+            <a href="index.html" class="browse-btn">
+                <i class="fas fa-shopping-bag"></i> Browse Products
+            </a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+
+        function isUserLoggedIn() {
+            return localStorage.getItem('token') || localStorage.getItem('current_user');
+        }
+
+        async function loadWishlist() {
+            if (!isUserLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const token = localStorage.getItem('token');
+            let wishlist = [];
+
+            try {
+                if (token) {
+                    const response = await fetch(`${API_URL}/wishlist`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (response.ok) {
+                        wishlist = await response.json();
+                    } else {
+                        throw new Error('API error');
+                    }
+                } else {
+                    throw new Error('No token');
+                }
+            } catch (error) {
+                console.log('Using localStorage wishlist');
+                // Fallback to localStorage
+                wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            }
+
+            if (wishlist.length === 0) {
+                document.getElementById('wishlist-grid').style.display = 'none';
+                document.getElementById('wishlist-stats').style.display = 'none';
+                document.getElementById('empty-wishlist').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('wishlist-grid').style.display = 'grid';
+            document.getElementById('wishlist-stats').style.display = 'flex';
+            document.getElementById('empty-wishlist').style.display = 'none';
+            renderWishlist(wishlist);
+        }
+
+        function renderWishlist(items) {
+            const grid = document.getElementById('wishlist-grid');
+            let totalValue = 0;
+            let totalSavings = 0;
+
+            grid.innerHTML = items.map(item => {
+                const hasOffer = item.offer_price && item.offer_price < item.price;
+                const displayPrice = hasOffer ? item.offer_price : item.price;
+                totalValue += displayPrice;
+                if (hasOffer) {
+                    totalSavings += (item.price - item.offer_price);
+                }
+
+                return `
+                    <div class="wishlist-card">
+                        <button class="remove-wishlist" onclick="removeFromWishlist(${item.product_id})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div class="wishlist-image">
+                            <img src="${item.image_url || 'https://via.placeholder.com/300x200?text=TechHub'}" alt="${item.name}">
+                            ${hasOffer ? `<span class="offer-badge">On Sale!</span>` : ''}
+                        </div>
+                        <div class="wishlist-content">
+                            <span class="category-badge">${item.category}</span>
+                            <h3><a href="product.html?id=${item.product_id}">${item.name}</a></h3>
+                            <div class="price-row">
+                                <span class="current-price">$${displayPrice.toFixed(2)}</span>
+                                ${hasOffer ? `<span class="original-price">$${item.price.toFixed(2)}</span>` : ''}
+                            </div>
+                            <div class="stock-status ${item.stock > 0 ? 'in-stock' : 'out-of-stock'}">
+                                ${item.stock > 0 ? `<i class="fas fa-check-circle"></i> In Stock (${item.stock})` : '<i class="fas fa-times-circle"></i> Out of Stock'}
+                            </div>
+                            <div class="wishlist-actions">
+                                <button class="btn-add-cart" onclick="addToCart(${item.product_id})" ${item.stock <= 0 ? 'disabled' : ''}>
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Update stats
+            document.getElementById('wishlist-count').textContent = `${items.length} item${items.length !== 1 ? 's' : ''} saved`;
+            document.getElementById('total-items').textContent = items.length;
+            document.getElementById('total-value').textContent = `$${totalValue.toFixed(0)}`;
+            document.getElementById('total-savings').textContent = `$${totalSavings.toFixed(0)}`;
+            document.getElementById('wishlist-stats').style.display = 'flex';
+        }
+
+        async function removeFromWishlist(productId) {
+            const token = localStorage.getItem('token');
+            try {
+                await fetch(`${API_URL}/wishlist/${productId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                showNotification('Removed from wishlist', 'success');
+                loadWishlist();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function addToCart(productId) {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_URL}/cart`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ productId, quantity: 1 })
+                });
+
+                if (response.ok) {
+                    showNotification('Added to cart!', 'success');
+                    updateCartCount();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                border-radius: 10px;
+                z-index: 9999;
+            `;
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'times'}-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        loadWishlist();
+        checkAuth();
+    </script>
+</body>
+</html>
