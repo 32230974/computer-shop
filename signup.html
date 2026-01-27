@@ -59,8 +59,10 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="config.js"></script>
     <script>
-        document.getElementById('signup-form').addEventListener('submit', function(e) {
+
+        document.getElementById('signup-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value;
@@ -75,44 +77,29 @@
                 return;
             }
 
-            // Get existing users
-            const users = JSON.parse(localStorage.getItem('techhub_users') || '[]');
-            
-            // Check if email already exists
-            if (users.find(u => u.email === email)) {
-                showMessage('Email already registered!', 'error');
-                return;
+            try {
+                const response = await fetch(`${API_URL}/auth/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, phone, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('Account created successfully! Redirecting to login...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                } else {
+                    showMessage(data.error || 'Registration failed!', 'error');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                showMessage('Connection error. Please make sure the server is running.', 'error');
             }
-
-            // Create new user
-            const newUser = {
-                id: Date.now(),
-                name,
-                email,
-                phone,
-                password
-            };
-
-            // Add user to localStorage
-            users.push(newUser);
-            localStorage.setItem('techhub_users', JSON.stringify(users));
-            
-            // Log signup event for admin notification
-            const signupEvents = JSON.parse(localStorage.getItem('signup_events') || '[]');
-            signupEvents.push({
-                type: 'signup',
-                name: name,
-                email: email,
-                phone: phone,
-                timestamp: new Date().toISOString(),
-                date: new Date().toLocaleString()
-            });
-            localStorage.setItem('signup_events', JSON.stringify(signupEvents));
-            
-            showMessage('Account created successfully! Redirecting to login...', 'success');
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1500);
         });
 
         function showMessage(msg, type) {

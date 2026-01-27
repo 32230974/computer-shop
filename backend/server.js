@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
@@ -21,10 +21,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Initialize database
-initializeDatabase();
+// Serve static frontend files from parent directory
+app.use(express.static(path.join(__dirname, '..')));
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
@@ -34,24 +34,14 @@ app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/contact', contactRoutes);
 
-// Root route
-app.get('/', (req, res) => {
-    res.json({ 
-        message: 'Welcome to TechHub API',
-        version: '1.0.0',
-        endpoints: {
-            auth: '/api/auth',
-            products: '/api/products',
-            cart: '/api/cart',
-            orders: '/api/orders',
-            health: '/api/health'
-        }
-    });
-});
-
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'Server is running', timestamp: new Date() });
+});
+
+// Serve index.html for root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 // Error handling middleware
@@ -62,7 +52,19 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`🚀 TechHub Backend Server running on http://localhost:${PORT}`);
-    console.log(`📧 Email notifications enabled for: ${process.env.EMAIL_USER}`);
-});
+// Initialize database and start server
+async function startServer() {
+    try {
+        await initializeDatabase();
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`🚀 TechHub Server running on http://localhost:${PORT}`);
+            console.log(`🌐 Website available at: http://localhost:${PORT}`);
+            console.log(`📧 Email notifications: ${process.env.EMAIL_USER || 'Not configured'}`);
+        });
+    } catch (err) {
+        console.error('Failed to start server:', err.message);
+        process.exit(1);
+    }
+}
+
+startServer();

@@ -203,9 +203,9 @@ exports.forgotPassword = async (req, res) => {
 
         // Save token to database
         const db = require('../database');
-        await db.run(
+        await db.runAsync(
             'INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, ?)',
-            [user.id, resetToken, resetExpires.toISOString()]
+            [user.id, resetToken, resetExpires]
         );
 
         // Send reset email
@@ -259,8 +259,8 @@ exports.resetPassword = async (req, res) => {
         const db = require('../database');
 
         // Find valid reset token
-        const resetRecord = await db.get(
-            'SELECT * FROM password_resets WHERE token = ? AND expires_at > datetime("now") AND used = 0',
+        const resetRecord = await db.getAsync(
+            'SELECT * FROM password_resets WHERE token = ? AND expires_at > NOW() AND used = 0',
             [token]
         );
 
@@ -272,7 +272,7 @@ exports.resetPassword = async (req, res) => {
         await User.updatePassword(resetRecord.user_id, password);
 
         // Mark token as used
-        await db.run('UPDATE password_resets SET used = 1 WHERE id = ?', [resetRecord.id]);
+        await db.runAsync('UPDATE password_resets SET used = 1 WHERE id = ?', [resetRecord.id]);
 
         res.json({ message: 'Password reset successfully' });
     } catch (error) {
@@ -285,7 +285,7 @@ exports.resetPassword = async (req, res) => {
 exports.getAddresses = async (req, res) => {
     try {
         const db = require('../database');
-        const addresses = await db.all('SELECT * FROM addresses WHERE user_id = ? ORDER BY is_default DESC', [req.user.id]);
+        const addresses = await db.allAsync('SELECT * FROM addresses WHERE user_id = ? ORDER BY is_default DESC', [req.user.id]);
         res.json(addresses);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -298,16 +298,16 @@ exports.addAddress = async (req, res) => {
         const { type, name, phone, street, apartment, city, state, zip, country, is_default } = req.body;
 
         if (is_default) {
-            await db.run('UPDATE addresses SET is_default = 0 WHERE user_id = ?', [req.user.id]);
+            await db.runAsync('UPDATE addresses SET is_default = 0 WHERE user_id = ?', [req.user.id]);
         }
 
-        const result = await db.run(
+        const result = await db.runAsync(
             `INSERT INTO addresses (user_id, type, name, phone, street, apartment, city, state, zip, country, is_default) 
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [req.user.id, type, name, phone, street, apartment, city, state, zip, country, is_default ? 1 : 0]
         );
 
-        res.status(201).json({ message: 'Address added', id: result.lastID });
+        res.status(201).json({ message: 'Address added', id: result.id });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -319,10 +319,10 @@ exports.updateAddress = async (req, res) => {
         const { type, name, phone, street, apartment, city, state, zip, country, is_default } = req.body;
 
         if (is_default) {
-            await db.run('UPDATE addresses SET is_default = 0 WHERE user_id = ?', [req.user.id]);
+            await db.runAsync('UPDATE addresses SET is_default = 0 WHERE user_id = ?', [req.user.id]);
         }
 
-        await db.run(
+        await db.runAsync(
             `UPDATE addresses SET type = ?, name = ?, phone = ?, street = ?, apartment = ?, city = ?, state = ?, zip = ?, country = ?, is_default = ? 
              WHERE id = ? AND user_id = ?`,
             [type, name, phone, street, apartment, city, state, zip, country, is_default ? 1 : 0, req.params.id, req.user.id]
@@ -337,7 +337,7 @@ exports.updateAddress = async (req, res) => {
 exports.deleteAddress = async (req, res) => {
     try {
         const db = require('../database');
-        await db.run('DELETE FROM addresses WHERE id = ? AND user_id = ?', [req.params.id, req.user.id]);
+        await db.runAsync('DELETE FROM addresses WHERE id = ? AND user_id = ?', [req.params.id, req.user.id]);
         res.json({ message: 'Address deleted' });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -347,8 +347,8 @@ exports.deleteAddress = async (req, res) => {
 exports.setDefaultAddress = async (req, res) => {
     try {
         const db = require('../database');
-        await db.run('UPDATE addresses SET is_default = 0 WHERE user_id = ?', [req.user.id]);
-        await db.run('UPDATE addresses SET is_default = 1 WHERE id = ? AND user_id = ?', [req.params.id, req.user.id]);
+        await db.runAsync('UPDATE addresses SET is_default = 0 WHERE user_id = ?', [req.user.id]);
+        await db.runAsync('UPDATE addresses SET is_default = 1 WHERE id = ? AND user_id = ?', [req.params.id, req.user.id]);
         res.json({ message: 'Default address updated' });
     } catch (error) {
         res.status(500).json({ error: error.message });

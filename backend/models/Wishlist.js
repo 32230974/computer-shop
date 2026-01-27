@@ -27,7 +27,7 @@ class Wishlist {
         return await allAsync(
             `SELECT w.*, p.name, p.price, p.image_url, p.category, p.stock,
                     (SELECT o.offer_price FROM offers o WHERE o.product_id = p.id AND o.is_active = 1 
-                     AND date(o.start_date) <= date('now') AND date(o.end_date) >= date('now') LIMIT 1) as offer_price
+                     AND DATE(o.start_date) <= CURDATE() AND DATE(o.end_date) >= CURDATE() LIMIT 1) as offer_price
              FROM wishlist w 
              JOIN products p ON w.product_id = p.id 
              WHERE w.user_id = ? 

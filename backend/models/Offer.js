@@ -35,8 +35,8 @@ class Offer {
              FROM offers o 
              JOIN products p ON o.product_id = p.id 
              WHERE o.is_active = 1 
-             AND date(o.start_date) <= date('now') 
-             AND date(o.end_date) >= date('now')
+             AND DATE(o.start_date) <= CURDATE() 
+             AND DATE(o.end_date) >= CURDATE()
              ORDER BY o.discount_percent DESC`
         );
     }
@@ -55,7 +55,7 @@ class Offer {
 
     static async toggleActive(id) {
         await runAsync(
-            'UPDATE offers SET is_active = NOT is_active, updated_at=CURRENT_TIMESTAMP WHERE id = ?',
+            'UPDATE offers SET is_active = IF(is_active = 1, 0, 1), updated_at=CURRENT_TIMESTAMP WHERE id = ?',
             [id]
         );
     }

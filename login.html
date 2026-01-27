@@ -48,38 +48,40 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="config.js"></script>
     <script>
-        document.getElementById('login-form').addEventListener('submit', function(e) {
+
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            // Get all users from localStorage
-            const users = JSON.parse(localStorage.getItem('techhub_users') || '[]');
-            
-            // Check if user exists and password is correct
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                localStorage.setItem('current_user', JSON.stringify(user));
-                
-                // Log login event for admin notification
-                const loginEvents = JSON.parse(localStorage.getItem('login_events') || '[]');
-                loginEvents.push({
-                    type: 'login',
-                    name: user.name,
-                    email: user.email,
-                    timestamp: new Date().toISOString(),
-                    date: new Date().toLocaleString()
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
                 });
-                localStorage.setItem('login_events', JSON.stringify(loginEvents));
-                
-                showMessage('Login successful! Redirecting...', 'success');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
-            } else {
-                showMessage('Invalid email or password!', 'error');
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Save token and user info
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('current_user', JSON.stringify(data.user));
+                    
+                    showMessage('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } else {
+                    showMessage(data.error || 'Invalid email or password!', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Connection error. Please make sure the server is running.', 'error');
             }
         });
 
