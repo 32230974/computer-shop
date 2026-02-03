@@ -119,6 +119,9 @@ exports.login = async (req, res) => {
         // Generate token
         const token = await User.generateToken(user);
 
+        // Update last login timestamp
+        await User.updateLastLogin(user.id);
+
         // Send login notification email to admin
         await sendEmail(
             process.env.EMAIL_USER,
@@ -183,6 +186,16 @@ exports.getAllUsers = async (req, res) => {
         const users = await User.getAll();
         res.json(users);
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.getAdminStats = async (req, res) => {
+    try {
+        const stats = await User.getStats();
+        res.json(stats);
+    } catch (error) {
+        console.error('Stats error:', error);
         res.status(500).json({ error: error.message });
     }
 };

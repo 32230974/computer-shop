@@ -274,21 +274,50 @@
         </div>
     </footer>
 
+    <script src="config.js"></script>
     <script src="script.js"></script>
     <script>
-        // Load and display notifications
-        function loadNotifications() {
-            const signupEvents = JSON.parse(localStorage.getItem('signup_events') || '[]');
-            const loginEvents = JSON.parse(localStorage.getItem('login_events') || '[]');
+        // Load and display notifications from API
+        async function loadNotifications() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please login as admin');
+                window.location.href = 'admin-login.html';
+                return;
+            }
 
-            // Display stats
-            document.getElementById('total-signups').textContent = signupEvents.length;
-            document.getElementById('total-logins').textContent = loginEvents.length;
+            try {
+                const response = await fetch(`${API_URL}/auth/stats`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
-            // Display signups
-            displaySignups(signupEvents);
-            displayLogins(loginEvents);
-            displayAllEvents(signupEvents, loginEvents);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch stats');
+                }
+
+                const data = await response.json();
+
+                // Display stats
+                document.getElementById('total-signups').textContent = data.totalSignups || 0;
+                document.getElementById('total-logins').textContent = data.totalLogins || 0;
+
+                // Display signups
+                displaySignups(data.recentSignups || []);
+                displayLogins(data.recentLogins || []);
+                displayAllEvents(data.recentSignups || [], data.recentLogins || []);
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+                document.getElementById('total-signups').textContent = '0';
+                document.getElementById('total-logins').textContent = '0';
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleString();
         }
 
         function displaySignups(events) {
@@ -299,17 +328,17 @@
             }
 
             let html = '';
-            events.reverse().forEach(event => {
+            events.forEach(event => {
                 html += `
                     <div class="notification-item signup">
                         <div class="notification-header">
                             <span class="notification-type signup">Signup</span>
-                            <span class="notification-time">${event.date}</span>
+                            <span class="notification-time">${formatDate(event.created_at)}</span>
                         </div>
                         <div class="notification-details">
                             <p><span class="notification-label">Name:</span> ${event.name}</p>
                             <p><span class="notification-label">Email:</span> ${event.email}</p>
-                            <p><span class="notification-label">Phone:</span> ${event.phone}</p>
+                            <p><span class="notification-label">Phone:</span> ${event.phone || 'Not provided'}</p>
                         </div>
                     </div>
                 `;
@@ -325,12 +354,12 @@
             }
 
             let html = '';
-            events.reverse().forEach(event => {
+            events.forEach(event => {
                 html += `
                     <div class="notification-item login">
                         <div class="notification-header">
                             <span class="notification-type login">Login</span>
-                            <span class="notification-time">${event.date}</span>
+                            <span class="notification-time">${formatDate(event.last_login)}</span>
                         </div>
                         <div class="notification-details">
                             <p><span class="notification-label">User:</span> ${event.name}</p>
@@ -345,8 +374,8 @@
         function displayAllEvents(signupEvents, loginEvents) {
             const container = document.getElementById('all-content');
             const allEvents = [
-                ...signupEvents.map(e => ({...e, type: 'signup'})),
-                ...loginEvents.map(e => ({...e, type: 'login'}))
+                ...signupEvents.map(e => ({...e, type: 'signup', timestamp: e.created_at})),
+                ...loginEvents.map(e => ({...e, type: 'login', timestamp: e.last_login}))
             ];
 
             if (allEvents.length === 0) {
@@ -367,12 +396,12 @@
                         <div class="notification-item ${className}">
                             <div class="notification-header">
                                 <span class="notification-type ${className}">${iconType} Signup</span>
-                                <span class="notification-time">${event.date}</span>
+                                <span class="notification-time">${formatDate(event.created_at)}</span>
                             </div>
                             <div class="notification-details">
                                 <p><span class="notification-label">Name:</span> ${event.name}</p>
                                 <p><span class="notification-label">Email:</span> ${event.email}</p>
-                                <p><span class="notification-label">Phone:</span> ${event.phone}</p>
+                                <p><span class="notification-label">Phone:</span> ${event.phone || 'Not provided'}</p>
                             </div>
                         </div>
                     `;
@@ -381,7 +410,7 @@
                         <div class="notification-item ${className}">
                             <div class="notification-header">
                                 <span class="notification-type ${className}">${iconType} Login</span>
-                                <span class="notification-time">${event.date}</span>
+                                <span class="notification-time">${formatDate(event.last_login)}</span>
                             </div>
                             <div class="notification-details">
                                 <p><span class="notification-label">User:</span> ${event.name}</p>
@@ -413,14 +442,9 @@
             event.target.classList.add('active');
         }
 
-        // Clear all notifications
+        // Clear all notifications (reloads data from API)
         function clearAllNotifications() {
-            if (confirm('Are you sure you want to clear all notifications? This cannot be undone.')) {
-                localStorage.removeItem('signup_events');
-                localStorage.removeItem('login_events');
-                alert('All notifications cleared!');
-                loadNotifications();
-            }
+            alert('Notification data is stored in the database and cannot be cleared from here.');
         }
 
         // Initialize on page load

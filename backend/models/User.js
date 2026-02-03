@@ -68,6 +68,37 @@ class User {
             await runAsync('UPDATE users SET phone = ? WHERE id = ?', [phone, userId]);
         }
     }
+
+    static async updateLastLogin(userId) {
+        await runAsync(
+            'UPDATE users SET last_login = NOW() WHERE id = ?',
+            [userId]
+        );
+    }
+
+    static async getStats() {
+        const totalUsers = await getAsync('SELECT COUNT(*) as count FROM users');
+        const totalLogins = await getAsync('SELECT COUNT(*) as count FROM users WHERE last_login IS NOT NULL');
+        const recentSignups = await allAsync(
+            `SELECT id, name, email, phone, created_at 
+             FROM users 
+             ORDER BY created_at DESC 
+             LIMIT 50`
+        );
+        const recentLogins = await allAsync(
+            `SELECT id, name, email, last_login 
+             FROM users 
+             WHERE last_login IS NOT NULL 
+             ORDER BY last_login DESC 
+             LIMIT 50`
+        );
+        return {
+            totalSignups: totalUsers.count,
+            totalLogins: totalLogins.count,
+            recentSignups,
+            recentLogins
+        };
+    }
 }
 
 module.exports = User;

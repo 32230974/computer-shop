@@ -40,11 +40,13 @@ CREATE TABLE users (
     phone VARCHAR(20) DEFAULT NULL,
     password VARCHAR(255) NOT NULL,
     is_admin TINYINT(1) NOT NULL DEFAULT 0,
+    last_login TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uk_users_email (email),
-    INDEX idx_users_is_admin (is_admin)
+    INDEX idx_users_is_admin (is_admin),
+    INDEX idx_users_last_login (last_login)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
