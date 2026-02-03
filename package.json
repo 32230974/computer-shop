@@ -10,11 +10,17 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "keywords": ["ecommerce", "nodejs", "express", "mysql"],
+  "keywords": [
+    "ecommerce",
+    "nodejs",
+    "express",
+    "mysql"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^12.6.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
