@@ -1,4 +1,20 @@
 const { runAsync } = require('../database');
+const bcrypt = require('bcryptjs');
+
+async function seedUsers() {
+    try {
+        const hashedPassword = await bcrypt.hash('12345678', 10);
+        await runAsync(
+            'INSERT INTO users (name, email, phone, password, is_admin) VALUES (?, ?, ?, ?, ?)',
+            ['Test User', 'mhmd12@gmail.com', '1234567890', hashedPassword, 0]
+        );
+        console.log('✅ Test user created: mhmd12@gmail.com / 12345678');
+    } catch (error) {
+        if (!error.message.includes('UNIQUE constraint failed')) {
+            console.error('Error seeding users:', error);
+        }
+    }
+}
 
 async function seedProducts() {
     const products = [
@@ -65,4 +81,4 @@ async function seedProducts() {
     }
 }
 
-module.exports = { seedProducts };
+module.exports = { seedProducts, seedUsers };

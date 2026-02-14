@@ -1,4 +1,5 @@
 const mysql = require('mysql2/promise');
+const bcrypt = require('bcryptjs');
 
 let pool;
 let useInMemory = false;
@@ -33,6 +34,18 @@ async function initializeDatabase() {
         console.log('⚠️ No MySQL configuration found - using in-memory storage');
         console.log('📦 Demo mode: Data will reset on server restart');
         useInMemory = true;
+        // Add test user to in-memory storage
+        const hashedPassword = await bcrypt.hash('12345678', 10);
+        inMemoryDB.users.push({
+            id: 1,
+            name: 'Test User',
+            email: 'mhmd12@gmail.com',
+            phone: '1234567890',
+            password: hashedPassword,
+            is_admin: 0,
+            created_at: new Date().toISOString()
+        });
+        console.log('✅ Test user created: mhmd12@gmail.com / 12345678');
         return;
     }
 
@@ -63,6 +76,18 @@ async function initializeDatabase() {
     } catch (err) {
         console.error('⚠️ MySQL connection failed, falling back to in-memory storage:', err.message);
         useInMemory = true;
+        // Add test user to in-memory storage
+        const hashedPassword = await bcrypt.hash('12345678', 10);
+        inMemoryDB.users.push({
+            id: 1,
+            name: 'Test User',
+            email: 'mhmd12@gmail.com',
+            phone: '1234567890',
+            password: hashedPassword,
+            is_admin: 0,
+            created_at: new Date().toISOString()
+        });
+        console.log('✅ Test user created: mhmd12@gmail.com / 12345678');
     }
 }
 

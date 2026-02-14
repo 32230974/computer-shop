@@ -441,13 +441,13 @@
         function proceedToCheckout() {
             // Check if user is still logged in
             const currentUser = localStorage.getItem('current_user');
-            if (!currentUser) {
+            const token = localStorage.getItem('token');
+            if (!currentUser && !token) {
                 alert('Your session has expired. Please login again to proceed with checkout.');
                 window.location.href = 'login.html';
                 return;
             }
-            alert('Checkout functionality will be implemented soon!');
-            // window.location.href = 'checkout.html';
+            window.location.href = 'checkout.html';
         }
 
         // Remove product from cart
