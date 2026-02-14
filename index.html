@@ -14,14 +14,17 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">TechHub</div>
-            <ul class="nav-links">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="offers.html">Offers</a></li>
                 <li><a href="#products">Products</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
-            <div class="auth-links">
+            <div class="auth-links" id="auth-links">
                 <button id="dark-mode-toggle" class="btn-dark-mode" onclick="toggleDarkMode()" title="Toggle Dark Mode">
                     <span class="dark-mode-icon">🌙</span>
                 </button>
