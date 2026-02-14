@@ -1,227 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category - TechHub</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81' }, accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' } } } } }
+    </script>
     <style>
-        .category-page-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .category-page-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .category-page-header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .category-breadcrumb {
-            padding: 1rem 0;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .category-breadcrumb a {
-            color: #3498db;
-            text-decoration: none;
-        }
-
-        .category-breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .category-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .category-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .back-btn {
-            background: #3498db;
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: #2980b9;
-            transform: translateY(-3px);
-        }
-
-        .product-count {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        @media (max-width: 768px) {
-            .category-page-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .category-page-header p {
-                font-size: 0.95rem;
-            }
-
-            .category-actions {
-                flex-direction: column;
-            }
-
-            .back-btn {
-                width: 100%;
-                text-align: center;
-            }
-        }
+        .gradient-text { background: linear-gradient(135deg, #6366f1, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .nav-glass { backdrop-filter: blur(20px); background: rgba(255,255,255,0.85); }
+        .dark .nav-glass { background: rgba(15,15,25,0.85); }
     </style>
 </head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">TechHub</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="index.html#products">Products</a></li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#contact">Contact</a></li>
-            </ul>
-            <div class="auth-links">
-                <a href="login.html" class="btn-login">Login</a>
-                <a href="signup.html" class="btn-signup">Sign Up</a>
-                <span id="user-profile" style="display:none;">
-                    <a href="#" onclick="showUserMenu(event)" class="user-menu-btn"></a>
-                    <div class="user-dropdown" id="user-dropdown">
-                        <a href="#" onclick="logout(); return false;">Logout</a>
-                    </div>
-                    <a href="#" id="logout-btn" class="btn-logout" onclick="logout(); return false;" style="display:none;">Logout</a>
-                </span>
-                <a href="#" id="admin-btn" class="btn-admin" onclick="checkAdminPassword(event)" style="display:none;">Admin</a>
+<body class="font-sans bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- Nav -->
+    <nav class="nav-glass fixed top-0 left-0 right-0 z-50 border-b border-gray-200/50 dark:border-gray-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+            <a href="index.html" class="flex items-center gap-2 text-xl font-bold"><i class="fas fa-bolt text-primary-500"></i><span class="gradient-text">TechHub</span></a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="index.html" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition">Home</a>
+                <a href="offers.html" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition">Offers</a>
+                <a href="about.html" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition">About</a>
+                <a href="contact.html" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition">Contact</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleDarkMode()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"><span class="dark-mode-icon text-lg">🌙</span></button>
+                <a href="cart.html" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition text-primary-500"><i class="fas fa-shopping-cart text-lg"></i></a>
             </div>
         </div>
     </nav>
 
-    <!-- Category Header -->
-    <section class="category-page-header">
-        <div class="container">
-            <div class="category-breadcrumb">
-                <a href="index.html">Home</a> / <span id="breadcrumb-text">Category</span>
-            </div>
-            <h1 id="category-title">Category</h1>
-            <p id="category-description">Explore our amazing collection</p>
-        </div>
-    </section>
-
-    <!-- Category Content -->
-    <section class="category-content">
-        <div class="category-actions">
-            <a href="index.html" class="back-btn">← Back to Home</a>
-            <div class="product-count">
-                <span id="product-count">0</span> products found
+    <div class="pt-20 pb-16">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-primary-600 to-accent-600 py-12 mb-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex items-center gap-2 text-sm text-white/70 mb-4">
+                    <a href="index.html" class="hover:text-white transition">Home</a>
+                    <i class="fas fa-chevron-right text-xs"></i>
+                    <span id="breadcrumb-text" class="text-white font-medium">Category</span>
+                </nav>
+                <h1 id="category-title" class="text-3xl sm:text-4xl font-bold text-white mb-2">Products</h1>
+                <p id="category-description" class="text-white/70">Browse our collection</p>
+                <div class="mt-4 inline-flex items-center gap-2 bg-white/10 backdrop-blur rounded-lg px-4 py-2 text-white text-sm">
+                    <i class="fas fa-box"></i> <span id="product-count">0</span> products found
+                </div>
             </div>
         </div>
 
-        <div class="products-grid" id="products-grid">
-            <!-- Products will be loaded here -->
+        <!-- Products Grid -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="products-grid">
+                <!-- Products loaded by JS -->
+            </div>
         </div>
-    </section>
+    </div>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 TechHub. All rights reserved.</p>
+    <footer class="bg-gray-900 dark:bg-black text-gray-300 pt-12 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            <p>&copy; 2026 TechHub. All rights reserved.</p>
         </div>
     </footer>
 
+    <script src="config.js"></script>
     <script src="script.js"></script>
     <script>
-        // Get category from URL parameter
         function getCategoryFromURL() {
             const params = new URLSearchParams(window.location.search);
             return params.get('category') || 'all';
         }
 
-        // Load category products
         function loadCategoryProducts() {
             const category = getCategoryFromURL();
             const products = JSON.parse(localStorage.getItem('techhub_products') || '[]');
-
-            // Filter products by category
             let filteredProducts = products;
-            if (category !== 'all') {
-                filteredProducts = products.filter(p => p.category === category);
-            }
+            if (category !== 'all') filteredProducts = products.filter(p => p.category === category);
 
-            // Update page title and description
             const categoryInfo = {
-                laptops: { title: 'Laptops', description: 'High-performance laptops for work and gaming', icon: '💻' },
-                desktops: { title: 'Desktops', description: 'Powerful desktop computers for professionals', icon: '🖥️' },
-                accessories: { title: 'Accessories', description: 'Essential tech accessories and peripherals', icon: '🎧' },
-                peripherals: { title: 'Peripherals', description: 'Input devices and computer peripherals', icon: '🖱️' },
-                all: { title: 'All Products', description: 'Browse our complete product collection', icon: '📦' }
+                laptops: { title: 'Laptops', description: 'High-performance laptops for work and gaming', icon: 'fa-laptop' },
+                desktops: { title: 'Desktops', description: 'Powerful desktop computers for professionals', icon: 'fa-desktop' },
+                accessories: { title: 'Accessories', description: 'Essential tech accessories and peripherals', icon: 'fa-headphones' },
+                peripherals: { title: 'Peripherals', description: 'Input devices and computer peripherals', icon: 'fa-mouse' },
+                all: { title: 'All Products', description: 'Browse our complete product collection', icon: 'fa-box' }
             };
-
             const info = categoryInfo[category] || categoryInfo.all;
             document.getElementById('category-title').textContent = info.title;
             document.getElementById('category-description').textContent = info.description;
             document.getElementById('breadcrumb-text').textContent = info.title;
             document.getElementById('product-count').textContent = filteredProducts.length;
+            document.title = `${info.title} - TechHub`;
 
-            // Display products
             const grid = document.getElementById('products-grid');
             grid.innerHTML = '';
 
             if (filteredProducts.length === 0) {
                 grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">
-                        <p style="font-size: 18px; margin-bottom: 10px;">No products found in this category.</p>
-                        <a href="index.html" style="color: #3498db; text-decoration: none;">← Back to Home</a>
-                    </div>
-                `;
+                    <div class="col-span-full text-center py-16">
+                        <i class="fas fa-box-open text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                        <p class="text-lg text-gray-500 mb-4">No products found in this category.</p>
+                        <a href="index.html" class="text-primary-600 hover:text-primary-500 font-medium"><i class="fas fa-arrow-left mr-1"></i> Back to Home</a>
+                    </div>`;
                 return;
             }
 
             filteredProducts.forEach(product => {
                 const card = document.createElement('div');
-                card.className = 'product-card';
+                card.className = 'bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group';
                 card.innerHTML = `
-                    <div class="product-image">${product.image || '📦'}</div>
-                    <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
-                        <div class="product-price">$${product.price.toFixed(2)}</div>
-                        <div class="product-description">${product.description}</div>
-                        <div class="product-stock">Stock: ${product.stock} units</div>
-                        <div class="product-actions">
-                            <button class="btn-add-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-                        </div>
+                    <div class="bg-gray-100 dark:bg-gray-800 p-8 flex items-center justify-center h-48">
+                        <span class="text-6xl group-hover:scale-110 transition-transform">${product.image || '📦'}</span>
                     </div>
-                `;
+                    <div class="p-5">
+                        <span class="text-xs font-medium text-primary-600 dark:text-primary-400 uppercase">${product.category}</span>
+                        <h3 class="font-semibold text-lg mt-1 mb-2">${product.name}</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">${product.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary-600">$${product.price.toFixed(2)}</span>
+                            <span class="text-xs text-gray-400">${product.stock} in stock</span>
+                        </div>
+                        <button onclick="addToCart(${product.id})" class="w-full mt-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2.5 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>`;
                 grid.appendChild(card);
             });
         }
 
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
+            initializeDarkMode();
+            initializeProducts();
             checkUserLogin();
             loadCategoryProducts();
         });

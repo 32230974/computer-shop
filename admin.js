@@ -27,23 +27,26 @@ function showSection(sectionId) {
     // Hide all sections
     const sections = document.querySelectorAll('.admin-section');
     sections.forEach(section => {
-        section.classList.remove('active');
+        section.classList.add('hidden');
     });
     
     // Remove active class from menu items
     const menuItems = document.querySelectorAll('.menu-item');
     menuItems.forEach(item => {
-        item.classList.remove('active');
+        item.classList.remove('active', 'bg-primary-50', 'dark:bg-primary-900/20', 'text-primary-600', 'dark:text-primary-400');
     });
     
     // Show selected section
     const section = document.getElementById(sectionId);
     if (section) {
-        section.classList.add('active');
+        section.classList.remove('hidden');
     }
     
     // Add active class to clicked menu item
-    event.target.classList.add('active');
+    if (event && event.target) {
+        const btn = event.target.closest('.menu-item');
+        if (btn) btn.classList.add('active', 'bg-primary-50', 'dark:bg-primary-900/20', 'text-primary-600', 'dark:text-primary-400');
+    }
     
     // Load data based on section
     if (sectionId === 'manage-products') {
@@ -176,21 +179,22 @@ function loadProductsList() {
     tbody.innerHTML = '';
     
     if (products.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No products found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">No products found</td></tr>';
         return;
     }
     
     products.forEach(product => {
         const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors';
         row.innerHTML = `
-            <td>${product.id}</td>
-            <td>${product.name}</td>
-            <td>${product.category}</td>
-            <td>$${product.price.toFixed(2)}</td>
-            <td>${product.stock}</td>
-            <td>
-                <button class="btn-edit" onclick="selectProductForEdit(${product.id})">Edit</button>
-                <button class="btn-delete" onclick="deleteProduct(${product.id})">Delete</button>
+            <td class="px-6 py-4 text-gray-500">#${product.id}</td>
+            <td class="px-6 py-4 font-medium">${product.name}</td>
+            <td class="px-6 py-4"><span class="px-2.5 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-medium rounded-full">${product.category}</span></td>
+            <td class="px-6 py-4 font-medium text-green-600 dark:text-green-400">$${product.price.toFixed(2)}</td>
+            <td class="px-6 py-4">${product.stock}</td>
+            <td class="px-6 py-4 flex gap-2">
+                <button class="px-3 py-1.5 text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-lg hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors" onclick="selectProductForEdit(${product.id})">Edit</button>
+                <button class="px-3 py-1.5 text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors" onclick="deleteProduct(${product.id})">Delete</button>
             </td>
         `;
         tbody.appendChild(row);
@@ -255,7 +259,7 @@ function loadProductForEdit() {
     const productId = parseInt(document.getElementById('edit-product-id').value);
     
     if (!productId) {
-        document.getElementById('edit-form-container').style.display = 'none';
+        document.getElementById('edit-form-container').classList.add('hidden');
         return;
     }
     
@@ -276,7 +280,7 @@ function loadProductForEdit() {
     document.getElementById('edit-product-stock').value = product.stock;
     
     // Show form container
-    document.getElementById('edit-form-container').style.display = 'block';
+    document.getElementById('edit-form-container').classList.remove('hidden');
 }
 
 // Delete current product
@@ -294,7 +298,7 @@ function deleteCurrentProduct() {
     
     deleteProduct(productId);
     document.getElementById('edit-product-id').value = '';
-    document.getElementById('edit-form-container').style.display = 'none';
+    document.getElementById('edit-form-container').classList.add('hidden');
     alert('Product deleted successfully!');
 }
 
@@ -303,6 +307,6 @@ function showMessage(elementId, message, type) {
     const messageElement = document.getElementById(elementId);
     if (messageElement) {
         messageElement.textContent = message;
-        messageElement.className = 'message ' + type;
+        messageElement.className = `mb-4 px-4 py-3 rounded-xl text-sm font-medium ${type === 'success' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'}`;
     }
 }

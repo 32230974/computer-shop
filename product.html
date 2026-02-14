@@ -1,756 +1,206 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - TechHub</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dark-mode.css">
+    <title>Product - TechHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81' }, accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' } } } } }
+    </script>
     <style>
-        .breadcrumb {
-            padding: 20px 0;
-            background: #f8f9fa;
-        }
-        .breadcrumb a {
-            color: #667eea;
-            text-decoration: none;
-        }
-        .breadcrumb span {
-            color: #999;
-            margin: 0 10px;
-        }
-        .product-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        .product-main {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            margin-bottom: 60px;
-        }
-        .product-gallery {
-            position: sticky;
-            top: 100px;
-        }
-        .main-image {
-            width: 100%;
-            height: 500px;
-            border-radius: 20px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .main-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        .main-image:hover img {
-            transform: scale(1.05);
-        }
-        .offer-tag {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-        }
-        .thumbnail-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-        .thumbnail {
-            height: 100px;
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-        .thumbnail.active, .thumbnail:hover {
-            border-color: #667eea;
-        }
-        .thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .product-info h1 {
-            font-size: 2.2rem;
-            color: #333;
-            margin-bottom: 15px;
-        }
-        .product-meta {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .rating {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .rating .stars {
-            color: #f39c12;
-        }
-        .rating span {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        .category-tag {
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-        }
-        .stock-status {
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        .in-stock {
-            background: #d4edda;
-            color: #155724;
-        }
-        .out-of-stock {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .price-section {
-            margin: 30px 0;
-            padding: 25px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 15px;
-        }
-        .price-row {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .current-price {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #28a745;
-        }
-        .original-price {
-            font-size: 1.5rem;
-            color: #999;
-            text-decoration: line-through;
-        }
-        .savings-badge {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-        }
-        .product-description {
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .quantity-selector label {
-            font-weight: 600;
-            color: #333;
-        }
-        .qty-controls {
-            display: flex;
-            align-items: center;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .qty-btn {
-            width: 45px;
-            height: 45px;
-            border: none;
-            background: #f8f9fa;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .qty-btn:hover {
-            background: #e9ecef;
-        }
-        .qty-input {
-            width: 60px;
-            height: 45px;
-            border: none;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        .btn-cart {
-            flex: 1;
-            padding: 18px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-        .btn-cart:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-        .btn-wishlist {
-            width: 60px;
-            height: 60px;
-            border: 2px solid #eee;
-            background: white;
-            border-radius: 12px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #ccc;
-        }
-        .btn-wishlist:hover, .btn-wishlist.active {
-            border-color: #ff6b6b;
-            color: #ff6b6b;
-            background: #fff5f5;
-        }
-        .product-features {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-        .feature-item i {
-            color: #667eea;
-            font-size: 1.2rem;
-        }
-        
-        /* Tabs */
-        .product-tabs {
-            margin-bottom: 60px;
-        }
-        .tabs-header {
-            display: flex;
-            border-bottom: 2px solid #eee;
-            margin-bottom: 30px;
-        }
-        .tab-btn {
-            padding: 15px 30px;
-            border: none;
-            background: none;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #999;
-            cursor: pointer;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-        .tab-btn.active {
-            color: #667eea;
-        }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #667eea;
-            border-radius: 3px 3px 0 0;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* Specifications */
-        .specs-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .specs-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-        .specs-table td {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-        }
-        .specs-table td:first-child {
-            font-weight: 600;
-            color: #555;
-            width: 200px;
-        }
-        
-        /* Reviews */
-        .reviews-summary {
-            display: flex;
-            gap: 40px;
-            margin-bottom: 40px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 15px;
-        }
-        .rating-big {
-            text-align: center;
-        }
-        .rating-big .number {
-            font-size: 4rem;
-            font-weight: 800;
-            color: #333;
-        }
-        .rating-big .stars {
-            color: #f39c12;
-            font-size: 1.5rem;
-        }
-        .rating-bars {
-            flex: 1;
-        }
-        .rating-bar {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 8px;
-        }
-        .rating-bar label {
-            width: 80px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        .bar-bg {
-            flex: 1;
-            height: 10px;
-            background: #e9ecef;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        .bar-fill {
-            height: 100%;
-            background: #f39c12;
-            border-radius: 5px;
-        }
-        .review-form {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            border: 2px solid #eee;
-            margin-bottom: 30px;
-        }
-        .review-form h3 {
-            margin-bottom: 20px;
-        }
-        .star-rating {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .star-rating i {
-            font-size: 2rem;
-            color: #ddd;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-        .star-rating i:hover, .star-rating i.active {
-            color: #f39c12;
-        }
-        .review-textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            resize: vertical;
-            min-height: 120px;
-            margin-bottom: 15px;
-        }
-        .review-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .review-item {
-            padding: 25px;
-            background: white;
-            border: 1px solid #eee;
-            border-radius: 15px;
-        }
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .reviewer {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .reviewer-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-        .reviewer-info h4 {
-            font-size: 1rem;
-            color: #333;
-        }
-        .reviewer-info span {
-            font-size: 0.85rem;
-            color: #999;
-        }
-        .review-stars {
-            color: #f39c12;
-        }
-        .review-text {
-            color: #666;
-            line-height: 1.7;
-        }
-        
-        /* Related Products */
-        .related-section h2 {
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-        }
-        .related-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-        }
-        .related-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-        .related-card:hover {
-            transform: translateY(-5px);
-        }
-        .related-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-        .related-card-content {
-            padding: 20px;
-        }
-        .related-card h4 {
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-        .related-card .price {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-        
-        @media (max-width: 992px) {
-            .product-main {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            .product-gallery {
-                position: static;
-            }
-            .related-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 576px) {
-            .related-grid {
-                grid-template-columns: 1fr;
-            }
-            .product-features {
-                grid-template-columns: 1fr;
-            }
-        }
+        .gradient-text { background: linear-gradient(135deg, #6366f1, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .nav-glass { backdrop-filter: blur(20px); background: rgba(255,255,255,0.85); }
+        .dark .nav-glass { background: rgba(15,15,25,0.85); }
+        .star-btn { cursor: pointer; transition: color 0.15s; }
+        .star-btn.active, .star-btn:hover { color: #f59e0b; }
     </style>
 </head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">TechHub</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="offers.html">Offers</a></li>
-                <li><a href="index.html#products">Products</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="auth-links">
-                <button id="dark-mode-toggle" class="btn-dark-mode" onclick="toggleDarkMode()" title="Toggle Dark Mode">
-                    <span class="dark-mode-icon">🌙</span>
-                </button>
-                <a href="wishlist.html" class="nav-icon" title="Wishlist"><i class="fas fa-heart"></i></a>
-                <a href="cart.html" class="nav-icon" title="Cart"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
-                <a href="login.html" class="btn-login" id="login-btn">Login</a>
-                <a href="signup.html" class="btn-signup" id="signup-btn">Sign Up</a>
+<body class="font-sans bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- Nav -->
+    <nav class="nav-glass fixed top-0 left-0 right-0 z-50 border-b border-gray-200/50 dark:border-gray-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+            <a href="index.html" class="flex items-center gap-2 text-xl font-bold"><i class="fas fa-bolt text-primary-500"></i><span class="gradient-text">TechHub</span></a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="index.html" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition">Home</a>
+                <a href="offers.html" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition">Offers</a>
+                <a href="about.html" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition">About</a>
+                <a href="contact.html" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition">Contact</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleDarkMode()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"><span class="dark-mode-icon text-lg">🌙</span></button>
+                <a href="cart.html" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition text-primary-500"><i class="fas fa-shopping-cart text-lg"></i></a>
+                <a href="wishlist.html" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition text-pink-500"><i class="fas fa-heart text-lg"></i></a>
             </div>
         </div>
     </nav>
 
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-        <div class="container">
-            <a href="index.html">Home</a>
-            <span>/</span>
-            <a href="category.html" id="category-link">Category</a>
-            <span>/</span>
-            <span id="product-name-breadcrumb">Product</span>
-        </div>
-    </div>
-
-    <!-- Product Container -->
-    <div class="product-container">
-        <!-- Main Product Section -->
-        <div class="product-main">
-            <div class="product-gallery">
-                <div class="main-image">
-                    <span class="offer-tag" id="offer-tag" style="display: none;">-20% OFF</span>
-                    <img src="" alt="" id="main-product-image">
-                </div>
-                <div class="thumbnail-grid" id="thumbnails">
-                    <!-- Thumbnails will be added dynamically -->
-                </div>
-            </div>
-
-            <div class="product-info">
-                <h1 id="product-title">Loading...</h1>
-                
-                <div class="product-meta">
-                    <div class="rating">
-                        <span class="stars" id="rating-stars">★★★★★</span>
-                        <span id="rating-text">(0 reviews)</span>
-                    </div>
-                    <span class="category-tag" id="category-tag">Category</span>
-                    <span class="stock-status in-stock" id="stock-status">In Stock</span>
-                </div>
-
-                <div class="price-section">
-                    <div class="price-row">
-                        <span class="current-price" id="current-price">$0.00</span>
-                        <span class="original-price" id="original-price" style="display: none;">$0.00</span>
-                        <span class="savings-badge" id="savings-badge" style="display: none;">Save $0</span>
-                    </div>
-                </div>
-
-                <p class="product-description" id="product-description">
-                    Loading product description...
-                </p>
-
-                <div class="quantity-selector">
-                    <label>Quantity:</label>
-                    <div class="qty-controls">
-                        <button class="qty-btn" onclick="changeQty(-1)">−</button>
-                        <input type="number" class="qty-input" id="quantity" value="1" min="1">
-                        <button class="qty-btn" onclick="changeQty(1)">+</button>
-                    </div>
-                </div>
-
-                <div class="action-buttons">
-                    <button class="btn-cart" onclick="addToCart()">
-                        <i class="fas fa-shopping-cart"></i> Add to Cart
-                    </button>
-                    <button class="btn-wishlist" id="wishlist-btn" onclick="toggleWishlist()">
-                        <i class="fas fa-heart"></i>
-                    </button>
-                </div>
-
-                <div class="product-features">
-                    <div class="feature-item">
-                        <i class="fas fa-truck"></i>
-                        <span>Free Shipping</span>
-                    </div>
-                    <div class="feature-item">
-                        <i class="fas fa-undo"></i>
-                        <span>30-Day Returns</span>
-                    </div>
-                    <div class="feature-item">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>2-Year Warranty</span>
-                    </div>
-                    <div class="feature-item">
-                        <i class="fas fa-headset"></i>
-                        <span>24/7 Support</span>
-                    </div>
-                </div>
-            </div>
+    <div class="pt-20 pb-12">
+        <!-- Breadcrumb -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+            <nav class="flex items-center gap-2 text-sm text-gray-500">
+                <a href="index.html" class="hover:text-primary-500 transition">Home</a>
+                <i class="fas fa-chevron-right text-xs"></i>
+                <a href="#" id="category-link" class="hover:text-primary-500 transition capitalize">Category</a>
+                <i class="fas fa-chevron-right text-xs"></i>
+                <span id="product-name-breadcrumb" class="text-gray-900 dark:text-white font-medium">Product</span>
+            </nav>
         </div>
 
-        <!-- Product Tabs -->
-        <div class="product-tabs">
-            <div class="tabs-header">
-                <button class="tab-btn active" onclick="showTab('description')">Description</button>
-                <button class="tab-btn" onclick="showTab('specs')">Specifications</button>
-                <button class="tab-btn" onclick="showTab('reviews')">Reviews <span id="review-count">(0)</span></button>
-            </div>
-
-            <div class="tab-content active" id="description-tab">
-                <p id="full-description">Loading description...</p>
-            </div>
-
-            <div class="tab-content" id="specs-tab">
-                <table class="specs-table" id="specs-table">
-                    <tr><td>Brand</td><td id="spec-brand">-</td></tr>
-                    <tr><td>Model</td><td id="spec-model">-</td></tr>
-                    <tr><td>Category</td><td id="spec-category">-</td></tr>
-                    <tr><td>Warranty</td><td>2 Years</td></tr>
-                </table>
-            </div>
-
-            <div class="tab-content" id="reviews-tab">
-                <div class="reviews-summary">
-                    <div class="rating-big">
-                        <div class="number" id="avg-rating">0.0</div>
-                        <div class="stars">★★★★★</div>
-                        <div id="total-reviews">0 reviews</div>
+        <!-- Product Container -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="product-container bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 overflow-hidden">
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Image -->
+                    <div class="relative bg-gray-100 dark:bg-gray-800 p-8 flex items-center justify-center min-h-[400px]">
+                        <span id="offer-tag" class="hidden absolute top-4 left-4 bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-lg"></span>
+                        <img id="main-product-image" src="" alt="Product" class="max-w-full max-h-[500px] object-contain rounded-xl">
                     </div>
-                    <div class="rating-bars">
-                        <div class="rating-bar">
-                            <label>5 stars</label>
-                            <div class="bar-bg"><div class="bar-fill" style="width: 0%" id="bar-5"></div></div>
+                    <!-- Info -->
+                    <div class="p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
+                        <span id="category-tag" class="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 text-xs font-semibold px-3 py-1 rounded-full mb-3 w-fit capitalize"></span>
+                        <h1 id="product-title" class="text-2xl sm:text-3xl font-bold mb-3">Loading...</h1>
+                        
+                        <div class="flex items-center gap-2 mb-4">
+                            <span id="rating-stars" class="text-amber-400 text-lg">☆☆☆☆☆</span>
+                            <span id="rating-text" class="text-sm text-gray-500">(0 reviews)</span>
                         </div>
-                        <div class="rating-bar">
-                            <label>4 stars</label>
-                            <div class="bar-bg"><div class="bar-fill" style="width: 0%" id="bar-4"></div></div>
+
+                        <div class="flex items-baseline gap-3 mb-4">
+                            <span id="current-price" class="text-3xl font-bold text-primary-600">$0.00</span>
+                            <span id="original-price" class="text-lg text-gray-400 line-through hidden"></span>
+                            <span id="savings-badge" class="hidden bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium px-2 py-0.5 rounded-lg"></span>
                         </div>
-                        <div class="rating-bar">
-                            <label>3 stars</label>
-                            <div class="bar-bg"><div class="bar-fill" style="width: 0%" id="bar-3"></div></div>
+
+                        <p id="product-description" class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed"></p>
+                        
+                        <div class="flex items-center gap-2 mb-6">
+                            <i class="fas fa-box text-gray-400"></i>
+                            <span id="stock-status" class="text-sm font-medium text-green-600">Loading...</span>
                         </div>
-                        <div class="rating-bar">
-                            <label>2 stars</label>
-                            <div class="bar-bg"><div class="bar-fill" style="width: 0%" id="bar-2"></div></div>
+
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="flex items-center border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                <button onclick="changeQty(-1)" class="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition font-bold text-lg">−</button>
+                                <input type="number" id="quantity" value="1" min="1" class="w-16 text-center py-3 bg-transparent border-x border-gray-200 dark:border-gray-700 outline-none text-lg font-medium">
+                                <button onclick="changeQty(1)" class="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition font-bold text-lg">+</button>
+                            </div>
                         </div>
-                        <div class="rating-bar">
-                            <label>1 star</label>
-                            <div class="bar-bg"><div class="bar-fill" style="width: 0%" id="bar-1"></div></div>
+
+                        <div class="flex gap-3">
+                            <button onclick="addToCart()" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-primary-600/20">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                            <button id="wishlist-btn" onclick="toggleWishlist()" class="w-14 h-14 border border-gray-200 dark:border-gray-700 rounded-xl flex items-center justify-center hover:bg-pink-50 dark:hover:bg-pink-900/20 transition text-gray-400 hover:text-pink-500">
+                                <i class="fas fa-heart text-xl"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="review-form" id="review-form">
-                    <h3>Write a Review</h3>
-                    <div class="star-rating" id="star-rating">
-                        <i class="fas fa-star" data-rating="1"></i>
-                        <i class="fas fa-star" data-rating="2"></i>
-                        <i class="fas fa-star" data-rating="3"></i>
-                        <i class="fas fa-star" data-rating="4"></i>
-                        <i class="fas fa-star" data-rating="5"></i>
-                    </div>
-                    <textarea class="review-textarea" id="review-comment" placeholder="Share your experience with this product..."></textarea>
-                    <button class="btn-cart" onclick="submitReview()">Submit Review</button>
+            <!-- Tabs -->
+            <div class="mt-10 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 overflow-hidden">
+                <div class="flex border-b border-gray-200 dark:border-gray-700">
+                    <button onclick="showTab('description')" class="tab-btn active px-6 py-4 text-sm font-medium text-primary-600 border-b-2 border-primary-600 transition">Description</button>
+                    <button onclick="showTab('specs')" class="tab-btn px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition">Specifications</button>
+                    <button onclick="showTab('reviews')" class="tab-btn px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition">Reviews <span id="review-count" class="text-xs">(0)</span></button>
                 </div>
-
-                <div class="review-list" id="review-list">
-                    <!-- Reviews will be loaded here -->
+                <div class="p-6 sm:p-8">
+                    <div id="description-tab" class="tab-content">
+                        <p id="full-description" class="text-gray-600 dark:text-gray-400 leading-relaxed"></p>
+                    </div>
+                    <div id="specs-tab" class="tab-content hidden">
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4"><span class="text-sm text-gray-500">Category</span><p id="spec-category" class="font-medium capitalize mt-1">-</p></div>
+                            <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4"><span class="text-sm text-gray-500">Brand</span><p class="font-medium mt-1">TechHub</p></div>
+                            <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4"><span class="text-sm text-gray-500">Warranty</span><p class="font-medium mt-1">1 Year</p></div>
+                            <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4"><span class="text-sm text-gray-500">Shipping</span><p class="font-medium mt-1">Free Delivery</p></div>
+                        </div>
+                    </div>
+                    <div id="reviews-tab" class="tab-content hidden">
+                        <div class="grid lg:grid-cols-3 gap-8">
+                            <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 text-center">
+                                <div id="avg-rating" class="text-5xl font-bold text-primary-600 mb-2">0</div>
+                                <div class="text-amber-400 text-lg mb-1">☆☆☆☆☆</div>
+                                <div id="total-reviews" class="text-sm text-gray-500">0 reviews</div>
+                                <div class="mt-4 space-y-2">
+                                    <div class="flex items-center gap-2 text-sm"><span class="w-3">5</span><div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"><div id="bar-5" class="h-full bg-amber-400 rounded-full" style="width:0%"></div></div></div>
+                                    <div class="flex items-center gap-2 text-sm"><span class="w-3">4</span><div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"><div id="bar-4" class="h-full bg-amber-400 rounded-full" style="width:0%"></div></div></div>
+                                    <div class="flex items-center gap-2 text-sm"><span class="w-3">3</span><div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"><div id="bar-3" class="h-full bg-amber-400 rounded-full" style="width:0%"></div></div></div>
+                                    <div class="flex items-center gap-2 text-sm"><span class="w-3">2</span><div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"><div id="bar-2" class="h-full bg-amber-400 rounded-full" style="width:0%"></div></div></div>
+                                    <div class="flex items-center gap-2 text-sm"><span class="w-3">1</span><div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"><div id="bar-1" class="h-full bg-amber-400 rounded-full" style="width:0%"></div></div></div>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-2">
+                                <div id="review-list" class="space-y-4 mb-8"></div>
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6">
+                                    <h3 class="font-semibold mb-4">Write a Review</h3>
+                                    <div id="star-rating" class="flex gap-1 mb-4">
+                                        <i class="fas fa-star text-2xl text-gray-300 star-btn" data-rating="1"></i>
+                                        <i class="fas fa-star text-2xl text-gray-300 star-btn" data-rating="2"></i>
+                                        <i class="fas fa-star text-2xl text-gray-300 star-btn" data-rating="3"></i>
+                                        <i class="fas fa-star text-2xl text-gray-300 star-btn" data-rating="4"></i>
+                                        <i class="fas fa-star text-2xl text-gray-300 star-btn" data-rating="5"></i>
+                                    </div>
+                                    <textarea id="review-comment" rows="3" placeholder="Share your experience..." class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-primary-500 outline-none text-sm mb-3"></textarea>
+                                    <button onclick="submitReview()" class="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-2.5 rounded-xl transition text-sm">Submit Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Related Products -->
-        <div class="related-section">
-            <h2>Related Products</h2>
-            <div class="related-grid" id="related-products">
-                <!-- Related products will be loaded here -->
+            <!-- Related Products -->
+            <div class="mt-10">
+                <h2 class="text-2xl font-bold mb-6">Related Products</h2>
+                <div id="related-products" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2026 TechHub. All rights reserved.</p>
-            </div>
+    <footer class="bg-gray-900 dark:bg-black text-gray-300 pt-12 pb-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            <p>&copy; 2026 TechHub. All rights reserved.</p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
     <script src="config.js"></script>
+    <script src="script.js"></script>
     <script>
         let currentProduct = null;
         let selectedRating = 0;
-
-        // Get product ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
-        // Load product
         async function loadProduct() {
-            if (!productId) {
-                window.location.href = 'index.html';
-                return;
-            }
-
+            if (!productId) { window.location.href = 'index.html'; return; }
             try {
                 const response = await fetch(`${API_URL}/products/${productId}`);
                 if (!response.ok) throw new Error('Product not found');
-                
                 currentProduct = await response.json();
                 displayProduct();
                 loadReviews();
                 loadRelatedProducts();
                 checkWishlistStatus();
             } catch (error) {
-                console.error('Error:', error);
                 document.querySelector('.product-container').innerHTML = `
-                    <div style="text-align: center; padding: 100px;">
-                        <h2>Product Not Found</h2>
-                        <p>The product you're looking for doesn't exist.</p>
-                        <a href="index.html" class="btn-cart" style="display: inline-block; margin-top: 20px;">Back to Home</a>
-                    </div>
-                `;
+                    <div class="text-center py-20 px-4">
+                        <i class="fas fa-box-open text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                        <h2 class="text-xl font-bold mb-2">Product Not Found</h2>
+                        <p class="text-gray-500 mb-4">The product you're looking for doesn't exist.</p>
+                        <a href="index.html" class="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-2.5 rounded-xl font-medium"><i class="fas fa-arrow-left"></i> Back to Home</a>
+                    </div>`;
             }
         }
 
-        // Display product
         function displayProduct() {
             const p = currentProduct;
-            
             document.title = `${p.name} - TechHub`;
             document.getElementById('product-title').textContent = p.name;
             document.getElementById('product-name-breadcrumb').textContent = p.name;
@@ -760,41 +210,33 @@
             document.getElementById('product-description').textContent = p.description || 'No description available.';
             document.getElementById('full-description').textContent = p.description || 'No description available.';
             document.getElementById('spec-category').textContent = p.category;
-            
-            // Image
             const mainImg = document.getElementById('main-product-image');
             mainImg.src = p.image_url || 'https://via.placeholder.com/600x500?text=TechHub';
             mainImg.alt = p.name;
-
-            // Price - check for offers
             checkOfferPrice(p);
-
-            // Stock
             const stockEl = document.getElementById('stock-status');
             if (p.stock > 0) {
                 stockEl.textContent = `In Stock (${p.stock})`;
-                stockEl.className = 'stock-status in-stock';
+                stockEl.className = 'text-sm font-medium text-green-600';
             } else {
                 stockEl.textContent = 'Out of Stock';
-                stockEl.className = 'stock-status out-of-stock';
+                stockEl.className = 'text-sm font-medium text-red-600';
             }
         }
 
-        // Check for offer price
         async function checkOfferPrice(product) {
             try {
                 const response = await fetch(`${API_URL}/offers/active`);
                 const offers = await response.json();
                 const offer = offers.find(o => o.product_id === product.id);
-
                 if (offer) {
                     document.getElementById('current-price').textContent = `$${offer.offer_price.toFixed(2)}`;
                     document.getElementById('original-price').textContent = `$${product.price.toFixed(2)}`;
-                    document.getElementById('original-price').style.display = 'inline';
+                    document.getElementById('original-price').classList.remove('hidden');
                     document.getElementById('savings-badge').textContent = `Save $${(product.price - offer.offer_price).toFixed(2)}`;
-                    document.getElementById('savings-badge').style.display = 'inline-block';
+                    document.getElementById('savings-badge').classList.remove('hidden');
                     document.getElementById('offer-tag').textContent = `-${offer.discount_percent}% OFF`;
-                    document.getElementById('offer-tag').style.display = 'block';
+                    document.getElementById('offer-tag').classList.remove('hidden');
                 } else {
                     document.getElementById('current-price').textContent = `$${product.price.toFixed(2)}`;
                 }
@@ -803,7 +245,6 @@
             }
         }
 
-        // Quantity controls
         function changeQty(delta) {
             const input = document.getElementById('quantity');
             let value = parseInt(input.value) + delta;
@@ -812,251 +253,148 @@
             input.value = value;
         }
 
-        // Add to cart
         async function addToCart() {
             const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
+            if (!token) { window.location.href = 'login.html'; return; }
             const quantity = parseInt(document.getElementById('quantity').value);
-
             try {
                 const response = await fetch(`${API_URL}/cart`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify({ productId, quantity })
                 });
-
-                if (response.ok) {
-                    showNotification('Added to cart!', 'success');
-                    updateCartCount();
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
+                if (response.ok) showNotification('Added to cart!', 'success');
+            } catch (error) { console.error('Error:', error); }
         }
 
-        // Wishlist
         async function toggleWishlist() {
             const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
+            if (!token) { window.location.href = 'login.html'; return; }
             const btn = document.getElementById('wishlist-btn');
-            const isInWishlist = btn.classList.contains('active');
-
+            const isIn = btn.classList.contains('text-pink-500');
             try {
-                if (isInWishlist) {
-                    await fetch(`${API_URL}/wishlist/${productId}`, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    btn.classList.remove('active');
+                if (isIn) {
+                    await fetch(`${API_URL}/wishlist/${productId}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                    btn.classList.remove('text-pink-500');
+                    btn.classList.add('text-gray-400');
                     showNotification('Removed from wishlist', 'success');
                 } else {
-                    await fetch(`${API_URL}/wishlist`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ productId })
-                    });
-                    btn.classList.add('active');
+                    await fetch(`${API_URL}/wishlist`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ productId }) });
+                    btn.classList.add('text-pink-500');
+                    btn.classList.remove('text-gray-400');
                     showNotification('Added to wishlist!', 'success');
                 }
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            } catch (error) { console.error('Error:', error); }
         }
 
         async function checkWishlistStatus() {
             const token = localStorage.getItem('token');
             if (!token) return;
-
             try {
-                const response = await fetch(`${API_URL}/wishlist/check/${productId}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const response = await fetch(`${API_URL}/wishlist/check/${productId}`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const data = await response.json();
                 if (data.isInWishlist) {
-                    document.getElementById('wishlist-btn').classList.add('active');
+                    document.getElementById('wishlist-btn').classList.add('text-pink-500');
+                    document.getElementById('wishlist-btn').classList.remove('text-gray-400');
                 }
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            } catch (error) { console.error('Error:', error); }
         }
 
-        // Tabs
         function showTab(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            
-            document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
-            document.getElementById(`${tabName}-tab`).classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(btn => { btn.classList.remove('active', 'text-primary-600', 'border-b-2', 'border-primary-600'); btn.classList.add('text-gray-500'); });
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            const activeBtn = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+            activeBtn.classList.add('active', 'text-primary-600', 'border-b-2', 'border-primary-600');
+            activeBtn.classList.remove('text-gray-500');
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
         }
 
-        // Reviews
         async function loadReviews() {
             try {
                 const response = await fetch(`${API_URL}/reviews/product/${productId}`);
                 const data = await response.json();
-
                 document.getElementById('review-count').textContent = `(${data.totalReviews})`;
                 document.getElementById('avg-rating').textContent = data.averageRating.toFixed(1);
                 document.getElementById('total-reviews').textContent = `${data.totalReviews} reviews`;
-
-                // Update stars display
                 const avgStars = Math.round(data.averageRating);
                 document.getElementById('rating-stars').textContent = '★'.repeat(avgStars) + '☆'.repeat(5 - avgStars);
                 document.getElementById('rating-text').textContent = `(${data.totalReviews} reviews)`;
-
-                // Rating bars
-                const ratingCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+                const ratingCounts = {1:0,2:0,3:0,4:0,5:0};
                 data.reviews.forEach(r => ratingCounts[r.rating]++);
                 for (let i = 1; i <= 5; i++) {
-                    const percent = data.totalReviews > 0 ? (ratingCounts[i] / data.totalReviews) * 100 : 0;
+                    const percent = data.totalReviews > 0 ? (ratingCounts[i]/data.totalReviews)*100 : 0;
                     document.getElementById(`bar-${i}`).style.width = `${percent}%`;
                 }
-
-                // Display reviews
-                const reviewList = document.getElementById('review-list');
-                reviewList.innerHTML = data.reviews.map(review => `
-                    <div class="review-item">
-                        <div class="review-header">
-                            <div class="reviewer">
-                                <div class="reviewer-avatar">${review.user_name.charAt(0).toUpperCase()}</div>
-                                <div class="reviewer-info">
-                                    <h4>${review.user_name}</h4>
-                                    <span>${new Date(review.created_at).toLocaleDateString()}</span>
-                                </div>
+                document.getElementById('review-list').innerHTML = data.reviews.map(review => `
+                    <div class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center font-bold text-primary-600">${'A'}</div>
+                                <div><h4 class="font-medium text-sm">${review.user_name}</h4><span class="text-xs text-gray-400">${new Date(review.created_at).toLocaleDateString()}</span></div>
                             </div>
-                            <div class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                            <div class="text-amber-400 text-sm">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
                         </div>
-                        <p class="review-text">${review.comment || 'No comment provided.'}</p>
-                    </div>
-                `).join('');
-
-            } catch (error) {
-                console.error('Error loading reviews:', error);
-            }
+                        <p class="text-sm text-gray-600 dark:text-gray-400">${review.comment || 'No comment provided.'}</p>
+                    </div>`).join('');
+            } catch (error) { console.error('Error loading reviews:', error); }
         }
 
-        // Star rating
         document.querySelectorAll('#star-rating i').forEach(star => {
             star.addEventListener('click', function() {
                 selectedRating = parseInt(this.dataset.rating);
-                document.querySelectorAll('#star-rating i').forEach((s, idx) => {
-                    s.classList.toggle('active', idx < selectedRating);
-                });
+                document.querySelectorAll('#star-rating i').forEach((s, idx) => { s.classList.toggle('active', idx < selectedRating); s.classList.toggle('text-amber-400', idx < selectedRating); s.classList.toggle('text-gray-300', idx >= selectedRating); });
             });
             star.addEventListener('mouseover', function() {
-                const rating = parseInt(this.dataset.rating);
-                document.querySelectorAll('#star-rating i').forEach((s, idx) => {
-                    s.classList.toggle('active', idx < rating);
-                });
+                const r = parseInt(this.dataset.rating);
+                document.querySelectorAll('#star-rating i').forEach((s, idx) => { s.classList.toggle('text-amber-400', idx < r); s.classList.toggle('text-gray-300', idx >= r); });
             });
         });
-
         document.getElementById('star-rating').addEventListener('mouseout', function() {
-            document.querySelectorAll('#star-rating i').forEach((s, idx) => {
-                s.classList.toggle('active', idx < selectedRating);
-            });
+            document.querySelectorAll('#star-rating i').forEach((s, idx) => { s.classList.toggle('text-amber-400', idx < selectedRating); s.classList.toggle('text-gray-300', idx >= selectedRating); });
         });
 
         async function submitReview() {
             const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            if (selectedRating === 0) {
-                showNotification('Please select a rating', 'error');
-                return;
-            }
-
+            if (!token) { window.location.href = 'login.html'; return; }
+            if (selectedRating === 0) { showNotification('Please select a rating', 'error'); return; }
             const comment = document.getElementById('review-comment').value;
-
             try {
-                const response = await fetch(`${API_URL}/reviews`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        productId: parseInt(productId),
-                        rating: selectedRating,
-                        comment
-                    })
-                });
-
+                const response = await fetch(`${API_URL}/reviews`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ productId: parseInt(productId), rating: selectedRating, comment }) });
                 if (response.ok) {
                     showNotification('Review submitted!', 'success');
                     document.getElementById('review-comment').value = '';
                     selectedRating = 0;
-                    document.querySelectorAll('#star-rating i').forEach(s => s.classList.remove('active'));
+                    document.querySelectorAll('#star-rating i').forEach(s => { s.classList.remove('active', 'text-amber-400'); s.classList.add('text-gray-300'); });
                     loadReviews();
-                } else {
-                    const error = await response.json();
-                    showNotification(error.error || 'Error submitting review', 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
+                } else { const err = await response.json(); showNotification(err.error || 'Error submitting review', 'error'); }
+            } catch (error) { console.error('Error:', error); }
         }
 
-        // Related products
         async function loadRelatedProducts() {
             try {
                 const response = await fetch(`${API_URL}/products`);
                 const products = await response.json();
-                
-                const related = products
-                    .filter(p => p.id !== parseInt(productId) && p.category === currentProduct.category)
-                    .slice(0, 4);
-
+                const related = products.filter(p => p.id !== parseInt(productId) && p.category === currentProduct.category).slice(0, 4);
                 document.getElementById('related-products').innerHTML = related.map(p => `
-                    <a href="product.html?id=${p.id}" class="related-card">
-                        <img src="${p.image_url || 'https://via.placeholder.com/300x180?text=TechHub'}" alt="${p.name}">
-                        <div class="related-card-content">
-                            <h4>${p.name}</h4>
-                            <span class="price">$${p.price.toFixed(2)}</span>
-                        </div>
-                    </a>
-                `).join('');
-
-            } catch (error) {
-                console.error('Error:', error);
-            }
+                    <a href="product.html?id=${p.id}" class="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4 flex items-center justify-center h-40"><img src="${p.image_url || 'https://via.placeholder.com/300x180?text=TechHub'}" alt="${p.name}" class="max-h-full object-contain group-hover:scale-105 transition-transform"></div>
+                        <div class="p-4"><h4 class="font-medium text-sm mb-1 truncate">${p.name}</h4><span class="text-primary-600 font-bold">$${p.price.toFixed(2)}</span></div>
+                    </a>`).join('');
+            } catch (error) { console.error('Error:', error); }
         }
 
         function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                padding: 15px 25px;
-                background: ${type === 'success' ? '#28a745' : '#dc3545'};
-                color: white;
-                border-radius: 10px;
-                z-index: 9999;
-            `;
-            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'times'}-circle"></i> ${message}`;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
+            const n = document.createElement('div');
+            n.className = `fixed top-20 right-4 z-50 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-medium flex items-center gap-2 ${type==='success'?'bg-green-500':'bg-red-500'}`;
+            n.innerHTML = `<i class="fas fa-${type==='success'?'check':'times'}-circle"></i> ${message}`;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
         }
 
-        // Initialize
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+        }
+
         loadProduct();
         checkAuth();
     </script>

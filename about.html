@@ -1,389 +1,196 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - TechHub</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dark-mode.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81',950:'#1e1b4e' },
+                        accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .about-hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 100px 20px;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        .about-hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        }
-        .about-hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .about-hero p {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-        }
-        .about-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 80px 20px;
-        }
-        .about-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-            margin-bottom: 100px;
-        }
-        .about-section.reverse {
-            direction: rtl;
-        }
-        .about-section.reverse > * {
-            direction: ltr;
-        }
-        .about-content h2 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 25px;
-        }
-        .about-content p {
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-        .about-image {
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-        .about-image img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-        }
-        .stats-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 80px 20px;
-            margin-bottom: 100px;
-            border-radius: 30px;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 40px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .stat-item {
-            text-align: center;
-            color: white;
-        }
-        .stat-item .number {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-        .stat-item .label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        .team-section h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 50px;
-        }
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-        }
-        .team-card {
-            text-align: center;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-        .team-card:hover {
-            transform: translateY(-10px);
-        }
-        .team-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: white;
-        }
-        .team-card h3 {
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .team-card .role {
-            color: #667eea;
-            font-weight: 500;
-            margin-bottom: 15px;
-        }
-        .team-social {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .team-social a {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: #f5f7fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #667eea;
-            transition: all 0.3s ease;
-        }
-        .team-social a:hover {
-            background: #667eea;
-            color: white;
-        }
-        .values-section {
-            margin-top: 100px;
-        }
-        .values-section h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 50px;
-        }
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-        .value-card {
-            text-align: center;
-            padding: 40px 30px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-        }
-        .value-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 25px;
-        }
-        .value-icon i {
-            font-size: 2rem;
-            color: white;
-        }
-        .value-card h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-        .value-card p {
-            color: #666;
-            line-height: 1.7;
-        }
-        @media (max-width: 992px) {
-            .about-section {
-                grid-template-columns: 1fr;
-            }
-            .about-section.reverse {
-                direction: ltr;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .team-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .values-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        @media (max-width: 576px) {
-            .stats-grid, .team-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans min-h-screen transition-colors duration-300">
+
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">TechHub</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="offers.html">Offers</a></li>
-                <li><a href="index.html#products">Products</a></li>
-                <li><a href="about.html" class="active">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="auth-links">
-                <button id="dark-mode-toggle" class="btn-dark-mode" onclick="toggleDarkMode()">
-                    <span class="dark-mode-icon">🌙</span>
-                </button>
-                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
-                <a href="login.html" class="btn-login">Login</a>
+    <nav class="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">
+                    <i class="fas fa-microchip text-primary-600"></i> TechHub
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                        <i class="fas fa-arrow-left mr-1"></i> Back to Shop
+                    </a>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:inline text-yellow-400"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="about-hero">
-        <h1>About TechHub</h1>
-        <p>We're passionate about bringing you the best technology products at unbeatable prices.</p>
+    <section class="relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-accent-600 text-white py-24">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.05%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 animate-fade-in-up">
+            <span class="inline-block px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium mb-6">Since 2024</span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">About TechHub</h1>
+            <p class="text-xl text-white/80 max-w-2xl mx-auto">Your trusted destination for premium technology products. We're passionate about bringing you the latest and greatest in tech.</p>
+        </div>
     </section>
 
-    <div class="about-container">
-        <!-- Our Story -->
-        <section class="about-section">
-            <div class="about-content">
-                <h2>Our Story</h2>
-                <p>Founded in 2020, TechHub started with a simple mission: to make premium technology accessible to everyone. What began as a small online store has grown into one of the most trusted names in tech retail.</p>
-                <p>We believe that everyone deserves access to the latest technology, regardless of their budget. That's why we work directly with manufacturers to bring you the best products at competitive prices.</p>
+    <!-- Mission Section -->
+    <section class="py-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div class="animate-fade-in-up">
+                <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">Our Mission</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-6">Empowering Through Technology</h2>
+                <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                    At TechHub, we believe technology should be accessible to everyone. Our mission is to provide high-quality tech products at competitive prices, backed by exceptional customer service.
+                </p>
+                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    We carefully curate our product selection to ensure every item meets our rigorous standards for quality, performance, and value.
+                </p>
             </div>
-            <div class="about-image">
-                <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=600" alt="Our Story">
+            <div class="grid grid-cols-2 gap-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 p-6 text-center">
+                    <div class="text-3xl font-extrabold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">10K+</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Happy Customers</div>
+                </div>
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 p-6 text-center">
+                    <div class="text-3xl font-extrabold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">500+</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Products</div>
+                </div>
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 p-6 text-center">
+                    <div class="text-3xl font-extrabold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">24/7</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Support</div>
+                </div>
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 p-6 text-center">
+                    <div class="text-3xl font-extrabold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">4.9★</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Rating</div>
+                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Our Mission -->
-        <section class="about-section reverse">
-            <div class="about-content">
-                <h2>Our Mission</h2>
-                <p>At TechHub, we're committed to providing exceptional customer service, quality products, and a seamless shopping experience. We continuously strive to exceed your expectations.</p>
-                <p>We're not just selling products – we're building relationships with our customers based on trust, transparency, and reliability.</p>
+    <!-- Values Section -->
+    <section class="py-20 bg-white dark:bg-gray-900">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 animate-fade-in-up">
+                <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">What We Stand For</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">Our Core Values</h2>
             </div>
-            <div class="about-image">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600" alt="Our Mission">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center p-6 rounded-2xl bg-gray-50 dark:bg-gray-800 hover:shadow-lg transition-all animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="w-14 h-14 mx-auto mb-4 bg-primary-100 dark:bg-primary-900/30 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-gem text-2xl text-primary-600"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Quality First</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Every product is vetted for quality and performance</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-gray-50 dark:bg-gray-800 hover:shadow-lg transition-all animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="w-14 h-14 mx-auto mb-4 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-headset text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Customer First</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">24/7 support to help you make the right choice</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-gray-50 dark:bg-gray-800 hover:shadow-lg transition-all animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="w-14 h-14 mx-auto mb-4 bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-bolt text-2xl text-orange-600"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Innovation</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Always bringing you the latest tech trends</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-gray-50 dark:bg-gray-800 hover:shadow-lg transition-all animate-fade-in-up" style="animation-delay: 0.4s;">
+                    <div class="w-14 h-14 mx-auto mb-4 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-shield-alt text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Trust</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Secure shopping with buyer protection</p>
+                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Stats -->
-        <section class="stats-section">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="number">10K+</div>
-                    <div class="label">Happy Customers</div>
-                </div>
-                <div class="stat-item">
-                    <div class="number">500+</div>
-                    <div class="label">Products</div>
-                </div>
-                <div class="stat-item">
-                    <div class="number">50+</div>
-                    <div class="label">Brands</div>
-                </div>
-                <div class="stat-item">
-                    <div class="number">99%</div>
-                    <div class="label">Satisfaction Rate</div>
-                </div>
+    <!-- Team Section -->
+    <section class="py-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 animate-fade-in-up">
+            <span class="text-primary-600 font-semibold text-sm uppercase tracking-wider">The People Behind TechHub</span>
+            <h2 class="text-3xl md:text-4xl font-bold mt-2">Meet Our Team</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 p-6 text-center hover:shadow-xl transition-all animate-fade-in-up" style="animation-delay: 0.1s;">
+                <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">MH</div>
+                <h3 class="font-bold text-lg">Mohammed</h3>
+                <p class="text-primary-600 text-sm mb-3">Founder & CEO</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Visionary leader with a passion for technology and innovation.</p>
             </div>
-        </section>
+            <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 p-6 text-center hover:shadow-xl transition-all animate-fade-in-up" style="animation-delay: 0.2s;">
+                <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">TA</div>
+                <h3 class="font-bold text-lg">Tech Advisor</h3>
+                <p class="text-green-600 text-sm mb-3">Head of Products</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Expert in curating the best tech products for our customers.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 p-6 text-center hover:shadow-xl transition-all animate-fade-in-up" style="animation-delay: 0.3s;">
+                <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">CS</div>
+                <h3 class="font-bold text-lg">Support Team</h3>
+                <p class="text-orange-600 text-sm mb-3">Customer Success</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Dedicated to ensuring every customer has an amazing experience.</p>
+            </div>
+        </div>
+    </section>
 
-        <!-- Team -->
-        <section class="team-section">
-            <h2>Meet Our Team</h2>
-            <div class="team-grid">
-                <div class="team-card">
-                    <div class="team-avatar">👨‍💼</div>
-                    <h3>John Smith</h3>
-                    <p class="role">CEO & Founder</p>
-                    <div class="team-social">
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-                <div class="team-card">
-                    <div class="team-avatar">👩‍💻</div>
-                    <h3>Sarah Johnson</h3>
-                    <p class="role">CTO</p>
-                    <div class="team-social">
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-                <div class="team-card">
-                    <div class="team-avatar">👨‍🎨</div>
-                    <h3>Mike Chen</h3>
-                    <p class="role">Design Lead</p>
-                    <div class="team-social">
-                        <a href="#"><i class="fab fa-dribbble"></i></a>
-                        <a href="#"><i class="fab fa-behance"></i></a>
-                    </div>
-                </div>
-                <div class="team-card">
-                    <div class="team-avatar">👩‍💼</div>
-                    <h3>Emily Davis</h3>
-                    <p class="role">Marketing Head</p>
-                    <div class="team-social">
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-primary-600 to-accent-600 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Explore?</h2>
+            <p class="text-xl text-white/80 mb-8">Browse our curated collection of premium tech products.</p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="index.html" class="px-8 py-3 bg-white text-primary-700 font-bold rounded-xl hover:bg-gray-100 transition-colors shadow-lg">
+                    <i class="fas fa-shopping-bag mr-2"></i> Shop Now
+                </a>
+                <a href="contact.html" class="px-8 py-3 bg-white/10 backdrop-blur text-white font-bold rounded-xl hover:bg-white/20 border border-white/20 transition-colors">
+                    <i class="fas fa-envelope mr-2"></i> Contact Us
+                </a>
             </div>
-        </section>
-
-        <!-- Values -->
-        <section class="values-section">
-            <h2>Our Values</h2>
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-icon"><i class="fas fa-heart"></i></div>
-                    <h3>Customer First</h3>
-                    <p>Every decision we make is centered around providing the best experience for our customers.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Quality Assurance</h3>
-                    <p>We only sell products that meet our high standards of quality and reliability.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon"><i class="fas fa-leaf"></i></div>
-                    <h3>Sustainability</h3>
-                    <p>We're committed to reducing our environmental impact through eco-friendly practices.</p>
-                </div>
-            </div>
-        </section>
-    </div>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2026 TechHub. All rights reserved.</p>
-            </div>
+    <footer class="bg-gray-900 dark:bg-gray-950 text-gray-400 py-8 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2024 TechHub. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+        if (localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark');
+    </script>
 </body>
 </html>

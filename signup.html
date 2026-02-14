@@ -1,111 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - TechHub</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81' }, accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' } } } } }
+    </script>
+    <style>
+        .gradient-text { background: linear-gradient(135deg, #6366f1, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    </style>
 </head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">TechHub</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-            </ul>
+<body class="font-sans bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+
+    <nav class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl fixed top-0 left-0 right-0 z-50 border-b border-gray-200/50 dark:border-gray-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+            <a href="index.html" class="flex items-center gap-2 text-xl font-bold">
+                <i class="fas fa-bolt text-primary-500"></i><span class="gradient-text">TechHub</span>
+            </a>
+            <a href="index.html" class="text-sm text-gray-500 hover:text-primary-500 transition"><i class="fas fa-arrow-left mr-1"></i> Back to Store</a>
         </div>
     </nav>
 
-    <!-- Signup Section -->
-    <section class="auth-section">
-        <div class="auth-container">
-            <div class="auth-box">
-                <h2>Create Account</h2>
-                <form id="signup-form">
-                    <div class="form-group">
-                        <label for="name">Full Name:</label>
-                        <input type="text" id="name" name="name" required>
+    <div class="min-h-screen flex items-center justify-center pt-16 px-4 py-12">
+        <div class="w-full max-w-md">
+            <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 sm:p-10">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-accent-100 dark:bg-accent-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-plus text-3xl text-accent-600 dark:text-accent-400"></i>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
+                    <h2 class="text-2xl font-bold">Create Account</h2>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Join TechHub and start shopping</p>
+                </div>
+
+                <form id="signup-form" class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium mb-2">Full Name</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-user"></i></span>
+                            <input type="text" id="name" required placeholder="John Doe"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="phone">Phone:</label>
-                        <input type="tel" id="phone" name="phone" required>
+                    <div>
+                        <label for="email" class="block text-sm font-medium mb-2">Email Address</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-envelope"></i></span>
+                            <input type="email" id="email" required placeholder="you@example.com"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium mb-2">Phone Number</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-phone"></i></span>
+                            <input type="tel" id="phone" required placeholder="+1 234 567 890"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="confirm-password">Confirm Password:</label>
-                        <input type="password" id="confirm-password" name="confirm-password" required>
+                    <div>
+                        <label for="password" class="block text-sm font-medium mb-2">Password</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock"></i></span>
+                            <input type="password" id="password" required placeholder="Min 6 characters"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm">
+                        </div>
                     </div>
-                    <button type="submit" class="btn-primary">Sign Up</button>
-                    <p class="form-footer">Already have an account? <a href="login.html">Login here</a></p>
+                    <div>
+                        <label for="confirm-password" class="block text-sm font-medium mb-2">Confirm Password</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock"></i></span>
+                            <input type="password" id="confirm-password" required placeholder="Repeat your password"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-primary-600/20 flex items-center justify-center gap-2 mt-2">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
                 </form>
-                <div id="signup-message" class="message"></div>
+
+                <div id="signup-message" class="mt-4 text-center text-sm rounded-lg p-2 hidden"></div>
+
+                <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                    Already have an account? <a href="login.html" class="text-primary-600 hover:text-primary-500 font-semibold">Sign in</a>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 TechHub. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
     <script src="config.js"></script>
+    <script src="script.js"></script>
     <script>
-
         document.getElementById('signup-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             
-            // Validation
-            if (password !== confirmPassword) {
-                showMessage('Passwords do not match!', 'error');
-                return;
-            }
+            if (password !== confirmPassword) { showMessage('Passwords do not match!', 'error'); return; }
+
+            const btn = this.querySelector('button[type="submit"]');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+            btn.disabled = true;
 
             try {
                 const response = await fetch(`${API_URL}/auth/signup`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, phone, password })
                 });
-
                 const data = await response.json();
-
                 if (response.ok) {
                     showMessage('Account created successfully! Redirecting to login...', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 1500);
+                    setTimeout(() => { window.location.href = 'login.html'; }, 1500);
                 } else {
                     showMessage(data.error || 'Registration failed!', 'error');
+                    btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                    btn.disabled = false;
                 }
             } catch (error) {
                 console.error('Signup error:', error);
                 showMessage('Connection error. Please make sure the server is running.', 'error');
+                btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                btn.disabled = false;
             }
         });
 
         function showMessage(msg, type) {
             const msgDiv = document.getElementById('signup-message');
             msgDiv.textContent = msg;
-            msgDiv.className = 'message ' + type;
+            msgDiv.classList.remove('hidden', 'bg-green-50', 'text-green-700', 'bg-red-50', 'text-red-700', 'dark:bg-green-900/20', 'dark:text-green-400', 'dark:bg-red-900/20', 'dark:text-red-400');
+            if (type === 'success') {
+                msgDiv.classList.add('bg-green-50', 'text-green-700', 'dark:bg-green-900/20', 'dark:text-green-400');
+            } else {
+                msgDiv.classList.add('bg-red-50', 'text-red-700', 'dark:bg-red-900/20', 'dark:text-red-400');
+            }
         }
     </script>
 </body>

@@ -1,470 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart Confirmation - TechHub</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .confirmation-container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .confirmation-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .confirmation-header h1 {
-            color: #27ae60;
-            margin-bottom: 10px;
-        }
-
-        .confirmation-header p {
-            color: #666;
-            font-size: 16px;
-        }
-
-        .product-summary {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #3498db;
-        }
-
-        .product-summary-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .product-summary-image {
-            font-size: 40px;
-            margin-right: 15px;
-        }
-
-        .product-summary-info {
-            flex: 1;
-        }
-
-        .product-summary-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .product-summary-price {
-            font-size: 16px;
-            color: #3498db;
-            font-weight: bold;
-        }
-
-        .product-summary-qty {
-            background: #ecf0f1;
-            padding: 5px 15px;
-            border-radius: 4px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .cart-summary {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-top: 2px solid #27ae60;
-        }
-
-        .cart-summary h3 {
-            color: #333;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 10px;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        .cart-item-details {
-            display: flex;
-            align-items: center;
-            flex: 1;
-        }
-
-        .cart-item-icon {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-
-        .cart-item-name {
-            color: #333;
-            font-size: 14px;
-        }
-
-        .cart-item-qty {
-            background: #ecf0f1;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            margin-left: 10px;
-            color: #666;
-        }
-
-        .cart-item-price {
-            color: #3498db;
-            font-weight: bold;
-            min-width: 80px;
-            text-align: right;
-        }
-
-        .cart-item-actions {
-            margin-left: 15px;
-        }
-
-        .btn-remove-item {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .btn-remove-item:hover {
-            background: #c0392b;
-        }
-
-        .cart-totals {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 15px;
-        }
-
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .total-row.grand-total {
-            border-top: 2px solid #ddd;
-            padding-top: 10px;
-            margin-top: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #27ae60;
-        }
-
-        .actions-container {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-continue-shopping {
-            background: #3498db;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .btn-continue-shopping:hover {
-            background: #2980b9;
-        }
-
-        .btn-add-more {
-            background: #27ae60;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-add-more:hover {
-            background: #229954;
-        }
-
-        .plus-icon {
-            font-size: 18px;
-        }
-
-        .btn-checkout {
-            background: #e74c3c;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .btn-checkout:hover {
-            background: #c0392b;
-        }
-
-        .empty-cart-message {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-        }
-
-        .empty-cart-message p {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .confirmation-container {
-                margin: 20px 10px;
-            }
-
-            .product-summary-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .product-summary-image {
-                margin-right: 0;
-                margin-bottom: 10px;
-            }
-
-            .actions-container {
-                flex-direction: column;
-            }
-
-            .btn-continue-shopping,
-            .btn-add-more,
-            .btn-checkout {
-                width: 100%;
-            }
-
-            .cart-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .cart-item-price {
-                margin-top: 10px;
-                width: 100%;
-                text-align: left;
-            }
-
-            .cart-item-actions {
-                margin-left: 0;
-                margin-top: 10px;
-                width: 100%;
-            }
-
-            .btn-remove-item {
-                width: 100%;
-            }
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81' } } } } }</script>
+    <style>.gradient-text{background:linear-gradient(135deg,#6366f1,#d946ef);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}</style>
 </head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">TechHub</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="index.html#products">Products</a></li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#contact">Contact</a></li>
-            </ul>
-            <div class="auth-links">
-                <a href="login.html" class="btn-login">Login</a>
-                <a href="signup.html" class="btn-signup">Sign Up</a>
-                <span id="user-profile" style="display:none;">
-                    <a href="#" onclick="showUserMenu(event)" class="user-menu-btn"></a>
-                    <div class="user-dropdown" id="user-dropdown">
-                        <a href="#" onclick="logout(); return false;">Logout</a>
-                    </div>
-                </span>
-                <a href="admin-login.html" class="btn-admin">Admin</a>
-            </div>
+<body class="font-sans bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+    <nav class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl fixed top-0 left-0 right-0 z-50 border-b border-gray-200/50 dark:border-gray-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+            <a href="index.html" class="flex items-center gap-2 text-xl font-bold"><i class="fas fa-bolt text-primary-500"></i><span class="gradient-text">TechHub</span></a>
+            <a href="index.html" class="text-sm text-gray-500 hover:text-primary-500 transition"><i class="fas fa-arrow-left mr-1"></i> Continue Shopping</a>
         </div>
     </nav>
 
-    <!-- Confirmation Section -->
-    <section class="confirmation-container">
-        <div id="confirmation-content">
-            <!-- Content will be loaded here -->
-        </div>
-    </section>
+    <div class="pt-24 pb-16 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8" id="confirmation-content">
+        <!-- Loaded by JS -->
+    </div>
 
+    <script src="config.js"></script>
     <script src="script.js"></script>
     <script>
-        // Load cart confirmation
         function loadCartConfirmation() {
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const products = JSON.parse(localStorage.getItem('techhub_products') || '[]');
-            const confirmationContent = document.getElementById('confirmation-content');
+            const container = document.getElementById('confirmation-content');
 
             if (cart.length === 0) {
-                confirmationContent.innerHTML = `
-                    <div class="confirmation-header">
-                        <h1>Your Cart</h1>
-                    </div>
-                    <div class="empty-cart-message">
-                        <p>Your cart is empty.</p>
-                        <a href="index.html" class="btn-continue-shopping">Continue Shopping</a>
-                    </div>
-                `;
+                container.innerHTML = `
+                    <div class="text-center py-20">
+                        <i class="fas fa-cart-plus text-7xl text-gray-300 dark:text-gray-600 mb-6"></i>
+                        <h2 class="text-xl font-bold mb-2">Your Cart is Empty</h2>
+                        <a href="index.html" class="inline-flex items-center gap-2 bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl mt-4 hover:bg-primary-700 transition"><i class="fas fa-shopping-bag"></i> Continue Shopping</a>
+                    </div>`;
                 return;
             }
 
-            // Get the last added product
             const lastProduct = cart[cart.length - 1];
-
-            // Calculate totals
             let subtotal = 0;
-            let tax = 0;
-            cart.forEach(item => {
-                subtotal += item.price * item.quantity;
-            });
-            tax = subtotal * 0.08; // 8% tax
+            cart.forEach(item => subtotal += item.price * item.quantity);
+            const tax = subtotal * 0.08;
             const total = subtotal + tax;
 
-            // Build cart items HTML
-            let cartItemsHTML = '';
-            cart.forEach(item => {
-                cartItemsHTML += `
-                    <div class="cart-item">
-                        <div class="cart-item-details">
-                            <div class="cart-item-icon">${item.image || '📦'}</div>
-                            <div>
-                                <div class="cart-item-name">${item.name}</div>
-                                <span class="cart-item-qty">Qty: ${item.quantity}</span>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
-                            <div class="cart-item-actions">
-                                <button class="btn-remove-item" onclick="removeFromCart(${item.id})">Remove</button>
-                            </div>
-                        </div>
+            container.innerHTML = `
+                <!-- Success Banner -->
+                <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl p-6 mb-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-check text-3xl text-green-600"></i>
                     </div>
-                `;
-            });
-
-            confirmationContent.innerHTML = `
-                <div class="confirmation-header">
-                    <h1>✓ Product Added to Cart!</h1>
-                    <p>Great choice! ${lastProduct.name} has been added to your cart.</p>
+                    <h1 class="text-xl font-bold text-green-700 dark:text-green-400 mb-1">Product Added to Cart!</h1>
+                    <p class="text-sm text-green-600 dark:text-green-500">${lastProduct.name} has been added.</p>
                 </div>
 
-                <div class="product-summary">
-                    <div class="product-summary-header">
-                        <div style="display: flex; align-items: center;">
-                            <div class="product-summary-image">${lastProduct.image || '📦'}</div>
-                            <div class="product-summary-info">
-                                <div class="product-summary-name">${lastProduct.name}</div>
-                                <div class="product-summary-price">$${lastProduct.price.toFixed(2)}</div>
-                            </div>
-                        </div>
-                        <div class="product-summary-qty">Added × ${lastProduct.quantity}</div>
+                <!-- Last Added Product -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 mb-6 flex items-center gap-4">
+                    <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center text-3xl flex-shrink-0">${lastProduct.image || '📦'}</div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold">${lastProduct.name}</h3>
+                        <p class="text-primary-600 font-bold">$${lastProduct.price.toFixed(2)}</p>
                     </div>
+                    <span class="text-sm text-gray-400">x${lastProduct.quantity}</span>
                 </div>
 
-                <div class="cart-summary">
-                    <h3>Your Shopping Cart (${cart.length} item${cart.length !== 1 ? 's' : ''})</h3>
-                    ${cartItemsHTML}
-                    <div class="cart-totals">
-                        <div class="total-row">
-                            <span>Subtotal:</span>
-                            <span>$${subtotal.toFixed(2)}</span>
-                        </div>
-                        <div class="total-row">
-                            <span>Tax (8%):</span>
-                            <span>$${tax.toFixed(2)}</span>
-                        </div>
-                        <div class="total-row grand-total">
-                            <span>Total Balance:</span>
-                            <span>$${total.toFixed(2)}</span>
-                        </div>
+                <!-- Cart Summary -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 mb-6">
+                    <h3 class="font-bold mb-4">Your Cart (${cart.length} item${cart.length !== 1 ? 's' : ''})</h3>
+                    <div class="space-y-3 mb-6">
+                        ${cart.map(item => `
+                            <div class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-800 last:border-0">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl">${item.image || '📦'}</span>
+                                    <div><div class="font-medium text-sm">${item.name}</div><span class="text-xs text-gray-400">Qty: ${item.quantity}</span></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-medium text-sm">$${(item.price * item.quantity).toFixed(2)}</span>
+                                    <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500 text-xs"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>`).join('')}
+                    </div>
+                    <div class="space-y-2 text-sm border-t border-gray-100 dark:border-gray-800 pt-4">
+                        <div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Tax (8%)</span><span>$${tax.toFixed(2)}</span></div>
+                        <div class="flex justify-between text-lg font-bold pt-2"><span>Total</span><span class="text-primary-600">$${total.toFixed(2)}</span></div>
                     </div>
                 </div>
 
-                <div class="actions-container">
-                    <button class="btn-add-more" onclick="goBackToShop()">
-                        <span class="plus-icon">+</span> Add More Products
+                <!-- Actions -->
+                <div class="flex gap-3">
+                    <button onclick="goBackToShop()" class="flex-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 font-semibold py-3.5 rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fas fa-plus"></i> Add More
                     </button>
-                    <button class="btn-checkout" onclick="proceedToCheckout()">Proceed to Checkout</button>
-                </div>
-            `;
+                    <button onclick="proceedToCheckout()" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-primary-600/20">
+                        Checkout <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>`;
         }
 
-        // Go back to shopping
-        function goBackToShop() {
-            window.location.href = 'index.html#products';
-        }
-
-        // Proceed to checkout
+        function goBackToShop() { window.location.href = 'index.html#products'; }
         function proceedToCheckout() {
-            // Check if user is still logged in
             const currentUser = localStorage.getItem('current_user');
             const token = localStorage.getItem('token');
-            if (!currentUser && !token) {
-                alert('Your session has expired. Please login again to proceed with checkout.');
-                window.location.href = 'login.html';
-                return;
-            }
+            if (!currentUser && !token) { alert('Please login to continue.'); window.location.href = 'login.html'; return; }
             window.location.href = 'checkout.html';
         }
-
-        // Remove product from cart
         function removeFromCart(productId) {
-            if (confirm('Are you sure you want to remove this product from your cart?')) {
+            if (confirm('Remove this item?')) {
                 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
                 cart = cart.filter(item => item.id !== productId);
                 localStorage.setItem('cart', JSON.stringify(cart));
-                loadCartConfirmation(); // Reload the cart display
+                loadCartConfirmation();
             }
         }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            checkUserLogin();
-            loadCartConfirmation();
-        });
+        document.addEventListener('DOMContentLoaded', function() { initializeDarkMode(); checkUserLogin(); loadCartConfirmation(); });
     </script>
 </body>
 </html>

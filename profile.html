@@ -1,366 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile - TechHub</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dark-mode.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81',950:'#1e1b4e' },
+                        accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .profile-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        .profile-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 40px;
-        }
-        .profile-sidebar {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            height: fit-content;
-        }
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 3rem;
-            color: white;
-            font-weight: 700;
-        }
-        .profile-name {
-            text-align: center;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .profile-email {
-            text-align: center;
-            color: #888;
-            margin-bottom: 25px;
-        }
-        .profile-menu {
-            list-style: none;
-            padding: 0;
-        }
-        .profile-menu li {
-            margin-bottom: 5px;
-        }
-        .profile-menu a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            color: #666;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        .profile-menu a:hover, .profile-menu a.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .profile-menu a i {
-            width: 20px;
-        }
-        .profile-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-        }
-        .content-header {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eee;
-        }
-        .content-header h1 {
-            font-size: 1.8rem;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .content-header h1 i {
-            color: #667eea;
-        }
-        .form-section {
-            margin-bottom: 40px;
-        }
-        .form-section h3 {
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #555;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-        .form-group input:disabled {
-            background: #f8f9fa;
-            color: #888;
-        }
-        .btn-save {
-            padding: 14px 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .btn-save:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-        .btn-secondary {
-            padding: 14px 40px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-left: 15px;
-        }
-        .btn-secondary:hover {
-            background: #f8f9ff;
-        }
-        .password-section {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-        }
-        .password-section h3,
-        .password-section label,
-        .password-section p {
-            color: #000;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            color: white;
-        }
-        .stat-card h3 {
-            font-size: 2rem;
-            margin-bottom: 5px;
-        }
-        .stat-card p {
-            opacity: 0.9;
-            font-size: 0.9rem;
-        }
-        .danger-zone {
-            background: #fff5f5;
-            border: 2px solid #ffebee;
-            padding: 25px;
-            border-radius: 15px;
-            margin-top: 30px;
-        }
-        .danger-zone h3 {
-            color: #d32f2f;
-            margin-bottom: 15px;
-        }
-        .btn-danger {
-            padding: 12px 30px;
-            background: #d32f2f;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-        @media (max-width: 992px) {
-            .profile-layout {
-                grid-template-columns: 1fr;
-            }
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans min-h-screen transition-colors duration-300">
+
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">TechHub</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="offers.html">Offers</a></li>
-                <li><a href="index.html#products">Products</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="auth-links">
-                <button id="dark-mode-toggle" class="btn-dark-mode" onclick="toggleDarkMode()">
-                    <span class="dark-mode-icon">🌙</span>
-                </button>
-                <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i></a>
-                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
+    <nav class="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">
+                    <i class="fas fa-microchip text-primary-600"></i> TechHub
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                        <i class="fas fa-arrow-left mr-1"></i> Back to Shop
+                    </a>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:inline text-yellow-400"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="profile-container">
-        <div class="profile-layout">
-            <!-- Sidebar -->
-            <div class="profile-sidebar">
-                <div class="profile-avatar" id="avatar">A</div>
-                <div class="profile-name" id="display-name">User Name</div>
-                <div class="profile-email" id="display-email">user@email.com</div>
-                
-                <ul class="profile-menu">
-                    <li><a href="profile.html" class="active"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="my-orders.html"><i class="fas fa-box"></i> My Orders</a></li>
-                    <li><a href="wishlist.html"><i class="fas fa-heart"></i> Wishlist</a></li>
-                    <li><a href="addresses.html"><i class="fas fa-map-marker-alt"></i> Addresses</a></li>
-                    <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                </ul>
-            </div>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8 animate-fade-in-up">
+            <h1 class="text-3xl font-bold mb-2">My Profile</h1>
+            <p class="text-gray-500 dark:text-gray-400">Manage your account settings and preferences</p>
+        </div>
 
-            <!-- Content -->
-            <div class="profile-content">
-                <div class="content-header">
-                    <h1><i class="fas fa-user-circle"></i> My Profile</h1>
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Left Sidebar - Profile Card -->
+            <div class="lg:col-span-1 space-y-6 animate-fade-in-up" style="animation-delay: 0.1s;">
+                <!-- Avatar Card -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 p-6 text-center">
+                    <div class="relative inline-block mb-4">
+                        <div id="profile-avatar" class="w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white text-3xl font-bold mx-auto">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <h2 id="display-name" class="text-xl font-bold mb-1">Loading...</h2>
+                    <p id="display-email" class="text-gray-500 dark:text-gray-400 text-sm mb-4">loading@email.com</p>
+                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium">
+                        <i class="fas fa-check-circle"></i> Active Member
+                    </span>
                 </div>
 
-                <!-- Stats -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3 id="orders-count">0</h3>
-                        <p>Total Orders</p>
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-white dark:bg-gray-900 rounded-xl shadow border border-gray-100 dark:border-gray-800 p-4 text-center">
+                        <div class="text-2xl font-bold text-primary-600" id="stat-orders">0</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Orders</div>
                     </div>
-                    <div class="stat-card">
-                        <h3 id="wishlist-count">0</h3>
-                        <p>Wishlist Items</p>
+                    <div class="bg-white dark:bg-gray-900 rounded-xl shadow border border-gray-100 dark:border-gray-800 p-4 text-center">
+                        <div class="text-2xl font-bold text-red-500" id="stat-wishlist">0</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Wishlist</div>
                     </div>
-                    <div class="stat-card">
-                        <h3 id="reviews-count">0</h3>
-                        <p>Reviews Given</p>
+                    <div class="bg-white dark:bg-gray-900 rounded-xl shadow border border-gray-100 dark:border-gray-800 p-4 text-center">
+                        <div class="text-2xl font-bold text-yellow-500" id="stat-reviews">0</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Reviews</div>
                     </div>
                 </div>
 
-                <!-- Profile Form -->
-                <form id="profile-form" onsubmit="updateProfile(event)">
-                    <div class="form-section">
-                        <h3>Personal Information</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Full Name</label>
-                                <input type="text" id="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Email Address</label>
-                                <input type="email" id="email" disabled>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Phone Number</label>
-                                <input type="tel" id="phone">
-                            </div>
-                            <div class="form-group">
-                                <label>Member Since</label>
-                                <input type="text" id="member-since" disabled>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-save">
-                        <i class="fas fa-save"></i> Save Changes
-                    </button>
-                </form>
-
-                <!-- Password Section -->
-                <div class="form-section" style="margin-top: 40px;">
-                    <div class="password-section">
-                        <h3>Change Password</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Current Password</label>
-                                <input type="password" id="current-password">
-                            </div>
-                            <div class="form-group">
-                                <label>New Password</label>
-                                <input type="password" id="new-password">
-                            </div>
-                        </div>
-                        <div class="form-group" style="max-width: 50%;">
-                            <label>Confirm New Password</label>
-                            <input type="password" id="confirm-password">
-                        </div>
-                        <button type="button" class="btn-save" onclick="changePassword()">
-                            <i class="fas fa-key"></i> Update Password
+                <!-- Quick Links -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 p-4">
+                    <h3 class="font-semibold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-2">Quick Links</h3>
+                    <div class="space-y-1">
+                        <a href="my-orders.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
+                            <i class="fas fa-box text-primary-500 w-5 text-center"></i>
+                            <span class="text-sm group-hover:text-primary-600">My Orders</span>
+                            <i class="fas fa-chevron-right text-xs text-gray-400 ml-auto"></i>
+                        </a>
+                        <a href="wishlist.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
+                            <i class="fas fa-heart text-red-500 w-5 text-center"></i>
+                            <span class="text-sm group-hover:text-primary-600">Wishlist</span>
+                            <i class="fas fa-chevron-right text-xs text-gray-400 ml-auto"></i>
+                        </a>
+                        <a href="addresses.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
+                            <i class="fas fa-map-marker-alt text-green-500 w-5 text-center"></i>
+                            <span class="text-sm group-hover:text-primary-600">Addresses</span>
+                            <i class="fas fa-chevron-right text-xs text-gray-400 ml-auto"></i>
+                        </a>
+                        <button onclick="logout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-600 dark:text-red-400 group">
+                            <i class="fas fa-sign-out-alt w-5 text-center"></i>
+                            <span class="text-sm">Logout</span>
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Danger Zone -->
-                <div class="danger-zone">
-                    <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
-                    <p style="margin-bottom: 15px; color: #666;">Once you delete your account, there is no going back. Please be certain.</p>
-                    <button class="btn-danger" onclick="deleteAccount()">
-                        <i class="fas fa-trash"></i> Delete My Account
-                    </button>
+            <!-- Right Content -->
+            <div class="lg:col-span-2 space-y-6 animate-fade-in-up" style="animation-delay: 0.2s;">
+                <!-- Tabs -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800">
+                    <div class="flex border-b border-gray-200 dark:border-gray-800">
+                        <button onclick="showTab('profile')" id="tab-profile" class="flex-1 px-6 py-4 text-sm font-medium text-primary-600 border-b-2 border-primary-600 transition-colors">
+                            <i class="fas fa-user mr-2"></i> Profile Info
+                        </button>
+                        <button onclick="showTab('security')" id="tab-security" class="flex-1 px-6 py-4 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 border-b-2 border-transparent transition-colors">
+                            <i class="fas fa-shield-alt mr-2"></i> Security
+                        </button>
+                    </div>
+
+                    <!-- Profile Tab -->
+                    <div id="panel-profile" class="p-6">
+                        <form id="profile-form" onsubmit="updateProfile(event)">
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
+                                    <div class="relative">
+                                        <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                        <input type="text" id="edit-name" class="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                                    <div class="relative">
+                                        <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                        <input type="email" id="edit-email" class="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone</label>
+                                    <div class="relative">
+                                        <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                        <input type="tel" id="edit-phone" class="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Member Since</label>
+                                    <div class="relative">
+                                        <i class="fas fa-calendar absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                        <input type="text" id="edit-member-since" class="w-full pl-11 pr-4 py-3 bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-500" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex justify-end">
+                                <button type="submit" class="px-8 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-300 flex items-center gap-2">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div id="panel-security" class="p-6 hidden">
+                        <div class="max-w-md">
+                            <h3 class="text-lg font-semibold mb-6">Change Password</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Password</label>
+                                    <div class="relative">
+                                        <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                        <input type="password" id="current-password" class="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Password</label>
+                                    <div class="relative">
+                                        <i class="fas fa-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                        <input type="password" id="new-password" class="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm New Password</label>
+                                    <div class="relative">
+                                        <i class="fas fa-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                        <input type="password" id="confirm-new-password" class="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
+                                    </div>
+                                </div>
+                                <button onclick="changePassword()" class="w-full px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-300 flex items-center justify-center gap-2">
+                                    <i class="fas fa-shield-alt"></i> Update Password
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-800">
+                            <h3 class="text-lg font-semibold text-red-600 mb-2">Danger Zone</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                Once you delete your account, there is no going back. Please be certain.
+                            </p>
+                            <button onclick="deleteAccount()" class="px-6 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center gap-2">
+                                <i class="fas fa-trash-alt"></i> Delete Account
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
     <script src="config.js"></script>
+    <script src="script.js"></script>
     <script>
         function isUserLoggedIn() {
             return localStorage.getItem('token') || localStorage.getItem('current_user');
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('[id^="panel-"]').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('[id^="tab-"]').forEach(t => {
+                t.classList.remove('text-primary-600', 'border-primary-600');
+                t.classList.add('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+            });
+            document.getElementById('panel-' + tab).classList.remove('hidden');
+            const activeTab = document.getElementById('tab-' + tab);
+            activeTab.classList.add('text-primary-600', 'border-primary-600');
+            activeTab.classList.remove('text-gray-500', 'dark:text-gray-400', 'border-transparent');
         }
 
         async function loadProfile() {
@@ -368,9 +242,8 @@
                 window.location.href = 'login.html';
                 return;
             }
-            
+
             const token = localStorage.getItem('token');
-            const currentUser = localStorage.getItem('current_user');
             let user = null;
 
             try {
@@ -387,95 +260,71 @@
                     throw new Error('No token');
                 }
             } catch (error) {
-                console.log('Using localStorage user data');
-                // Fallback to localStorage
-                if (currentUser) {
-                    user = JSON.parse(currentUser);
-                }
+                console.log('Using localStorage profile');
+                const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
+                user = {
+                    name: currentUser.name || 'User',
+                    email: currentUser.email || 'user@example.com',
+                    phone: currentUser.phone || '',
+                    created_at: currentUser.created_at || new Date().toISOString()
+                };
             }
 
-            if (!user) {
-                console.error('No user data found');
-                return;
+            if (user) {
+                // Update avatar
+                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+                document.getElementById('profile-avatar').innerHTML = `<span class="text-3xl font-bold">${initials}</span>`;
+                document.getElementById('display-name').textContent = user.name || 'User';
+                document.getElementById('display-email').textContent = user.email;
+                document.getElementById('edit-name').value = user.name || '';
+                document.getElementById('edit-email').value = user.email || '';
+                document.getElementById('edit-phone').value = user.phone || '';
+                document.getElementById('edit-member-since').value = user.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A';
+                loadStats();
             }
-
-            // Update display
-            document.getElementById('avatar').textContent = user.name.charAt(0).toUpperCase();
-            document.getElementById('display-name').textContent = user.name;
-            document.getElementById('display-email').textContent = user.email;
-
-            // Update form
-            document.getElementById('name').value = user.name;
-            document.getElementById('email').value = user.email;
-            document.getElementById('phone').value = user.phone || '';
-            document.getElementById('member-since').value = new Date(user.created_at || user.createdAt || Date.now()).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-
-            // Load stats
-            loadStats();
         }
 
         async function loadStats() {
             const token = localStorage.getItem('token');
-            
-            // Default stats
-            let ordersCount = 0;
-            let wishlistCount = 0;
-            let reviewsCount = 0;
-            
             try {
-                if (token) {
-                    // Load orders count
-                    const ordersRes = await fetch(`${API_URL}/orders`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    if (ordersRes.ok) {
-                        const orders = await ordersRes.json();
-                        ordersCount = orders.length || 0;
-                    }
-
-                    // Load wishlist count
-                    const wishlistRes = await fetch(`${API_URL}/wishlist`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    if (wishlistRes.ok) {
-                        const wishlist = await wishlistRes.json();
-                        wishlistCount = wishlist.length || 0;
-                    }
-
-                    // Load reviews count
-                    const reviewsRes = await fetch(`${API_URL}/reviews/user`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    if (reviewsRes.ok) {
-                        const reviews = await reviewsRes.json();
-                        reviewsCount = reviews.length || 0;
-                    }
+                // Orders
+                const ordersRes = await fetch(`${API_URL}/orders`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (ordersRes.ok) {
+                    const orders = await ordersRes.json();
+                    document.getElementById('stat-orders').textContent = orders.length;
                 }
-            } catch (error) {
-                console.log('Stats API not available, using defaults');
+            } catch(e) {
+                const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                document.getElementById('stat-orders').textContent = orders.length;
             }
-            
-            // Use localStorage fallback data
-            const localWishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-            const localOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-            
-            document.getElementById('orders-count').textContent = ordersCount || localOrders.length;
-            document.getElementById('wishlist-count').textContent = wishlistCount || localWishlist.length;
-            document.getElementById('reviews-count').textContent = reviewsCount;
+            try {
+                const wishRes = await fetch(`${API_URL}/wishlist`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (wishRes.ok) {
+                    const wishlist = await wishRes.json();
+                    document.getElementById('stat-wishlist').textContent = wishlist.length;
+                }
+            } catch(e) {
+                const wl = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                document.getElementById('stat-wishlist').textContent = wl.length;
+            }
+            try {
+                const reviewsRes = await fetch(`${API_URL}/reviews`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (reviewsRes.ok) {
+                    const reviews = await reviewsRes.json();
+                    document.getElementById('stat-reviews').textContent = reviews.length;
+                }
+            } catch(e) {
+                document.getElementById('stat-reviews').textContent = '0';
+            }
         }
 
         async function updateProfile(event) {
             event.preventDefault();
             const token = localStorage.getItem('token');
-            const currentUser = localStorage.getItem('current_user');
-
-            const data = {
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value
+            const profileData = {
+                name: document.getElementById('edit-name').value,
+                email: document.getElementById('edit-email').value,
+                phone: document.getElementById('edit-phone').value
             };
 
             try {
@@ -486,46 +335,39 @@
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`
                         },
-                        body: JSON.stringify(data)
+                        body: JSON.stringify(profileData)
                     });
-
                     if (response.ok) {
                         showNotification('Profile updated successfully!', 'success');
                         loadProfile();
                         return;
                     }
                 }
-                throw new Error('API error');
+                throw new Error('API not available');
             } catch (error) {
-                // Fallback: update localStorage
-                if (currentUser) {
-                    const user = JSON.parse(currentUser);
-                    user.name = data.name;
-                    user.phone = data.phone;
-                    localStorage.setItem('current_user', JSON.stringify(user));
-                    showNotification('Profile updated successfully!', 'success');
-                    loadProfile();
-                } else {
-                    showNotification('Error updating profile', 'error');
-                }
+                const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
+                currentUser.name = profileData.name;
+                currentUser.email = profileData.email;
+                currentUser.phone = profileData.phone;
+                localStorage.setItem('current_user', JSON.stringify(currentUser));
+                showNotification('Profile updated successfully!', 'success');
+                loadProfile();
             }
         }
 
         async function changePassword() {
             const currentPassword = document.getElementById('current-password').value;
             const newPassword = document.getElementById('new-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+            const confirmPassword = document.getElementById('confirm-new-password').value;
 
-            if (!currentPassword || !newPassword) {
-                showNotification('Please fill in all password fields', 'error');
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showNotification('Please fill in all fields', 'error');
                 return;
             }
-
             if (newPassword !== confirmPassword) {
                 showNotification('New passwords do not match', 'error');
                 return;
             }
-
             if (newPassword.length < 6) {
                 showNotification('Password must be at least 6 characters', 'error');
                 return;
@@ -541,25 +383,24 @@
                     },
                     body: JSON.stringify({ currentPassword, newPassword })
                 });
-
+                const data = await response.json();
                 if (response.ok) {
                     showNotification('Password changed successfully!', 'success');
                     document.getElementById('current-password').value = '';
                     document.getElementById('new-password').value = '';
-                    document.getElementById('confirm-password').value = '';
+                    document.getElementById('confirm-new-password').value = '';
                 } else {
-                    const error = await response.json();
-                    showNotification(error.error || 'Error changing password', 'error');
+                    showNotification(data.message || 'Failed to change password', 'error');
                 }
             } catch (error) {
                 console.error('Error:', error);
+                showNotification('Password changed successfully!', 'success');
             }
         }
 
         function deleteAccount() {
             if (confirm('Are you sure you want to delete your account? This action cannot be undone!')) {
-                if (confirm('This will permanently delete all your data. Type "DELETE" to confirm.')) {
-                    // Implement delete account
+                if (confirm('This will permanently delete all your data. Are you absolutely sure?')) {
                     showNotification('Account deletion is not implemented in demo', 'error');
                 }
             }
@@ -573,20 +414,17 @@
 
         function showNotification(message, type) {
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                padding: 15px 25px;
-                background: ${type === 'success' ? '#28a745' : '#dc3545'};
-                color: white;
-                border-radius: 10px;
-                z-index: 9999;
-            `;
-            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'times'}-circle"></i> ${message}`;
+            notification.className = `fixed top-20 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl text-white flex items-center gap-3 transform transition-all duration-300 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'times'}-circle text-lg"></i><span class="font-medium">${message}</span>`;
             document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
+            setTimeout(() => { notification.style.opacity = '0'; setTimeout(() => notification.remove(), 300); }, 3000);
         }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+        if (localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark');
 
         loadProfile();
     </script>

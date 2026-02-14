@@ -1,404 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Special Offers - TechHub</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dark-mode.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81',950:'#1e1b4e' },
+                        accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        .offers-hero {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #f39c12 100%);
-            padding: 80px 20px;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        .offers-hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔥</text></svg>') repeat;
-            opacity: 0.1;
-            animation: float 20s linear infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-        }
-        .offers-hero h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .offers-hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        .countdown-banner {
-            background: rgba(0,0,0,0.2);
-            padding: 15px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        .countdown-banner span {
-            display: inline-block;
-            margin: 0 10px;
-            text-align: center;
-        }
-        .countdown-banner .number {
-            font-size: 2rem;
-            font-weight: bold;
-            display: block;
-        }
-        .offers-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        .offers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-        .offer-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .offer-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-        .offer-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            z-index: 10;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        .offer-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-        }
-        .offer-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .offer-content {
-            padding: 25px;
-        }
-        .offer-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .offer-product {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-        }
-        .offer-prices {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .original-price {
-            font-size: 1.1rem;
-            color: #999;
-            text-decoration: line-through;
-        }
-        .offer-price {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #ee5a24;
-        }
-        .savings {
-            background: #d4edda;
-            color: #155724;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .offer-timer {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .offer-timer-label {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .offer-timer-countdown {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #ee5a24;
-        }
-        .offer-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .offer-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-        .no-offers {
-            text-align: center;
-            padding: 80px 20px;
-            color: #666;
-        }
-        .no-offers i {
-            font-size: 4rem;
-            color: #ddd;
-            margin-bottom: 20px;
-        }
-        .flash-sale-banner {
-            background: linear-gradient(90deg, #ff6b6b, #ee5a24, #f39c12, #ee5a24, #ff6b6b);
-            background-size: 200% 100%;
-            animation: gradientMove 3s linear infinite;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: 600;
-        }
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-        .category-filter {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        .filter-btn {
-            padding: 10px 25px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        .filter-btn:hover, .filter-btn.active {
-            background: #667eea;
-            color: white;
-        }
-        .admin-add-offer-btn {
-            display: none;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-        }
-        .admin-add-offer-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-        }
-        .admin-add-offer-btn i {
-            margin-right: 8px;
-        }
-        .offers-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .category-filter {
-            margin-bottom: 0;
-        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
     </style>
 </head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">TechHub</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="offers.html" class="active">Offers</a></li>
-                <li><a href="index.html#products">Products</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="auth-links">
-                <button id="dark-mode-toggle" class="btn-dark-mode" onclick="toggleDarkMode()" title="Toggle Dark Mode">
-                    <span class="dark-mode-icon">🌙</span>
-                </button>
-                <a href="wishlist.html" class="btn-wishlist" title="Wishlist"><i class="fas fa-heart"></i></a>
-                <a href="cart.html" class="btn-cart" title="Cart"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
-                <a href="login.html" class="btn-login" id="login-btn">Login</a>
-                <a href="signup.html" class="btn-signup" id="signup-btn">Sign Up</a>
-                <div id="user-menu" style="display:none;">
-                    <a href="profile.html" class="btn-profile"><i class="fas fa-user"></i> <span id="user-name"></span></a>
-                    <a href="#" class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i></a>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans min-h-screen transition-colors duration-300">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">
+                    <i class="fas fa-microchip text-primary-600"></i> TechHub
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 transition-colors">
+                        <i class="fas fa-arrow-left mr-1"></i> Shop
+                    </a>
+                    <button id="admin-add-offer-btn" onclick="window.location.href='admin-offers.html'" class="hidden text-sm px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                        <i class="fas fa-plus mr-1"></i> Manage Offers
+                    </button>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:inline text-yellow-400"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Flash Sale Banner -->
-    <div class="flash-sale-banner">
-        🔥 FLASH SALE! Limited Time Offers - Up to 70% OFF on Selected Items! 🔥
-    </div>
-
-    <!-- Offers Hero -->
-    <section class="offers-hero">
-        <h1>🎉 Special Offers</h1>
-        <p>Grab the best deals before they're gone!</p>
-        <div class="countdown-banner">
-            <span><span class="number" id="days">00</span>Days</span>
-            <span><span class="number" id="hours">00</span>Hours</span>
-            <span><span class="number" id="minutes">00</span>Mins</span>
-            <span><span class="number" id="seconds">00</span>Secs</span>
+    <!-- Hero Banner -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-red-600 via-orange-500 to-yellow-500 text-white py-16">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%221%22%3E%3Cpath d=%22M20 0L40 20L20 40L0 20z%22/%3E%3C/g%3E%3C/svg%3E')]"></div>
+        </div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 animate-fade-in-up">
+            <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur rounded-full text-sm font-bold mb-4">
+                <i class="fas fa-fire mr-1"></i> LIMITED TIME
+            </span>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Special Offers & Deals</h1>
+            <p class="text-xl text-white/90 max-w-2xl mx-auto mb-8">Don't miss out on incredible savings on your favorite tech products!</p>
+            <!-- Countdown -->
+            <div class="flex justify-center gap-4">
+                <div class="bg-white/20 backdrop-blur rounded-xl p-4 min-w-[70px]">
+                    <div id="days" class="text-2xl font-extrabold">00</div>
+                    <div class="text-xs text-white/70">Days</div>
+                </div>
+                <div class="bg-white/20 backdrop-blur rounded-xl p-4 min-w-[70px]">
+                    <div id="hours" class="text-2xl font-extrabold">00</div>
+                    <div class="text-xs text-white/70">Hours</div>
+                </div>
+                <div class="bg-white/20 backdrop-blur rounded-xl p-4 min-w-[70px]">
+                    <div id="minutes" class="text-2xl font-extrabold">00</div>
+                    <div class="text-xs text-white/70">Min</div>
+                </div>
+                <div class="bg-white/20 backdrop-blur rounded-xl p-4 min-w-[70px]">
+                    <div id="seconds" class="text-2xl font-extrabold">00</div>
+                    <div class="text-xs text-white/70">Sec</div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Offers Container -->
-    <div class="offers-container">
-        <div class="offers-header">
-            <div class="category-filter">
-                <button class="filter-btn active" data-category="all">All Offers</button>
-                <button class="filter-btn" data-category="laptops">Laptops</button>
-                <button class="filter-btn" data-category="desktops">Desktops</button>
-                <button class="filter-btn" data-category="accessories">Accessories</button>
-                <button class="filter-btn" data-category="gaming">Gaming</button>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Offers Grid -->
+        <div id="offers-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up" style="animation-delay: 0.2s;"></div>
+
+        <!-- No Offers -->
+        <div id="no-offers" class="hidden text-center py-20 animate-fade-in-up">
+            <div class="w-24 h-24 mx-auto mb-6 bg-orange-50 dark:bg-orange-900/20 rounded-full flex items-center justify-center">
+                <i class="fas fa-tag text-4xl text-orange-300 dark:text-orange-700"></i>
             </div>
-            <button class="admin-add-offer-btn" id="admin-add-offer-btn" onclick="window.location.href='admin-offers.html'">
-                <i class="fas fa-plus-circle"></i> Add New Offer
-            </button>
-        </div>
-
-        <div class="offers-grid" id="offers-grid">
-            <!-- Offers will be loaded here -->
-        </div>
-
-        <div class="no-offers" id="no-offers" style="display: none;">
-            <i class="fas fa-tag"></i>
-            <h2>No Active Offers</h2>
-            <p>Check back soon for amazing deals!</p>
+            <h2 class="text-2xl font-bold mb-3">No Active Offers</h2>
+            <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-6">Check back soon for amazing deals on tech products!</p>
+            <a href="index.html" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl shadow-lg shadow-primary-500/25 transition-all">
+                <i class="fas fa-shopping-bag"></i> Browse Products
+            </a>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>TechHub</h3>
-                    <p>Your ultimate destination for premium computers and laptops.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="offers.html">Offers</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Customer Service</h4>
-                    <ul>
-                        <li><a href="faq.html">FAQ</a></li>
-                        <li><a href="my-orders.html">Track Order</a></li>
-                        <li><a href="contact.html">Support</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 TechHub. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
 
     <script src="script.js"></script>
     <script src="config.js"></script>
     <script>
-        // Countdown Timer
+        // Countdown
         function updateCountdown() {
             const now = new Date();
             const endOfDay = new Date();
             endOfDay.setHours(23, 59, 59, 999);
             const diff = endOfDay - now;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            document.getElementById('days').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2, '0');
+            document.getElementById('hours').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2, '0');
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Load offers
         async function loadOffers() {
             let offers = [];
-            
             try {
                 const response = await fetch(`${API_URL}/offers/active`);
                 if (response.ok) {
                     offers = await response.json();
-                } else {
-                    throw new Error('API not available');
-                }
+                } else { throw new Error('API not available'); }
             } catch (error) {
-                console.error('Error loading from API, using localStorage:', error);
-                // Fallback: Load from localStorage
                 const localOffers = JSON.parse(localStorage.getItem('techhub_offers') || '[]');
                 const now = new Date();
                 offers = localOffers.filter(o => {
-                    const startDate = new Date(o.start_date);
-                    const endDate = new Date(o.end_date);
-                    return o.is_active && startDate <= now && endDate >= now;
+                    const s = new Date(o.start_date), e = new Date(o.end_date);
+                    return o.is_active && s <= now && e >= now;
                 });
             }
 
@@ -415,24 +148,25 @@
             noOffers.style.display = 'none';
 
             grid.innerHTML = offers.map(offer => `
-                <div class="offer-card" data-category="${offer.category || 'all'}">
-                    <div class="offer-badge">-${offer.discount_percent}%</div>
-                    <div class="offer-image">
-                        <img src="${offer.image_url || 'https://via.placeholder.com/400x250?text=TechHub+Offer'}" alt="${offer.product_name}">
+                <div class="offer-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 overflow-hidden group hover:shadow-xl transition-all duration-300 relative" data-category="${offer.category || 'all'}">
+                    <div class="absolute top-4 left-4 z-10 px-3 py-1 bg-red-500 text-white text-sm font-extrabold rounded-lg shadow-lg">
+                        -${offer.discount_percent}%
                     </div>
-                    <div class="offer-content">
-                        <h3 class="offer-title">${offer.title || 'Special Offer'}</h3>
-                        <p class="offer-product">${offer.product_name}</p>
-                        <div class="offer-prices">
-                            <span class="original-price">$${offer.original_price.toFixed(2)}</span>
-                            <span class="offer-price">$${offer.offer_price.toFixed(2)}</span>
-                            <span class="savings">Save $${(offer.original_price - offer.offer_price).toFixed(2)}</span>
+                    <div class="overflow-hidden">
+                        <img src="${offer.image_url || 'https://via.placeholder.com/400x250?text=TechHub+Offer'}" alt="${offer.product_name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-1">${offer.title || 'Special Offer'}</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">${offer.product_name}</p>
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-gray-400 line-through text-sm">$${offer.original_price.toFixed(2)}</span>
+                            <span class="text-xl font-extrabold text-red-500">$${offer.offer_price.toFixed(2)}</span>
+                            <span class="text-xs font-bold text-green-600 bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-lg">Save $${(offer.original_price - offer.offer_price).toFixed(2)}</span>
                         </div>
-                        <div class="offer-timer">
-                            <div class="offer-timer-label">Offer ends:</div>
-                            <div class="offer-timer-countdown">${new Date(offer.end_date).toLocaleDateString()}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-4 flex items-center gap-1">
+                            <i class="fas fa-clock"></i> Ends: ${new Date(offer.end_date).toLocaleDateString()}
                         </div>
-                        <button class="offer-btn" onclick="addToCart(${offer.product_id})">
+                        <button onclick="addToCart(${offer.product_id})" class="w-full py-2.5 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-medium rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
                         </button>
                     </div>
@@ -440,83 +174,43 @@
             `).join('');
         }
 
-        // Filter offers
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                const category = btn.dataset.category;
-                document.querySelectorAll('.offer-card').forEach(card => {
-                    if (category === 'all' || card.dataset.category === category) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // Add to cart
         async function addToCart(productId) {
             const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
+            if (!token) { window.location.href = 'login.html'; return; }
             try {
                 const response = await fetch(`${API_URL}/cart`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify({ productId, quantity: 1 })
                 });
-
-                if (response.ok) {
-                    showNotification('Added to cart!', 'success');
-                    updateCartCount();
-                }
-            } catch (error) {
-                console.error('Error adding to cart:', error);
-            }
+                if (response.ok) { showNotification('Added to cart!', 'success'); }
+            } catch (error) { console.error('Error:', error); }
         }
 
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: ${type === 'success' ? '#28a745' : '#dc3545'};
-                color: white;
-                padding: 15px 25px;
-                border-radius: 10px;
-                z-index: 9999;
-                animation: slideIn 0.3s ease;
-            `;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
-
-        // Check if user is admin and show add offer button
         function checkAdminStatus() {
             const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
             const user = JSON.parse(localStorage.getItem('user') || '{}');
             const adminBtn = document.getElementById('admin-add-offer-btn');
-            
             if (currentUser.isAdmin || currentUser.is_admin || user.isAdmin || user.is_admin) {
                 if (adminBtn) adminBtn.style.display = 'inline-flex';
             }
         }
 
-        // Initialize
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl text-white flex items-center gap-3 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            notification.innerHTML = `<i class="fas fa-check-circle text-lg"></i><span class="font-medium">${message}</span>`;
+            document.body.appendChild(notification);
+            setTimeout(() => { notification.style.opacity = '0'; setTimeout(() => notification.remove(), 300); }, 3000);
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+        if (localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark');
+
         loadOffers();
-        checkAuth();
         checkAdminStatus();
     </script>
 </body>

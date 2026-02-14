@@ -1,341 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Orders - TechHub</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dark-mode.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81',950:'#1e1b4e' },
+                        accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .orders-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        .orders-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .orders-header h1 {
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .orders-filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        .filter-btn {
-            padding: 10px 25px;
-            border: 2px solid #eee;
-            background: white;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .filter-btn:hover, .filter-btn.active {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
-        }
-        .order-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
-        }
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 30px;
-            background: #f8f9fa;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .order-info {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        .order-info-item {
-            text-align: left;
-        }
-        .order-info-item .label {
-            font-size: 0.85rem;
-            color: #888;
-            margin-bottom: 3px;
-        }
-        .order-info-item .value {
-            font-weight: 600;
-            color: #333;
-        }
-        .order-status {
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-        .status-processing {
-            background: #cce5ff;
-            color: #004085;
-        }
-        .status-shipped {
-            background: #d4edda;
-            color: #155724;
-        }
-        .status-delivered {
-            background: #28a745;
-            color: white;
-        }
-        .status-cancelled {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .order-items {
-            padding: 20px 30px;
-        }
-        .order-item {
-            display: flex;
-            gap: 20px;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-            align-items: center;
-        }
-        .order-item:last-child {
-            border-bottom: none;
-        }
-        .order-item-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #f5f7fa;
-        }
-        .order-item-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .order-item-details {
-            flex: 1;
-        }
-        .order-item-details h4 {
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .order-item-details span {
-            color: #888;
-            font-size: 0.9rem;
-        }
-        .order-item-price {
-            font-weight: 700;
-            color: #667eea;
-            font-size: 1.1rem;
-        }
-        .order-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 30px;
-            background: #f8f9fa;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .order-total {
-            font-size: 1.2rem;
-        }
-        .order-total span {
-            font-weight: 700;
-            color: #333;
-        }
-        .order-actions {
-            display: flex;
-            gap: 10px;
-        }
-        .btn-track {
-            padding: 10px 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .btn-track:hover {
-            transform: translateY(-2px);
-        }
-        .btn-reorder {
-            padding: 10px 25px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .btn-reorder:hover {
-            background: #f8f9ff;
-        }
-        .empty-orders {
-            text-align: center;
-            padding: 80px 20px;
-        }
-        .empty-orders i {
-            font-size: 5rem;
-            color: #ddd;
-            margin-bottom: 20px;
-        }
-        .empty-orders h2 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .tracking-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        .tracking-modal.active {
-            display: flex;
-        }
-        .tracking-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 90%;
-        }
-        .tracking-timeline {
-            margin-top: 30px;
-        }
-        .timeline-item {
-            display: flex;
-            gap: 20px;
-            padding-bottom: 30px;
-            position: relative;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 35px;
-            bottom: 0;
-            width: 2px;
-            background: #eee;
-        }
-        .timeline-item:last-child::before {
-            display: none;
-        }
-        .timeline-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            z-index: 1;
-        }
-        .timeline-item.completed .timeline-icon {
-            background: #28a745;
-            color: white;
-        }
-        .timeline-item.current .timeline-icon {
-            background: #667eea;
-            color: white;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
-        }
-        .timeline-info h4 {
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .timeline-info span {
-            color: #888;
-            font-size: 0.85rem;
-        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans min-h-screen transition-colors duration-300">
+
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">TechHub</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="offers.html">Offers</a></li>
-                <li><a href="index.html#products">Products</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="auth-links">
-                <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i></a>
-                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
+    <nav class="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">
+                    <i class="fas fa-microchip text-primary-600"></i> TechHub
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="profile.html" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                        <i class="fas fa-user mr-1"></i> Profile
+                    </a>
+                    <a href="index.html" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                        <i class="fas fa-arrow-left mr-1"></i> Shop
+                    </a>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:inline text-yellow-400"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="orders-container">
-        <div class="orders-header">
-            <h1><i class="fas fa-box"></i> My Orders</h1>
-            <p>Track and manage your orders</p>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4 animate-fade-in-up">
+            <div>
+                <h1 class="text-3xl font-bold mb-1">My Orders</h1>
+                <p class="text-gray-500 dark:text-gray-400">Track and manage your orders</p>
+            </div>
+            <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-xl shadow-lg shadow-primary-500/25 transition-all">
+                <i class="fas fa-shopping-bag"></i> Continue Shopping
+            </a>
         </div>
 
-        <div class="orders-filters">
-            <button class="filter-btn active" data-status="all">All Orders</button>
-            <button class="filter-btn" data-status="pending">Pending</button>
-            <button class="filter-btn" data-status="processing">Processing</button>
-            <button class="filter-btn" data-status="shipped">Shipped</button>
-            <button class="filter-btn" data-status="delivered">Delivered</button>
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap gap-2 mb-6 animate-fade-in-up" style="animation-delay: 0.1s;">
+            <button data-status="all" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl bg-primary-600 text-white transition-all">All Orders</button>
+            <button data-status="pending" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">Pending</button>
+            <button data-status="processing" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">Processing</button>
+            <button data-status="shipped" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">Shipped</button>
+            <button data-status="delivered" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">Delivered</button>
         </div>
 
-        <div id="orders-list">
-            <!-- Orders loaded dynamically -->
-        </div>
+        <!-- Orders List -->
+        <div id="orders-list" class="space-y-4 animate-fade-in-up" style="animation-delay: 0.2s;"></div>
 
-        <div class="empty-orders" id="empty-orders" style="display: none;">
-            <i class="fas fa-box-open"></i>
-            <h2>No orders yet</h2>
-            <p>When you place an order, it will appear here</p>
-            <a href="index.html" class="btn-track" style="display: inline-block; margin-top: 20px; text-decoration: none;">
-                Start Shopping
+        <!-- Empty State -->
+        <div id="empty-orders" class="hidden text-center py-20 animate-fade-in-up">
+            <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
+                <i class="fas fa-box-open text-4xl text-gray-400"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-3">No Orders Yet</h2>
+            <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">You haven't placed any orders yet. Start exploring our products!</p>
+            <a href="index.html" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl shadow-lg shadow-primary-500/25 transition-all">
+                <i class="fas fa-shopping-bag"></i> Start Shopping
             </a>
         </div>
     </div>
 
     <!-- Tracking Modal -->
-    <div class="tracking-modal" id="tracking-modal">
-        <div class="tracking-content">
-            <h2><i class="fas fa-shipping-fast"></i> Order Tracking</h2>
-            <p>Order #<span id="tracking-order-id"></span></p>
-            <div class="tracking-timeline" id="tracking-timeline">
-                <!-- Timeline loaded dynamically -->
-            </div>
-            <button class="btn-track" style="width: 100%; margin-top: 20px;" onclick="closeTracking()">Close</button>
+    <div id="tracking-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 w-full max-w-lg p-6 relative">
+            <button onclick="closeTracking()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+            <h3 class="text-xl font-bold mb-1">Order Tracking</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Order #<span id="tracking-order-id"></span></p>
+            <div id="tracking-timeline" class="space-y-6"></div>
         </div>
     </div>
 
-    <script src="script.js"></script>
     <script src="config.js"></script>
+    <script src="script.js"></script>
     <script>
         let orders = [];
 
@@ -348,7 +115,7 @@
                 window.location.href = 'login.html';
                 return;
             }
-            
+
             const token = localStorage.getItem('token');
 
             try {
@@ -358,72 +125,84 @@
                     });
                     if (response.ok) {
                         orders = await response.json();
-                    } else {
-                        throw new Error('API error');
-                    }
-                } else {
-                    throw new Error('No token');
-                }
+                    } else { throw new Error('API error'); }
+                } else { throw new Error('No token'); }
             } catch (error) {
                 console.log('Using localStorage orders');
-                // Fallback to localStorage
                 orders = JSON.parse(localStorage.getItem('orders') || '[]');
             }
 
             if (orders.length === 0) {
-                document.getElementById('orders-list').style.display = 'none';
-                document.getElementById('empty-orders').style.display = 'block';
+                document.getElementById('orders-list').classList.add('hidden');
+                document.getElementById('empty-orders').classList.remove('hidden');
             } else {
-                document.getElementById('orders-list').style.display = 'block';
-                document.getElementById('empty-orders').style.display = 'none';
+                document.getElementById('orders-list').classList.remove('hidden');
+                document.getElementById('empty-orders').classList.add('hidden');
                 renderOrders(orders);
             }
         }
 
         function renderOrders(ordersToShow) {
             const container = document.getElementById('orders-list');
+            const statusColors = {
+                pending: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+                processing: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
+                shipped: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400',
+                delivered: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+                cancelled: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+            };
+
             container.innerHTML = ordersToShow.map(order => `
-                <div class="order-card" data-status="${order.status}">
-                    <div class="order-header">
-                        <div class="order-info">
-                            <div class="order-info-item">
-                                <div class="label">Order ID</div>
-                                <div class="value">#${order.id}</div>
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-xl transition-shadow">
+                    <!-- Order Header -->
+                    <div class="p-5 border-b border-gray-100 dark:border-gray-800">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+                                <div>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 block">Order ID</span>
+                                    <span class="font-bold text-primary-600">#${order.id}</span>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 block">Date</span>
+                                    <span class="font-medium text-sm">${new Date(order.created_at).toLocaleDateString()}</span>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 block">Items</span>
+                                    <span class="font-medium text-sm">${order.items ? order.items.length : 0} items</span>
+                                </div>
                             </div>
-                            <div class="order-info-item">
-                                <div class="label">Date</div>
-                                <div class="value">${new Date(order.created_at).toLocaleDateString()}</div>
-                            </div>
-                            <div class="order-info-item">
-                                <div class="label">Items</div>
-                                <div class="value">${order.items ? order.items.length : 0} items</div>
-                            </div>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium ${statusColors[order.status] || statusColors.pending}">
+                                ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            </span>
                         </div>
-                        <span class="order-status status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
                     </div>
-                    <div class="order-items">
+
+                    <!-- Order Items -->
+                    <div class="p-5 space-y-3">
                         ${order.items ? order.items.map(item => `
-                            <div class="order-item">
-                                <div class="order-item-image">
-                                    <img src="${item.image_url || 'https://via.placeholder.com/80'}" alt="${item.name}">
+                            <div class="flex items-center gap-4">
+                                <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden flex-shrink-0">
+                                    <img src="${item.image_url || 'https://via.placeholder.com/80'}" alt="${item.name}" class="w-full h-full object-cover">
                                 </div>
-                                <div class="order-item-details">
-                                    <h4>${item.name || 'Product'}</h4>
-                                    <span>Qty: ${item.quantity}</span>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-medium text-sm truncate">${item.name || 'Product'}</h4>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">Qty: ${item.quantity}</span>
                                 </div>
-                                <div class="order-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                                <span class="font-semibold text-sm">$${(item.price * item.quantity).toFixed(2)}</span>
                             </div>
-                        `).join('') : '<p>No items</p>'}
+                        `).join('') : '<p class="text-gray-500 text-sm">No items</p>'}
                     </div>
-                    <div class="order-footer">
-                        <div class="order-total">
-                            Total: <span>$${order.total_amount.toFixed(2)}</span>
+
+                    <!-- Order Footer -->
+                    <div class="p-5 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 flex flex-wrap items-center justify-between gap-3">
+                        <div class="font-bold">
+                            Total: <span class="text-primary-600">$${order.total_amount.toFixed(2)}</span>
                         </div>
-                        <div class="order-actions">
-                            <button class="btn-track" onclick="trackOrder(${order.id}, '${order.status}')">
-                                <i class="fas fa-map-marker-alt"></i> Track Order
+                        <div class="flex gap-2">
+                            <button onclick="trackOrder(${order.id}, '${order.status}')" class="px-4 py-2 text-sm font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors flex items-center gap-2">
+                                <i class="fas fa-map-marker-alt"></i> Track
                             </button>
-                            <button class="btn-reorder" onclick="reorder(${order.id})">
+                            <button onclick="reorder(${order.id})" class="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center gap-2">
                                 <i class="fas fa-redo"></i> Reorder
                             </button>
                         </div>
@@ -432,11 +211,15 @@
             `).join('');
         }
 
-        // Filter orders
+        // Filter logic
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-primary-600', 'text-white');
+                    b.classList.add('bg-gray-100', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-400');
+                });
+                btn.classList.remove('bg-gray-100', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-400');
+                btn.classList.add('bg-primary-600', 'text-white');
 
                 const status = btn.dataset.status;
                 if (status === 'all') {
@@ -449,7 +232,7 @@
 
         function trackOrder(orderId, status) {
             document.getElementById('tracking-order-id').textContent = orderId;
-            
+
             const statuses = ['pending', 'processing', 'shipped', 'delivered'];
             const currentIndex = statuses.indexOf(status);
 
@@ -460,26 +243,40 @@
                 { status: 'shipped', icon: 'fa-truck', title: 'Shipped', desc: 'Your order is on the way' },
                 { status: 'delivered', icon: 'fa-check', title: 'Delivered', desc: 'Your order has been delivered' }
             ].map((item, index) => {
-                let className = '';
-                if (index < currentIndex) className = 'completed';
-                else if (index === currentIndex) className = 'current';
+                let iconBg = 'bg-gray-200 dark:bg-gray-700 text-gray-400';
+                let lineColor = 'bg-gray-200 dark:bg-gray-700';
+                let textClass = 'text-gray-400';
+
+                if (index < currentIndex) {
+                    iconBg = 'bg-green-500 text-white';
+                    lineColor = 'bg-green-500';
+                    textClass = 'text-green-600 dark:text-green-400';
+                } else if (index === currentIndex) {
+                    iconBg = 'bg-primary-500 text-white ring-4 ring-primary-200 dark:ring-primary-900';
+                    textClass = 'text-primary-600 dark:text-primary-400 font-semibold';
+                }
 
                 return `
-                    <div class="timeline-item ${className}">
-                        <div class="timeline-icon"><i class="fas ${item.icon}"></i></div>
-                        <div class="timeline-info">
-                            <h4>${item.title}</h4>
-                            <span>${item.desc}</span>
+                    <div class="flex gap-4 items-start relative">
+                        <div class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full ${iconBg} flex items-center justify-center flex-shrink-0 transition-all">
+                                <i class="fas ${item.icon} text-sm"></i>
+                            </div>
+                            ${index < 3 ? `<div class="w-0.5 h-8 ${lineColor} mt-2"></div>` : ''}
+                        </div>
+                        <div class="pb-6">
+                            <h4 class="${textClass} text-sm">${item.title}</h4>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">${item.desc}</span>
                         </div>
                     </div>
                 `;
             }).join('');
 
-            document.getElementById('tracking-modal').classList.add('active');
+            document.getElementById('tracking-modal').classList.remove('hidden');
         }
 
         function closeTracking() {
-            document.getElementById('tracking-modal').classList.remove('active');
+            document.getElementById('tracking-modal').classList.add('hidden');
         }
 
         function reorder(orderId) {
@@ -488,20 +285,17 @@
 
         function showNotification(message, type) {
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                padding: 15px 25px;
-                background: ${type === 'success' ? '#28a745' : '#dc3545'};
-                color: white;
-                border-radius: 10px;
-                z-index: 9999;
-            `;
-            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            notification.className = `fixed top-20 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl text-white flex items-center gap-3 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'times'}-circle text-lg"></i><span class="font-medium">${message}</span>`;
             document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
+            setTimeout(() => { notification.style.opacity = '0'; setTimeout(() => notification.remove(), 300); }, 3000);
         }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+        if (localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark');
 
         loadOrders();
     </script>

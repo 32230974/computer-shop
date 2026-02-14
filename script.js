@@ -1,36 +1,13 @@
 // Dark Mode Toggle
 function toggleDarkMode() {
-    const body = document.body;
-    const isDarkMode = body.classList.toggle('dark-mode');
-    
-    // Save preference to localStorage
-    if (isDarkMode) {
-        localStorage.setItem('darkMode', 'enabled');
-        updateDarkModeIcon(true);
-    } else {
-        localStorage.setItem('darkMode', 'disabled');
-        updateDarkModeIcon(false);
-    }
-}
-
-// Update dark mode icon
-function updateDarkModeIcon(isDarkMode) {
-    const icon = document.querySelector('.dark-mode-icon');
-    if (icon) {
-        if (isDarkMode) {
-            icon.textContent = '☀️';
-        } else {
-            icon.textContent = '🌙';
-        }
-    }
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('darkMode', document.documentElement.classList.contains('dark').toString());
 }
 
 // Initialize dark mode based on saved preference
 function initializeDarkMode() {
-    const darkModePreference = localStorage.getItem('darkMode');
-    if (darkModePreference === 'enabled') {
-        document.body.classList.add('dark-mode');
-        updateDarkModeIcon(true);
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.documentElement.classList.add('dark');
     }
 }
 
@@ -132,24 +109,25 @@ function loadProducts(filter = 'all') {
     grid.innerHTML = '';
     
     if (filteredProducts.length === 0) {
-        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No products found.</p>';
+        grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-12">No products found.</p>';
         return;
     }
 
     filteredProducts.forEach(product => {
         const card = document.createElement('div');
-        card.className = 'product-card';
+        card.className = 'bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden cursor-pointer';
+        card.onclick = function() { window.location.href = `product.html?id=${product.id}`; };
         card.innerHTML = `
-            <div class="product-image">${product.image || '📦'}</div>
-            <div class="product-info">
-                <div class="product-name">${product.name}</div>
-                <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
-                <div class="product-price">$${product.price.toFixed(2)}</div>
-                <div class="product-description">${product.description}</div>
-                <div class="product-stock">Stock: ${product.stock} units</div>
-                <div class="product-actions">
-                    <button class="btn-add-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-                </div>
+            <div class="h-48 bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center text-6xl">${product.image || '📦'}</div>
+            <div class="p-5">
+                <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">${product.name}</h3>
+                <p class="text-sm text-primary-600 dark:text-primary-400 font-medium mb-2">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white mb-2">$${product.price.toFixed(2)}</p>
+                <p class="text-sm text-gray-500 mb-3 line-clamp-2">${product.description}</p>
+                <p class="text-xs text-gray-400 mb-4">Stock: ${product.stock} units</p>
+                <button onclick="event.stopPropagation(); addToCart(${product.id})" class="w-full py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium rounded-xl shadow-lg shadow-primary-500/25 transition-all flex items-center justify-center gap-2 text-sm">
+                    <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
             </div>
         `;
         grid.appendChild(card);
@@ -207,37 +185,27 @@ function addToCart(productId) {
 function checkUserLogin() {
     const currentUser = localStorage.getItem('current_user');
     const userProfile = document.getElementById('user-profile');
-    const authLinks = document.querySelector('.auth-links');
+    const loginBtn = document.getElementById('login-btn');
+    const signupBtn = document.getElementById('signup-btn');
     const adminBtn = document.getElementById('admin-btn');
     const userNameDisplay = document.getElementById('user-name-display');
 
     if (currentUser) {
         const user = JSON.parse(currentUser);
         if (userProfile) {
-            userProfile.style.display = 'inline-block';
+            userProfile.classList.remove('hidden');
             if (userNameDisplay) {
                 userNameDisplay.textContent = user.name;
             }
         }
-        // Hide login/signup buttons
-        if (authLinks) {
-            const loginBtn = authLinks.querySelector('.btn-login');
-            const signupBtn = authLinks.querySelector('.btn-signup');
-            if (loginBtn) loginBtn.style.display = 'none';
-            if (signupBtn) signupBtn.style.display = 'none';
-        }
-        // Hide admin button when user is logged in
-        if (adminBtn) {
-            adminBtn.style.display = 'none';
-        }
+        if (loginBtn) loginBtn.classList.add('hidden');
+        if (signupBtn) signupBtn.classList.add('hidden');
+        if (adminBtn) adminBtn.classList.add('hidden');
     } else {
-        if (userProfile) {
-            userProfile.style.display = 'none';
-        }
-        // Show admin button only if NO user is logged in
-        if (adminBtn) {
-            adminBtn.style.display = 'block';
-        }
+        if (userProfile) userProfile.classList.add('hidden');
+        if (loginBtn) loginBtn.classList.remove('hidden');
+        if (signupBtn) signupBtn.classList.remove('hidden');
+        if (adminBtn) adminBtn.classList.remove('hidden');
     }
 }
 
@@ -246,7 +214,7 @@ function showUserMenu(event) {
     event.preventDefault();
     event.stopPropagation();
     const dropdown = document.getElementById('user-dropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    dropdown.classList.toggle('hidden');
 }
 
 // Close dropdown when clicking outside
@@ -254,7 +222,7 @@ document.addEventListener('click', function(event) {
     const dropdown = document.getElementById('user-dropdown');
     const userProfile = document.getElementById('user-profile');
     if (dropdown && userProfile && !userProfile.contains(event.target)) {
-        dropdown.style.display = 'none';
+        dropdown.classList.add('hidden');
     }
 });
 
@@ -284,56 +252,13 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeDarkMode();
     initializeProducts();
     loadProducts('all');
-    checkUserLogin(); // This will show/hide admin button based on login status
-
-    // Setup filter buttons
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            filterButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-
-    // Update active nav link
-    const navLinks = document.querySelectorAll('.nav-links a');
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.href === window.location.href) {
-            link.classList.add('active');
-        }
-    });
-    
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(e) {
-        const navLinks = document.getElementById('nav-links');
-        const authLinks = document.getElementById('auth-links');
-        const mobileBtn = document.querySelector('.mobile-menu-btn');
-        
-        if (navLinks && mobileBtn && !navLinks.contains(e.target) && !mobileBtn.contains(e.target)) {
-            navLinks.classList.remove('active');
-            if (authLinks) authLinks.classList.remove('active');
-        }
-    });
+    checkUserLogin();
 });
 
 // Mobile Menu Toggle
 function toggleMobileMenu() {
-    const navLinks = document.getElementById('nav-links');
-    const authLinks = document.getElementById('auth-links');
-    const mobileBtn = document.querySelector('.mobile-menu-btn i');
-    
-    if (navLinks) {
-        navLinks.classList.toggle('active');
-        if (authLinks) authLinks.classList.toggle('active');
-        
-        // Toggle icon
-        if (mobileBtn) {
-            if (navLinks.classList.contains('active')) {
-                mobileBtn.className = 'fas fa-times';
-            } else {
-                mobileBtn.className = 'fas fa-bars';
-            }
-        }
+    const menu = document.getElementById('mobile-menu');
+    if (menu) {
+        menu.classList.toggle('hidden');
     }
 }

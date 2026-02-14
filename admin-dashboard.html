@@ -1,167 +1,420 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - TechHub</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81',950:'#1e1b4e' },
+                        accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <!-- Admin Navigation -->
-    <nav class="admin-navbar">
-        <div class="container">
-            <div class="logo">TechHub Admin Panel</div>
-            <div class="admin-nav-links">
-                <span id="admin-name"></span>
-                <a href="#" onclick="adminLogout(); return false;" class="btn-danger">Logout</a>
-            </div>
-        </div>
-    </nav>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans min-h-screen">
 
-    <!-- Admin Dashboard -->
-    <div class="admin-container">
-        <aside class="admin-sidebar">
-            <ul class="admin-menu">
-                <li><a href="#" onclick="showSection('dashboard'); return false;" class="menu-item active">📊 Dashboard</a></li>
-                <li><a href="#" onclick="showSection('add-product'); return false;" class="menu-item">➕ Add Product</a></li>
-                <li><a href="#" onclick="showSection('manage-products'); return false;" class="menu-item">📦 Manage Products</a></li>
-                <li><a href="#" onclick="showSection('edit-product'); return false;" class="menu-item">✏️ Edit Product</a></li>
-                <li><a href="admin-offers.html" class="menu-item">🎁 Manage Offers</a></li>
-                <li><a href="admin-notifications.html" class="menu-item">📧 User Notifications</a></li>
-            </ul>
+    <!-- Mobile Header -->
+    <div class="lg:hidden flex items-center justify-between bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
+        <button onclick="toggleSidebar()" class="text-gray-600 dark:text-gray-400 hover:text-primary-500">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+        <span class="font-bold text-lg bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">TechHub Admin</span>
+        <button onclick="toggleDarkMode()" class="text-gray-600 dark:text-gray-400 hover:text-primary-500">
+            <i class="fas fa-moon dark:hidden"></i><i class="fas fa-sun hidden dark:inline"></i>
+        </button>
+    </div>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-72 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-800">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">
+                    <i class="fas fa-microchip text-primary-500"></i> TechHub Admin
+                </a>
+                <p id="admin-name" class="text-xs text-gray-500 mt-2 truncate">Admin Panel</p>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+                <button onclick="showSection('dashboard')" class="menu-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-sm font-medium transition-all hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400">
+                    <i class="fas fa-chart-line w-5 text-center"></i> Dashboard
+                </button>
+                <button onclick="showSection('manage-products')" class="menu-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-sm font-medium transition-all hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400">
+                    <i class="fas fa-boxes-stacked w-5 text-center"></i> Manage Products
+                </button>
+                <button onclick="showSection('add-product')" class="menu-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-sm font-medium transition-all hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400">
+                    <i class="fas fa-plus-circle w-5 text-center"></i> Add Product
+                </button>
+                <button onclick="showSection('edit-product')" class="menu-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-sm font-medium transition-all hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400">
+                    <i class="fas fa-pen-to-square w-5 text-center"></i> Edit Product
+                </button>
+
+                <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-800">
+                    <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Admin Tools</p>
+                    <a href="admin-contacts.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400">
+                        <i class="fas fa-envelope w-5 text-center"></i> Contacts
+                    </a>
+                    <a href="admin-notifications.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400">
+                        <i class="fas fa-bell w-5 text-center"></i> Notifications
+                    </a>
+                    <a href="admin-offers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400">
+                        <i class="fas fa-tags w-5 text-center"></i> Offers
+                    </a>
+                    <a href="admin-create.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400">
+                        <i class="fas fa-user-plus w-5 text-center"></i> Create Admin
+                    </a>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200 dark:border-gray-800 space-y-2">
+                <button onclick="toggleDarkMode()" class="hidden lg:flex w-full items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <i class="fas fa-moon dark:hidden w-5 text-center"></i><i class="fas fa-sun hidden dark:inline w-5 text-center"></i> <span class="dark:hidden">Dark Mode</span><span class="hidden dark:inline">Light Mode</span>
+                </button>
+                <a href="index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <i class="fas fa-store w-5 text-center"></i> Back to Store
+                </a>
+                <button onclick="adminLogout()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
+                    <i class="fas fa-sign-out-alt w-5 text-center"></i> Logout
+                </button>
+            </div>
         </aside>
 
-        <main class="admin-content">
+        <!-- Sidebar Overlay -->
+        <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 min-h-screen p-4 lg:p-8">
+
             <!-- Dashboard Section -->
-            <section id="dashboard" class="admin-section active">
-                <h2>Dashboard</h2>
-                <div class="dashboard-stats">
-                    <div class="stat-card">
-                        <h3>Total Products</h3>
-                        <p id="total-products" class="stat-number">0</p>
+            <div id="dashboard" class="admin-section">
+                <div class="mb-8">
+                    <h1 class="text-2xl lg:text-3xl font-bold">Dashboard</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Overview of your store</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-box text-xl text-primary-600 dark:text-primary-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Total Products</p>
+                                <p id="total-products" class="text-2xl font-bold">0</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <h3>Total Users</h3>
-                        <p id="total-users" class="stat-number">0</p>
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-users text-xl text-green-600 dark:text-green-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Total Users</p>
+                                <p id="total-users" class="text-2xl font-bold">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-shopping-cart text-xl text-amber-600 dark:text-amber-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Total Orders</p>
+                                <p id="total-orders" class="text-2xl font-bold">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-tags text-xl text-accent-600 dark:text-accent-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Active Offers</p>
+                                <p id="total-offers" class="text-2xl font-bold">0</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
 
-            <!-- Add Product Section -->
-            <section id="add-product" class="admin-section">
-                <h2>Add New Product</h2>
-                <form id="add-product-form">
-                    <div class="form-group">
-                        <label for="product-name">Product Name:</label>
-                        <input type="text" id="product-name" required>
+                <!-- Quick Actions -->
+                <div class="mt-8">
+                    <h2 class="text-lg font-semibold mb-4">Quick Actions</h2>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                        <button onclick="showSection('add-product')" class="flex flex-col items-center gap-2 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl hover:border-primary-500 hover:shadow-md transition-all">
+                            <i class="fas fa-plus-circle text-primary-500 text-xl"></i>
+                            <span class="text-xs font-medium">Add Product</span>
+                        </button>
+                        <a href="admin-offers.html" class="flex flex-col items-center gap-2 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl hover:border-primary-500 hover:shadow-md transition-all">
+                            <i class="fas fa-tags text-amber-500 text-xl"></i>
+                            <span class="text-xs font-medium">Manage Offers</span>
+                        </a>
+                        <a href="admin-contacts.html" class="flex flex-col items-center gap-2 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl hover:border-primary-500 hover:shadow-md transition-all">
+                            <i class="fas fa-envelope text-green-500 text-xl"></i>
+                            <span class="text-xs font-medium">Contacts</span>
+                        </a>
+                        <a href="admin-notifications.html" class="flex flex-col items-center gap-2 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl hover:border-primary-500 hover:shadow-md transition-all">
+                            <i class="fas fa-bell text-red-500 text-xl"></i>
+                            <span class="text-xs font-medium">Notifications</span>
+                        </a>
+                        <a href="admin-create.html" class="flex flex-col items-center gap-2 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl hover:border-primary-500 hover:shadow-md transition-all">
+                            <i class="fas fa-user-plus text-accent-500 text-xl"></i>
+                            <span class="text-xs font-medium">New Admin</span>
+                        </a>
+                        <a href="index.html" class="flex flex-col items-center gap-2 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl hover:border-primary-500 hover:shadow-md transition-all">
+                            <i class="fas fa-store text-blue-500 text-xl"></i>
+                            <span class="text-xs font-medium">View Store</span>
+                        </a>
                     </div>
-                    <div class="form-group">
-                        <label for="product-category">Category:</label>
-                        <select id="product-category" required>
-                            <option value="">Select Category</option>
-                            <option value="laptops">Laptops</option>
-                            <option value="desktops">Desktops</option>
-                            <option value="accessories">Accessories</option>
-                            <option value="peripherals">Peripherals</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="product-price">Price ($):</label>
-                        <input type="number" id="product-price" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="product-description">Description:</label>
-                        <textarea id="product-description" rows="4"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="product-image">Image URL:</label>
-                        <input type="url" id="product-image" placeholder="https://example.com/image.jpg">
-                    </div>
-                    <div class="form-group">
-                        <label for="product-stock">Stock Quantity:</label>
-                        <input type="number" id="product-stock" value="0" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Add Product</button>
-                    <div id="add-product-message" class="message"></div>
-                </form>
-            </section>
+                </div>
+            </div>
 
             <!-- Manage Products Section -->
-            <section id="manage-products" class="admin-section">
-                <h2>Manage Products</h2>
-                <div class="manage-controls">
-                    <input type="text" id="search-products" placeholder="Search products..." class="search-input">
+            <div id="manage-products" class="admin-section hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold">Manage Products</h1>
+                        <p class="text-gray-500 dark:text-gray-400 mt-1">View, edit, and delete products</p>
+                    </div>
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="search-products" placeholder="Search products..." class="pl-11 pr-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full sm:w-64">
+                    </div>
                 </div>
-                <div id="products-list" class="products-table-container">
-                    <table class="products-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Stock</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="products-tbody">
-                            <!-- Products will be listed here -->
-                        </tbody>
-                    </table>
+                <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
+                                    <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-300">ID</th>
+                                    <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-300">Name</th>
+                                    <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-300">Category</th>
+                                    <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-300">Price</th>
+                                    <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-300">Stock</th>
+                                    <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-300">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-tbody" class="divide-y divide-gray-100 dark:divide-gray-800">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </section>
+            </div>
+
+            <!-- Add Product Section -->
+            <div id="add-product" class="admin-section hidden">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold">Add New Product</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Create a new product listing</p>
+                </div>
+                <div class="max-w-2xl bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm p-6 lg:p-8">
+                    <div id="add-product-message" class="mb-4 text-sm font-medium"></div>
+                    <form id="add-product-form" class="space-y-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Product Name *</label>
+                                <input type="text" id="product-name" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category *</label>
+                                <select id="product-category" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                    <option value="">Select Category</option>
+                                    <option value="laptops">Laptops</option>
+                                    <option value="desktops">Desktops</option>
+                                    <option value="peripherals">Peripherals</option>
+                                    <option value="accessories">Accessories</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price ($) *</label>
+                                <input type="number" id="product-price" step="0.01" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stock</label>
+                                <input type="number" id="product-stock" value="0" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Image (emoji or URL)</label>
+                            <input type="text" id="product-image" placeholder="e.g. 💻 or https://..." class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                            <textarea id="product-description" rows="4" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium rounded-xl shadow-lg shadow-primary-500/25 transition-all flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+                    </form>
+                </div>
+            </div>
 
             <!-- Edit Product Section -->
-            <section id="edit-product" class="admin-section">
-                <h2>Edit Product</h2>
-                <form id="edit-product-form">
-                    <div class="form-group">
-                        <label for="edit-product-id">Select Product to Edit:</label>
-                        <select id="edit-product-id" required onchange="loadProductForEdit()">
-                            <option value="">-- Select Product --</option>
+            <div id="edit-product" class="admin-section hidden">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold">Edit Product</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Select and modify an existing product</p>
+                </div>
+                <div class="max-w-2xl bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm p-6 lg:p-8">
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Product</label>
+                        <select id="edit-product-id" onchange="loadProductForEdit()" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <option value="">-- Select a product --</option>
                         </select>
                     </div>
-                    <div id="edit-form-container" style="display:none;">
-                        <div class="form-group">
-                            <label for="edit-product-name">Product Name:</label>
-                            <input type="text" id="edit-product-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-category">Category:</label>
-                            <select id="edit-product-category" required>
-                                <option value="">Select Category</option>
-                                <option value="laptops">Laptops</option>
-                                <option value="desktops">Desktops</option>
-                                <option value="accessories">Accessories</option>
-                                <option value="peripherals">Peripherals</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-price">Price ($):</label>
-                            <input type="number" id="edit-product-price" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-description">Description:</label>
-                            <textarea id="edit-product-description" rows="4"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-image">Image URL:</label>
-                            <input type="url" id="edit-product-image">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-stock">Stock Quantity:</label>
-                            <input type="number" id="edit-product-stock" required>
-                        </div>
-                        <button type="submit" class="btn-primary">Update Product</button>
-                        <button type="button" class="btn-danger" onclick="deleteCurrentProduct()">Delete Product</button>
+                    <div id="edit-form-container" class="hidden">
+                        <div id="edit-product-message" class="mb-4 text-sm font-medium"></div>
+                        <form id="edit-product-form" class="space-y-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Product Name *</label>
+                                    <input type="text" id="edit-product-name" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category *</label>
+                                    <select id="edit-product-category" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option value="laptops">Laptops</option>
+                                        <option value="desktops">Desktops</option>
+                                        <option value="peripherals">Peripherals</option>
+                                        <option value="accessories">Accessories</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price ($) *</label>
+                                    <input type="number" id="edit-product-price" step="0.01" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stock</label>
+                                    <input type="number" id="edit-product-stock" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Image</label>
+                                <input type="text" id="edit-product-image" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                                <textarea id="edit-product-description" rows="4" class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"></textarea>
+                            </div>
+                            <div class="flex gap-3">
+                                <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium rounded-xl shadow-lg shadow-primary-500/25 transition-all flex items-center gap-2">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                                <button type="button" onclick="deleteCurrentProduct()" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl transition-all flex items-center gap-2">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div id="edit-product-message" class="message"></div>
-                </form>
-            </section>
+                </div>
+            </div>
+
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script src="config.js"></script>
+    <script>
+        // Override showSection for Tailwind
+        function showSection(sectionId) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.menu-item').forEach(m => {
+                m.classList.remove('bg-primary-50', 'dark:bg-primary-900/20', 'text-primary-600', 'dark:text-primary-400', 'active');
+            });
+            const section = document.getElementById(sectionId);
+            if (section) section.classList.remove('hidden');
+            if (event && event.target) {
+                const btn = event.target.closest('.menu-item');
+                if (btn) btn.classList.add('bg-primary-50', 'dark:bg-primary-900/20', 'text-primary-600', 'dark:text-primary-400', 'active');
+            }
+            if (sectionId === 'manage-products') loadProductsList();
+            else if (sectionId === 'edit-product') loadEditProductDropdown();
+        }
+
+        // Override loadProductsList for Tailwind table rows
+        function loadProductsList() {
+            const tbody = document.getElementById('products-tbody');
+            if (!tbody) return;
+            const products = JSON.parse(localStorage.getItem('techhub_products') || '[]');
+            tbody.innerHTML = '';
+            if (products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">No products found</td></tr>';
+                return;
+            }
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors';
+                row.innerHTML = `
+                    <td class="px-6 py-4 text-gray-500">#${product.id}</td>
+                    <td class="px-6 py-4 font-medium">${product.name}</td>
+                    <td class="px-6 py-4"><span class="px-2.5 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-medium rounded-full">${product.category}</span></td>
+                    <td class="px-6 py-4 font-medium text-green-600 dark:text-green-400">$${product.price.toFixed(2)}</td>
+                    <td class="px-6 py-4">${product.stock}</td>
+                    <td class="px-6 py-4 flex gap-2">
+                        <button onclick="selectProductForEdit(${product.id})" class="px-3 py-1.5 text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-lg hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors">Edit</button>
+                        <button onclick="deleteProduct(${product.id})" class="px-3 py-1.5 text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Override showMessage for Tailwind
+        function showMessage(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.textContent = message;
+                el.className = `mb-4 px-4 py-3 rounded-xl text-sm font-medium ${type === 'success' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'}`;
+            }
+        }
+
+        // Override loadProductForEdit to use 'hidden' instead of display
+        function loadProductForEdit() {
+            const productId = parseInt(document.getElementById('edit-product-id').value);
+            const container = document.getElementById('edit-form-container');
+            if (!productId) { container.classList.add('hidden'); return; }
+            const products = JSON.parse(localStorage.getItem('techhub_products') || '[]');
+            const product = products.find(p => p.id === productId);
+            if (!product) { alert('Product not found!'); return; }
+            document.getElementById('edit-product-name').value = product.name;
+            document.getElementById('edit-product-category').value = product.category;
+            document.getElementById('edit-product-price').value = product.price;
+            document.getElementById('edit-product-description').value = product.description;
+            document.getElementById('edit-product-image').value = product.image;
+            document.getElementById('edit-product-stock').value = product.stock;
+            container.classList.remove('hidden');
+        }
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        // Dark mode
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark').toString());
+        }
+        if (localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark');
+    </script>
     <script src="admin.js"></script>
 </body>
 </html>

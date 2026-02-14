@@ -1,920 +1,206 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - TechHub</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dark-mode.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81' }, accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' } } } } }</script>
     <style>
-        .checkout-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        .checkout-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .checkout-header h1 {
-            font-size: 2rem;
-            color: #333;
-        }
-        .checkout-steps {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        .step {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ccc;
-        }
-        .step.active {
-            color: #667eea;
-        }
-        .step.completed {
-            color: #28a745;
-        }
-        .step-number {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-        .step.active .step-number {
-            background: #667eea;
-            color: white;
-        }
-        .step.completed .step-number {
-            background: #28a745;
-            color: white;
-        }
-        .checkout-layout {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 40px;
-        }
-        .checkout-form {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-        }
-        .form-section {
-            margin-bottom: 30px;
-        }
-        .form-section h3 {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .form-section h3 i {
-            color: #667eea;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #555;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-        .payment-methods {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .payment-method {
-            flex: 1;
-            padding: 20px;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .payment-method:hover, .payment-method.active {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
-        .payment-method i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #667eea;
-        }
-
-        /* 3D Credit Card Styles */
-        .credit-card-container {
-            perspective: 1000px;
-            margin-bottom: 30px;
-        }
-        .credit-card {
-            width: 100%;
-            max-width: 400px;
-            height: 240px;
-            margin: 0 auto;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .credit-card.flipped {
-            transform: rotateY(180deg);
-        }
-        .credit-card-front, .credit-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            backface-visibility: hidden;
-            padding: 25px;
-            box-sizing: border-box;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-        .credit-card-front {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            color: white;
-        }
-        .credit-card-back {
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
-            transform: rotateY(180deg);
-            color: white;
-        }
-        .card-chip {
-            width: 50px;
-            height: 40px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
-            border-radius: 8px;
-            margin-bottom: 25px;
-            position: relative;
-            overflow: hidden;
-        }
-        .card-chip::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 5px;
-            right: 5px;
-            height: 1px;
-            background: rgba(0,0,0,0.2);
-        }
-        .card-chip::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 5px;
-            bottom: 5px;
-            width: 1px;
-            background: rgba(0,0,0,0.2);
-        }
-        .card-number-display {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            margin-bottom: 25px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .card-info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        .card-holder-label, .card-expiry-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-        .card-holder-name, .card-expiry-date {
-            font-family: 'Space Mono', monospace;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .card-type-logo {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            font-size: 2.5rem;
-        }
-        .card-contactless {
-            position: absolute;
-            top: 25px;
-            right: 80px;
-            font-size: 1.5rem;
-            opacity: 0.8;
-        }
-        
-        /* Card Back */
-        .card-magnetic-stripe {
-            background: #1a1a2e;
-            height: 50px;
-            margin: -25px -25px 20px -25px;
-            border-radius: 20px 20px 0 0;
-        }
-        .card-cvv-strip {
-            background: white;
-            color: #333;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .card-cvv-strip span {
-            font-family: 'Space Mono', monospace;
-            font-style: italic;
-            font-size: 1rem;
-        }
-        .cvv-display {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.2rem;
-            letter-spacing: 5px;
-            font-weight: bold;
-        }
-        .card-back-info {
-            margin-top: 30px;
-            font-size: 0.7rem;
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-
-        /* Card Input Section */
-        .card-inputs {
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8eaff 100%);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid #e0e3ff;
-        }
-        .card-number-input {
-            position: relative;
-        }
-        .card-type-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.8rem;
-            transition: all 0.3s ease;
-        }
-        .card-type-icon.visa { color: #1a1f71; }
-        .card-type-icon.mastercard { color: #eb001b; }
-        .card-type-icon.amex { color: #006fcf; }
-        .card-type-icon.discover { color: #ff6600; }
-
-        .card-input-group {
-            margin-bottom: 20px;
-        }
-        .card-input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #444;
-            font-size: 0.9rem;
-        }
-        .card-input-group input {
-            width: 100%;
-            padding: 16px 20px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-family: 'Space Mono', monospace;
-            transition: all 0.3s ease;
-            background: white;
-            box-sizing: border-box;
-        }
-        .card-input-group input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
-            outline: none;
-        }
-        .card-input-group input.valid {
-            border-color: #28a745;
-        }
-        .card-input-group input.invalid {
-            border-color: #dc3545;
-        }
-        .card-input-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .accepted-cards {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-        .accepted-cards i {
-            font-size: 2rem;
-            opacity: 0.4;
-            transition: all 0.3s ease;
-        }
-        .accepted-cards i.active {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .order-summary {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 100px;
-            height: fit-content;
-        }
-        .order-summary h2 {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-        }
-        .order-items {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-        .order-item {
-            display: flex;
-            gap: 15px;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .order-item img {
-            width: 60px;
-            height: 60px;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-        .order-item-info {
-            flex: 1;
-        }
-        .order-item-info h4 {
-            font-size: 0.95rem;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .order-item-info span {
-            font-size: 0.85rem;
-            color: #888;
-        }
-        .order-item-price {
-            font-weight: 600;
-            color: #333;
-        }
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            color: #666;
-        }
-        .summary-row.total {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #333;
-            padding-top: 15px;
-            margin-top: 15px;
-            border-top: 2px solid #eee;
-        }
-        .place-order-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-        .place-order-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-        .place-order-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        .secure-note {
-            text-align: center;
-            margin-top: 20px;
-            color: #888;
-            font-size: 0.85rem;
-        }
-        .secure-note i {
-            color: #28a745;
-        }
-
-        /* Processing Overlay */
-        .processing-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .processing-overlay.active {
-            display: flex;
-        }
-        .processing-card {
-            background: white;
-            padding: 50px;
-            border-radius: 20px;
-            text-align: center;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-        .processing-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid #eee;
-            border-top-color: #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .processing-text {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .processing-subtext {
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 992px) {
-            .checkout-layout {
-                grid-template-columns: 1fr;
-            }
-            .form-row, .card-input-row {
-                grid-template-columns: 1fr;
-            }
-            .credit-card {
-                max-width: 100%;
-                height: 200px;
-            }
-            .card-number-display {
-                font-size: 1.1rem;
-            }
-        }
+        .gradient-text{background:linear-gradient(135deg,#6366f1,#d946ef);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .card-3d{perspective:1000px;}
+        .card-inner{transition:transform 0.6s;transform-style:preserve-3d;position:relative;}
+        .card-3d.flipped .card-inner{transform:rotateY(180deg);}
+        .card-front,.card-back{backface-visibility:hidden;position:absolute;inset:0;border-radius:1rem;}
+        .card-back{transform:rotateY(180deg);}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+        .processing-pulse{animation:pulse 1.5s ease-in-out infinite;}
     </style>
 </head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">TechHub</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="offers.html">Offers</a></li>
-                <li><a href="index.html#products">Products</a></li>
-            </ul>
-            <div class="auth-links">
-                <a href="cart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
+<body class="font-sans bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+    <nav class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl fixed top-0 left-0 right-0 z-50 border-b border-gray-200/50 dark:border-gray-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+            <a href="index.html" class="flex items-center gap-2 text-xl font-bold"><i class="fas fa-bolt text-primary-500"></i><span class="gradient-text">TechHub</span></a>
+            <div class="flex items-center gap-4 text-sm">
+                <span class="hidden sm:inline text-gray-400"><i class="fas fa-lock text-green-500 mr-1"></i> Secure Checkout</span>
+                <a href="cart.html" class="text-gray-500 hover:text-primary-500 transition"><i class="fas fa-arrow-left mr-1"></i> Back to Cart</a>
             </div>
         </div>
     </nav>
 
-    <div class="checkout-container">
-        <div class="checkout-header">
-            <h1><i class="fas fa-lock"></i> Secure Checkout</h1>
-        </div>
-
-        <div class="checkout-steps">
-            <div class="step completed">
-                <div class="step-number"><i class="fas fa-check"></i></div>
-                <span>Cart</span>
-            </div>
-            <div class="step active">
-                <div class="step-number">2</div>
-                <span>Checkout</span>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <span>Confirmation</span>
-            </div>
-        </div>
-
-        <div class="checkout-layout">
-            <div class="checkout-form">
-                <!-- Shipping Information -->
-                <div class="form-section">
-                    <h3><i class="fas fa-truck"></i> Shipping Information</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>First Name *</label>
-                            <input type="text" id="firstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Last Name *</label>
-                            <input type="text" id="lastName" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Email *</label>
-                        <input type="email" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone *</label>
-                        <input type="tel" id="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Address *</label>
-                        <input type="text" id="address" placeholder="Street address" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>City *</label>
-                            <input type="text" id="city" required>
-                        </div>
-                        <div class="form-group">
-                            <label>State/Province</label>
-                            <input type="text" id="state">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>ZIP Code *</label>
-                            <input type="text" id="zipCode" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Country *</label>
-                            <select id="country">
-                                <option value="US">United States</option>
-                                <option value="CA">Canada</option>
-                                <option value="UK">United Kingdom</option>
-                                <option value="AU">Australia</option>
-                                <option value="IQ">Iraq</option>
-                                <option value="AE">UAE</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Payment Method -->
-                <div class="form-section">
-                    <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
-                    <div class="payment-methods">
-                        <div class="payment-method active" onclick="selectPayment('card')">
-                            <i class="fas fa-credit-card"></i>
-                            <div>Credit Card</div>
-                        </div>
-                        <div class="payment-method" onclick="selectPayment('paypal')">
-                            <i class="fab fa-paypal"></i>
-                            <div>PayPal</div>
-                        </div>
-                        <div class="payment-method" onclick="selectPayment('cod')">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <div>Cash on Delivery</div>
-                        </div>
-                    </div>
-
-                    <div class="card-inputs" id="card-inputs">
-                        <!-- 3D Credit Card Preview -->
-                        <div class="credit-card-container">
-                            <div class="credit-card" id="credit-card">
-                                <!-- Front of Card -->
-                                <div class="credit-card-front">
-                                    <i class="fas fa-wifi card-contactless"></i>
-                                    <div class="card-type-logo" id="card-logo">
-                                        <i class="fab fa-cc-visa"></i>
-                                    </div>
-                                    <div class="card-chip"></div>
-                                    <div class="card-number-display" id="card-number-display">
-                                        •••• •••• •••• ••••
-                                    </div>
-                                    <div class="card-info-row">
-                                        <div>
-                                            <div class="card-holder-label">Card Holder</div>
-                                            <div class="card-holder-name" id="card-holder-display">YOUR NAME</div>
-                                        </div>
-                                        <div>
-                                            <div class="card-expiry-label">Expires</div>
-                                            <div class="card-expiry-date" id="card-expiry-display">MM/YY</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Back of Card -->
-                                <div class="credit-card-back">
-                                    <div class="card-magnetic-stripe"></div>
-                                    <div class="card-cvv-strip">
-                                        <span>CVV</span>
-                                        <div class="cvv-display" id="cvv-display">•••</div>
-                                    </div>
-                                    <div class="card-back-info">
-                                        This card is property of TechHub Bank. If found, please return to any TechHub branch. 
-                                        Unauthorized use is prohibited.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Input Fields -->
-                        <div class="card-input-group card-number-input">
-                            <label><i class="fas fa-credit-card"></i> Card Number</label>
-                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
-                            <div class="card-type-icon" id="card-type-icon">
-                                <i class="fab fa-cc-visa"></i>
-                            </div>
-                        </div>
-                        <div class="card-input-group">
-                            <label><i class="fas fa-user"></i> Name on Card</label>
-                            <input type="text" id="cardName" placeholder="JOHN DOE" autocomplete="cc-name" style="text-transform: uppercase;">
-                        </div>
-                        <div class="card-input-row">
-                            <div class="card-input-group">
-                                <label><i class="fas fa-calendar"></i> Expiry Date</label>
-                                <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp">
-                            </div>
-                            <div class="card-input-group">
-                                <label><i class="fas fa-lock"></i> CVV</label>
-                                <input type="text" id="cvv" placeholder="•••" maxlength="4" autocomplete="cc-csc">
-                            </div>
-                        </div>
-                        
-                        <div class="accepted-cards">
-                            <i class="fab fa-cc-visa" id="icon-visa" title="Visa"></i>
-                            <i class="fab fa-cc-mastercard" id="icon-mastercard" title="Mastercard"></i>
-                            <i class="fab fa-cc-amex" id="icon-amex" title="American Express"></i>
-                            <i class="fab fa-cc-discover" id="icon-discover" title="Discover"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Order Summary -->
-            <div class="order-summary">
-                <h2>Order Summary</h2>
-                <div class="order-items" id="order-items">
-                    <!-- Items loaded dynamically -->
-                </div>
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span id="subtotal">$0.00</span>
-                </div>
-                <div class="summary-row">
-                    <span>Shipping</span>
-                    <span>Free</span>
-                </div>
-                <div class="summary-row">
-                    <span>Tax (10%)</span>
-                    <span id="tax">$0.00</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Total</span>
-                    <span id="total">$0.00</span>
-                </div>
-
-                <button class="place-order-btn" onclick="placeOrder()">
-                    <i class="fas fa-lock"></i> Place Order
-                </button>
-
-                <p class="secure-note">
-                    <i class="fas fa-shield-alt"></i> Your payment information is secure and encrypted
-                </p>
-            </div>
-        </div>
-    </div>
-
     <!-- Processing Overlay -->
-    <div class="processing-overlay" id="processing-overlay">
-        <div class="processing-card">
-            <div class="processing-spinner"></div>
-            <div class="processing-text">Processing Payment...</div>
-            <div class="processing-subtext">Please do not close this window</div>
+    <div id="processing-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] hidden items-center justify-center">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl p-10 text-center shadow-2xl">
+            <div class="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <h3 class="text-lg font-bold mb-1">Processing Payment</h3>
+            <p class="text-sm text-gray-500 processing-pulse">Please do not close this page...</p>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <div class="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-2xl sm:text-3xl font-bold mb-8"><i class="fas fa-credit-card text-primary-500 mr-2"></i>Checkout</h1>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Left: Forms -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Shipping Info -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+                    <h2 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fas fa-truck text-primary-500"></i> Shipping Information</h2>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium mb-1">First Name</label><input type="text" id="firstName" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500" required></div>
+                        <div><label class="block text-sm font-medium mb-1">Last Name</label><input type="text" id="lastName" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500" required></div>
+                        <div><label class="block text-sm font-medium mb-1">Email</label><input type="email" id="email" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500" required></div>
+                        <div><label class="block text-sm font-medium mb-1">Phone</label><input type="tel" id="phone" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500" required></div>
+                        <div class="sm:col-span-2"><label class="block text-sm font-medium mb-1">Address</label><input type="text" id="address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500" required></div>
+                        <div><label class="block text-sm font-medium mb-1">City</label><input type="text" id="city" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500" required></div>
+                        <div><label class="block text-sm font-medium mb-1">State</label><input type="text" id="state" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500"></div>
+                        <div><label class="block text-sm font-medium mb-1">Zip Code</label><input type="text" id="zipCode" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500" required></div>
+                        <div><label class="block text-sm font-medium mb-1">Country</label><input type="text" id="country" value="US" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500"></div>
+                    </div>
+                </div>
+
+                <!-- Payment -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+                    <h2 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fas fa-credit-card text-primary-500"></i> Payment Method</h2>
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <button onclick="selectPayment('card')" class="payment-method active border-2 border-primary-500 bg-primary-50 dark:bg-primary-900/20 rounded-xl p-3 text-center transition hover:shadow"><i class="fab fa-cc-visa text-2xl text-primary-500"></i><div class="text-xs font-medium mt-1">Credit Card</div></button>
+                        <button onclick="selectPayment('paypal')" class="payment-method border-2 border-gray-200 dark:border-gray-700 rounded-xl p-3 text-center transition hover:shadow"><i class="fab fa-paypal text-2xl text-blue-500"></i><div class="text-xs font-medium mt-1">PayPal</div></button>
+                        <button onclick="selectPayment('cod')" class="payment-method border-2 border-gray-200 dark:border-gray-700 rounded-xl p-3 text-center transition hover:shadow"><i class="fas fa-money-bill-wave text-2xl text-green-500"></i><div class="text-xs font-medium mt-1">Cash</div></button>
+                    </div>
+
+                    <div id="card-inputs">
+                        <!-- 3D Credit Card Preview -->
+                        <div class="card-3d w-full max-w-sm mx-auto h-52 mb-6 cursor-pointer" id="credit-card">
+                            <div class="card-inner w-full h-full">
+                                <div class="card-front bg-gradient-to-br from-primary-600 via-primary-700 to-accent-600 rounded-2xl p-6 text-white shadow-xl">
+                                    <div class="flex justify-between items-start mb-8">
+                                        <i class="fas fa-sim-card text-3xl text-yellow-300/80"></i>
+                                        <span id="card-logo" class="text-3xl"><i class="fab fa-cc-visa"></i></span>
+                                    </div>
+                                    <div id="card-number-display" class="text-xl sm:text-2xl font-mono tracking-wider mb-6">•••• •••• •••• ••••</div>
+                                    <div class="flex justify-between items-end">
+                                        <div><div class="text-[10px] uppercase text-white/60">Card Holder</div><div id="card-holder-display" class="text-sm font-medium tracking-wide">YOUR NAME</div></div>
+                                        <div><div class="text-[10px] uppercase text-white/60">Expires</div><div id="card-expiry-display" class="text-sm font-medium">MM/YY</div></div>
+                                        <span id="card-type-icon" class="text-2xl"><i class="fab fa-cc-visa"></i></span>
+                                    </div>
+                                </div>
+                                <div class="card-back bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl text-white shadow-xl">
+                                    <div class="w-full h-12 bg-black/40 mt-8"></div>
+                                    <div class="px-6 mt-4"><div class="bg-gray-200 rounded h-10 flex items-center justify-end px-4"><span id="cvv-display" class="text-gray-800 font-mono font-bold">•••</span></div></div>
+                                    <div class="px-6 mt-4 text-xs text-gray-400">This card is property of TechHub Bank. Unauthorized use is prohibited.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div><label class="block text-sm font-medium mb-1">Card Number</label><input type="text" id="cardNumber" maxlength="19" placeholder="1234 5678 9012 3456" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500 font-mono"></div>
+                            <div><label class="block text-sm font-medium mb-1">Name on Card</label><input type="text" id="cardName" placeholder="JOHN DOE" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500 uppercase"></div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="block text-sm font-medium mb-1">Expiry</label><input type="text" id="expiry" maxlength="5" placeholder="MM/YY" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500 font-mono"></div>
+                                <div><label class="block text-sm font-medium mb-1">CVV</label><input type="text" id="cvv" maxlength="4" placeholder="•••" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-primary-500 font-mono"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Order Summary -->
+            <div>
+                <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 shadow-sm sticky top-24">
+                    <h3 class="font-bold text-lg mb-4">Order Summary</h3>
+                    <div id="order-items" class="space-y-3 mb-4 max-h-64 overflow-y-auto"></div>
+                    <div class="space-y-2 text-sm border-t border-gray-100 dark:border-gray-800 pt-4">
+                        <div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span id="subtotal">$0.00</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Tax (10%)</span><span id="tax">$0.00</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Shipping</span><span class="text-green-600">Free</span></div>
+                        <hr class="border-gray-100 dark:border-gray-800">
+                        <div class="flex justify-between text-lg font-bold"><span>Total</span><span id="total" class="text-primary-600">$0.00</span></div>
+                    </div>
+                    <button onclick="placeOrder()" class="w-full mt-6 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-primary-600/20">
+                        <i class="fas fa-lock"></i> Place Order
+                    </button>
+                    <div class="flex items-center justify-center gap-3 mt-4 text-gray-400">
+                        <i class="fab fa-cc-visa text-lg"></i><i class="fab fa-cc-mastercard text-lg"></i><i class="fab fa-cc-amex text-lg"></i><i class="fas fa-shield-alt text-lg text-green-500"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="config.js"></script>
+    <script src="script.js"></script>
     <script>
         let cartItems = [];
         let selectedPayment = 'card';
-
-        // Card type detection patterns
-        const cardPatterns = {
-            visa: /^4/,
-            mastercard: /^5[1-5]|^2[2-7]/,
-            amex: /^3[47]/,
-            discover: /^6(?:011|5)/
-        };
+        const cardPatterns = { visa: /^4/, mastercard: /^5[1-5]|^2[2-7]/, amex: /^3[47]/, discover: /^6(?:011|5)/ };
 
         async function loadCheckout() {
             const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            // Pre-fill user info
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (user.name) {
-                const names = user.name.split(' ');
-                document.getElementById('firstName').value = names[0] || '';
-                document.getElementById('lastName').value = names.slice(1).join(' ') || '';
-            }
+            if (!token) { window.location.href = 'login.html'; return; }
+            const user = JSON.parse(localStorage.getItem('current_user') || localStorage.getItem('user') || '{}');
+            if (user.name) { const names = user.name.split(' '); document.getElementById('firstName').value = names[0] || ''; document.getElementById('lastName').value = names.slice(1).join(' ') || ''; }
             if (user.email) document.getElementById('email').value = user.email;
 
-            // Load cart from localStorage first (primary source)
             const localCart = JSON.parse(localStorage.getItem('cart') || '[]');
-            
-            if (localCart.length > 0) {
-                cartItems = localCart;
-                renderOrderSummary();
-            } else {
-                // Try API as fallback
-                try {
-                    const response = await fetch(`${API_URL}/cart`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    if (response.ok) {
-                        cartItems = await response.json();
-                    }
-                } catch (error) {
-                    console.error('Error loading cart from API:', error);
-                }
-                
-                if (cartItems.length === 0) {
-                    alert('Your cart is empty. Please add items to your cart first.');
-                    window.location.href = 'index.html';
-                    return;
-                }
+            if (localCart.length > 0) { cartItems = localCart; renderOrderSummary(); }
+            else {
+                try { const response = await fetch(`${API_URL}/cart`, { headers: { 'Authorization': `Bearer ${token}` } }); if (response.ok) cartItems = await response.json(); } catch (e) {}
+                if (cartItems.length === 0) { alert('Your cart is empty.'); window.location.href = 'index.html'; return; }
                 renderOrderSummary();
             }
-
-            // Initialize card input handlers
             initCardInputs();
         }
 
         function initCardInputs() {
-            const cardNumberInput = document.getElementById('cardNumber');
-            const cardNameInput = document.getElementById('cardName');
-            const expiryInput = document.getElementById('expiry');
-            const cvvInput = document.getElementById('cvv');
-
-            // Card number input
-            cardNumberInput?.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                value = value.replace(/(.{4})/g, '$1 ').trim();
-                e.target.value = value;
-                
-                // Update card preview
-                updateCardDisplay();
-                detectCardType(value.replace(/\s/g, ''));
+            document.getElementById('cardNumber')?.addEventListener('input', function(e) {
+                let v = e.target.value.replace(/\D/g, ''); v = v.replace(/(.{4})/g, '$1 ').trim(); e.target.value = v;
+                updateCardDisplay(); detectCardType(v.replace(/\s/g, ''));
             });
-
-            // Card name input
-            cardNameInput?.addEventListener('input', function(e) {
+            document.getElementById('cardName')?.addEventListener('input', function(e) {
                 e.target.value = e.target.value.toUpperCase();
-                document.getElementById('card-holder-display').textContent = 
-                    e.target.value || 'YOUR NAME';
+                document.getElementById('card-holder-display').textContent = e.target.value || 'YOUR NAME';
             });
-
-            // Expiry input
-            expiryInput?.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length >= 2) {
-                    value = value.slice(0, 2) + '/' + value.slice(2);
-                }
-                e.target.value = value;
-                document.getElementById('card-expiry-display').textContent = 
-                    value || 'MM/YY';
+            document.getElementById('expiry')?.addEventListener('input', function(e) {
+                let v = e.target.value.replace(/\D/g, ''); if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2); e.target.value = v;
+                document.getElementById('card-expiry-display').textContent = v || 'MM/YY';
             });
-
-            // CVV input - flip card
-            cvvInput?.addEventListener('focus', function() {
-                document.getElementById('credit-card').classList.add('flipped');
-            });
-
-            cvvInput?.addEventListener('blur', function() {
-                document.getElementById('credit-card').classList.remove('flipped');
-            });
-
-            cvvInput?.addEventListener('input', function(e) {
+            document.getElementById('cvv')?.addEventListener('focus', () => document.getElementById('credit-card').classList.add('flipped'));
+            document.getElementById('cvv')?.addEventListener('blur', () => document.getElementById('credit-card').classList.remove('flipped'));
+            document.getElementById('cvv')?.addEventListener('input', function(e) {
                 e.target.value = e.target.value.replace(/\D/g, '');
-                const cvvDisplay = document.getElementById('cvv-display');
-                cvvDisplay.textContent = e.target.value || '•••';
+                document.getElementById('cvv-display').textContent = e.target.value || '•••';
             });
         }
 
         function updateCardDisplay() {
-            const cardNumber = document.getElementById('cardNumber').value;
-            const displayEl = document.getElementById('card-number-display');
-            
-            if (cardNumber) {
-                displayEl.textContent = cardNumber;
-            } else {
-                displayEl.textContent = '•••• •••• •••• ••••';
-            }
+            const v = document.getElementById('cardNumber').value;
+            document.getElementById('card-number-display').textContent = v || '•••• •••• •••• ••••';
         }
 
         function detectCardType(number) {
-            let cardType = null;
-            
-            for (const [type, pattern] of Object.entries(cardPatterns)) {
-                if (pattern.test(number)) {
-                    cardType = type;
-                    break;
-                }
-            }
-
-            // Update icons
-            const icons = ['visa', 'mastercard', 'amex', 'discover'];
-            icons.forEach(icon => {
-                const el = document.getElementById(`icon-${icon}`);
-                if (el) {
-                    el.classList.toggle('active', icon === cardType);
-                }
-            });
-
-            // Update card logo
+            let type = null;
+            for (const [t, p] of Object.entries(cardPatterns)) { if (p.test(number)) { type = t; break; } }
             const logoEl = document.getElementById('card-logo');
             const typeIcon = document.getElementById('card-type-icon');
-            
-            if (cardType) {
-                logoEl.innerHTML = `<i class="fab fa-cc-${cardType}"></i>`;
-                typeIcon.innerHTML = `<i class="fab fa-cc-${cardType}"></i>`;
-                typeIcon.className = `card-type-icon ${cardType}`;
-            } else {
-                logoEl.innerHTML = `<i class="fab fa-cc-visa"></i>`;
-                typeIcon.innerHTML = `<i class="fab fa-cc-visa"></i>`;
-                typeIcon.className = 'card-type-icon';
-            }
+            if (type) { logoEl.innerHTML = `<i class="fab fa-cc-${type}"></i>`; typeIcon.innerHTML = `<i class="fab fa-cc-${type}"></i>`; }
+            else { logoEl.innerHTML = `<i class="fab fa-cc-visa"></i>`; typeIcon.innerHTML = `<i class="fab fa-cc-visa"></i>`; }
         }
 
         function renderOrderSummary() {
             const container = document.getElementById('order-items');
             let subtotal = 0;
-
             container.innerHTML = cartItems.map(item => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                return `
-                    <div class="order-item">
-                        <img src="${item.image_url || item.image || 'https://via.placeholder.com/60'}" alt="${item.name}">
-                        <div class="order-item-info">
-                            <h4>${item.name}</h4>
-                            <span>Qty: ${item.quantity}</span>
-                        </div>
-                        <div class="order-item-price">$${itemTotal.toFixed(2)}</div>
+                const t = item.price * item.quantity; subtotal += t;
+                return `<div class="flex items-center gap-3 py-2">
+                    <div class="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <img src="${item.image_url || item.image || 'https://via.placeholder.com/48'}" alt="${item.name}" class="max-w-full max-h-full object-contain rounded">
                     </div>
-                `;
+                    <div class="flex-1 min-w-0"><h4 class="text-sm font-medium truncate">${item.name}</h4><span class="text-xs text-gray-400">Qty: ${item.quantity}</span></div>
+                    <span class="text-sm font-bold">$${t.toFixed(2)}</span></div>`;
             }).join('');
-
-            const tax = subtotal * 0.1;
-            const total = subtotal + tax;
-
+            const tax = subtotal * 0.1; const total = subtotal + tax;
             document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
             document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
             document.getElementById('total').textContent = `$${total.toFixed(2)}`;
@@ -922,200 +208,74 @@
 
         function selectPayment(method) {
             selectedPayment = method;
-            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            
+            document.querySelectorAll('.payment-method').forEach(el => { el.classList.remove('active', 'border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20'); el.classList.add('border-gray-200', 'dark:border-gray-700'); });
+            event.currentTarget.classList.add('active', 'border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20');
+            event.currentTarget.classList.remove('border-gray-200', 'dark:border-gray-700');
             document.getElementById('card-inputs').style.display = method === 'card' ? 'block' : 'none';
         }
 
         function validateCard() {
             if (selectedPayment !== 'card') return true;
-
-            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
-            const cardName = document.getElementById('cardName').value;
-            const expiry = document.getElementById('expiry').value;
-            const cvv = document.getElementById('cvv').value;
-
-            if (cardNumber.length < 15) {
-                showNotification('Please enter a valid card number', 'error');
-                return false;
-            }
-            if (!cardName.trim()) {
-                showNotification('Please enter the name on card', 'error');
-                return false;
-            }
-            if (!/^\d{2}\/\d{2}$/.test(expiry)) {
-                showNotification('Please enter a valid expiry date (MM/YY)', 'error');
-                return false;
-            }
-            if (cvv.length < 3) {
-                showNotification('Please enter a valid CVV', 'error');
-                return false;
-            }
-
+            const cn = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            if (cn.length < 15) { showNotification('Please enter a valid card number', 'error'); return false; }
+            if (!document.getElementById('cardName').value.trim()) { showNotification('Please enter the name on card', 'error'); return false; }
+            if (!/^\d{2}\/\d{2}$/.test(document.getElementById('expiry').value)) { showNotification('Please enter a valid expiry date', 'error'); return false; }
+            if (document.getElementById('cvv').value.length < 3) { showNotification('Please enter a valid CVV', 'error'); return false; }
             return true;
         }
 
         async function placeOrder() {
             const token = localStorage.getItem('token');
-            
-            // Validate required fields
-            const required = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'zipCode'];
-            for (const field of required) {
-                if (!document.getElementById(field).value.trim()) {
-                    showNotification(`Please fill in ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`, 'error');
-                    document.getElementById(field).focus();
-                    return;
-                }
-            }
+            const required = ['firstName','lastName','email','phone','address','city','zipCode'];
+            for (const f of required) { if (!document.getElementById(f).value.trim()) { showNotification(`Please fill in ${f.replace(/([A-Z])/g,' $1').toLowerCase()}`,'error'); document.getElementById(f).focus(); return; } }
+            if (selectedPayment === 'card' && !validateCard()) return;
 
-            // Validate card if card payment selected
-            if (selectedPayment === 'card' && !validateCard()) {
-                return;
-            }
+            document.getElementById('processing-overlay').classList.remove('hidden');
+            document.getElementById('processing-overlay').classList.add('flex');
 
-            // Show processing overlay
-            document.getElementById('processing-overlay').classList.add('active');
+            let subtotal = cartItems.reduce((s,i) => s + i.price * i.quantity, 0);
+            const tax = subtotal * 0.1; const total = subtotal + tax;
+            await new Promise(r => setTimeout(r, 1500));
 
-            // Calculate total
-            let subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tax = subtotal * 0.1;
-            const total = subtotal + tax;
-
-            // Simulate payment processing delay (1.5 seconds)
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            // Hide processing overlay
-            document.getElementById('processing-overlay').classList.remove('active');
-
-            // Clear cart from localStorage
+            document.getElementById('processing-overlay').classList.add('hidden');
+            document.getElementById('processing-overlay').classList.remove('flex');
             localStorage.removeItem('cart');
-
-            // Show success modal immediately (demo mode - no API needed)
             showOrderSuccessModal(total);
 
-            // Optionally try to save order to server in background (non-blocking)
             try {
-                fetch(`${API_URL}/orders`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        items: cartItems.map(item => ({
-                            productId: item.product_id || item.id,
-                            quantity: item.quantity,
-                            price: item.price
-                        })),
-                        totalAmount: total,
-                        taxAmount: tax,
-                        shippingAddress: {
-                            firstName: document.getElementById('firstName').value,
-                            lastName: document.getElementById('lastName').value,
-                            address: document.getElementById('address').value,
-                            city: document.getElementById('city').value,
-                            state: document.getElementById('state').value,
-                            zipCode: document.getElementById('zipCode').value,
-                            country: document.getElementById('country').value,
-                            phone: document.getElementById('phone').value
-                        },
-                        paymentMethod: selectedPayment
-                    })
-                }).catch(err => console.log('Background order save:', err));
-            } catch (e) {
-                // Ignore API errors - order is confirmed locally
-            }
+                fetch(`${API_URL}/orders`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ items: cartItems.map(i => ({ productId: i.product_id || i.id, quantity: i.quantity, price: i.price })), totalAmount: total, taxAmount: tax,
+                        shippingAddress: { firstName: document.getElementById('firstName').value, lastName: document.getElementById('lastName').value, address: document.getElementById('address').value, city: document.getElementById('city').value, state: document.getElementById('state').value, zipCode: document.getElementById('zipCode').value, country: document.getElementById('country').value, phone: document.getElementById('phone').value }, paymentMethod: selectedPayment })
+                }).catch(e => console.log('Background order save:', e));
+            } catch(e) {}
         }
 
         function showOrderSuccessModal(total) {
-            // Create success modal
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.8);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 10000;
-            `;
-            modal.innerHTML = `
-                <div style="
-                    background: white;
-                    padding: 50px;
-                    border-radius: 20px;
-                    text-align: center;
-                    max-width: 500px;
-                    animation: scaleIn 0.3s ease;
-                ">
-                    <div style="
-                        width: 80px;
-                        height: 80px;
-                        background: linear-gradient(135deg, #28a745, #20c997);
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        margin: 0 auto 25px;
-                    ">
-                        <i class="fas fa-check" style="font-size: 40px; color: white;"></i>
+            const m = document.createElement('div');
+            m.className = 'fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[200] p-4';
+            m.innerHTML = `
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 sm:p-10 text-center max-w-md w-full shadow-2xl">
+                    <div class="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-check text-4xl text-green-600"></i>
                     </div>
-                    <h2 style="color: #333; margin-bottom: 15px; font-size: 28px;">Order Placed Successfully!</h2>
-                    <p style="color: #666; font-size: 16px; margin-bottom: 10px;">Thank you for your purchase!</p>
-                    <p style="color: #888; font-size: 14px; margin-bottom: 25px;">
-                        Your order total: <strong style="color: #667eea;">$${total.toFixed(2)}</strong>
-                    </p>
-                    <p style="color: #666; font-size: 14px; margin-bottom: 25px;">
-                        A confirmation email has been sent to your email address.
-                    </p>
-                    <div style="display: flex; gap: 15px; justify-content: center;">
-                        <button onclick="window.location.href='my-orders.html'" style="
-                            padding: 14px 30px;
-                            background: linear-gradient(135deg, #667eea, #764ba2);
-                            color: white;
-                            border: none;
-                            border-radius: 10px;
-                            font-size: 16px;
-                            cursor: pointer;
-                            font-weight: 600;
-                        ">View My Orders</button>
-                        <button onclick="window.location.href='index.html'" style="
-                            padding: 14px 30px;
-                            background: #f0f0f0;
-                            color: #333;
-                            border: none;
-                            border-radius: 10px;
-                            font-size: 16px;
-                            cursor: pointer;
-                            font-weight: 600;
-                        ">Continue Shopping</button>
+                    <h2 class="text-2xl font-bold mb-2">Order Placed Successfully!</h2>
+                    <p class="text-gray-500 mb-2">Thank you for your purchase!</p>
+                    <p class="text-sm text-gray-400 mb-6">Total: <span class="font-bold text-primary-600">$${total.toFixed(2)}</span></p>
+                    <p class="text-xs text-gray-400 mb-6">A confirmation email has been sent.</p>
+                    <div class="flex gap-3">
+                        <button onclick="window.location.href='my-orders.html'" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-xl transition">View Orders</button>
+                        <button onclick="window.location.href='index.html'" class="flex-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 font-semibold py-3 rounded-xl transition">Continue Shopping</button>
                     </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
+                </div>`;
+            document.body.appendChild(m);
         }
 
         function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                padding: 15px 25px;
-                background: ${type === 'success' ? '#28a745' : '#dc3545'};
-                color: white;
-                border-radius: 10px;
-                z-index: 9999;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-                animation: slideIn 0.3s ease;
-            `;
-            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'times'}-circle"></i> ${message}`;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
+            const n = document.createElement('div');
+            n.className = `fixed top-20 right-4 z-50 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-medium flex items-center gap-2 ${type==='success'?'bg-green-500':'bg-red-500'}`;
+            n.innerHTML = `<i class="fas fa-${type==='success'?'check':'times'}-circle"></i> ${message}`;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
         }
 
         loadCheckout();
