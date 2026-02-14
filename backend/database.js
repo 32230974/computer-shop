@@ -42,10 +42,10 @@ async function initializeDatabase() {
             email: 'mhmd12@gmail.com',
             phone: '1234567890',
             password: hashedPassword,
-            is_admin: 0,
+            is_admin: 1,
             created_at: new Date().toISOString()
         });
-        console.log('✅ Test user created: mhmd12@gmail.com / 12345678');
+        console.log('✅ Test admin user created: mhmd12@gmail.com / 12345678');
         return;
     }
 
@@ -84,10 +84,10 @@ async function initializeDatabase() {
             email: 'mhmd12@gmail.com',
             phone: '1234567890',
             password: hashedPassword,
-            is_admin: 0,
+            is_admin: 1,
             created_at: new Date().toISOString()
         });
-        console.log('✅ Test user created: mhmd12@gmail.com / 12345678');
+        console.log('✅ Test admin user created: mhmd12@gmail.com / 12345678');
     }
 }
 

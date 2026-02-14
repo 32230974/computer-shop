@@ -187,11 +187,18 @@ function checkUserLogin() {
     const userProfile = document.getElementById('user-profile');
     const loginBtn = document.getElementById('login-btn');
     const signupBtn = document.getElementById('signup-btn');
-    const adminBtn = document.getElementById('admin-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const adminNavLink = document.getElementById('admin-nav-link');
+    const adminDropdownLink = document.getElementById('admin-dropdown-link');
+    const adminMobileLink = document.getElementById('admin-mobile-link');
+    const mobileLoginBtn = document.getElementById('mobile-login-btn');
+    const mobileSignupBtn = document.getElementById('mobile-signup-btn');
+    const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
     const userNameDisplay = document.getElementById('user-name-display');
 
     if (currentUser) {
         const user = JSON.parse(currentUser);
+        // Show user profile and logout
         if (userProfile) {
             userProfile.classList.remove('hidden');
             if (userNameDisplay) {
@@ -200,12 +207,33 @@ function checkUserLogin() {
         }
         if (loginBtn) loginBtn.classList.add('hidden');
         if (signupBtn) signupBtn.classList.add('hidden');
-        if (adminBtn) adminBtn.classList.add('hidden');
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
+        if (mobileLoginBtn) mobileLoginBtn.classList.add('hidden');
+        if (mobileSignupBtn) mobileSignupBtn.classList.add('hidden');
+        if (mobileLogoutBtn) mobileLogoutBtn.classList.remove('hidden');
+        
+        // Show admin links if user is admin
+        if (user.is_admin || user.isAdmin) {
+            if (adminNavLink) adminNavLink.classList.remove('hidden');
+            if (adminDropdownLink) adminDropdownLink.classList.remove('hidden');
+            if (adminMobileLink) adminMobileLink.classList.remove('hidden');
+        } else {
+            if (adminNavLink) adminNavLink.classList.add('hidden');
+            if (adminDropdownLink) adminDropdownLink.classList.add('hidden');
+            if (adminMobileLink) adminMobileLink.classList.add('hidden');
+        }
     } else {
+        // Show login/signup, hide user elements
         if (userProfile) userProfile.classList.add('hidden');
         if (loginBtn) loginBtn.classList.remove('hidden');
         if (signupBtn) signupBtn.classList.remove('hidden');
-        if (adminBtn) adminBtn.classList.remove('hidden');
+        if (logoutBtn) logoutBtn.classList.add('hidden');
+        if (mobileLoginBtn) mobileLoginBtn.classList.remove('hidden');
+        if (mobileSignupBtn) mobileSignupBtn.classList.remove('hidden');
+        if (mobileLogoutBtn) mobileLogoutBtn.classList.add('hidden');
+        if (adminNavLink) adminNavLink.classList.add('hidden');
+        if (adminDropdownLink) adminDropdownLink.classList.add('hidden');
+        if (adminMobileLink) adminMobileLink.classList.add('hidden');
     }
 }
 
