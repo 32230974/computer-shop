@@ -190,6 +190,111 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
+exports.createAdmin = async (req, res) => {
+    try {
+        // Check if user is admin
+        if (!req.user.is_admin) {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
+
+        const { name, email, phone, password } = req.body;
+
+        if (!name || !email || !password) {
+            return res.status(400).json({ error: 'Name, email, and password are required' });
+        }
+
+        // Check if user already exists
+        const existingUser = await User.findByEmail(email);
+        if (existingUser) {
+            return res.status(400).json({ error: 'Email already registered' });
+        }
+
+        // Create admin user
+        const userId = await User.create(name, email, phone, password);
+        
+        // Set as admin
+        await User.makeAdmin(userId);
+        
+        const user = await User.findById(userId);
+
+        // Send welcome email
+        await sendEmail(
+            email,
+            '🎉 Admin Account Created - TechHub',
+            `<!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+                    .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; }
+                    .header { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; padding: 30px; text-align: center; }
+                    .content { padding: 30px; }
+                    .footer { background-color: #f8f9fa; padding: 20px; text-align: center; color: #888; font-size: 12px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>🔐 Admin Account Created</h1>
+                    </div>
+                    <div class="content">
+                        <p>Hello <strong>${name}</strong>,</p>
+                        <p>An admin account has been created for you at TechHub.</p>
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <p><strong>Email:</strong> ${email}</p>
+                            <p><strong>Role:</strong> Administrator</p>
+                            <p><strong>Created:</strong> ${new Date().toLocaleString()}</p>
+                        </div>
+                        <p>You now have full access to the admin dashboard and can manage:</p>
+                        <ul>
+                            <li>Products & Inventory</li>
+                            <li>Orders & Customers</li>
+                            <li>Offers & Promotions</li>
+                            <li>Other Administrator Accounts</li>
+                        </ul>
+                    </div>
+                    <div class="footer">
+                        <p>© ${new Date().getFullYear()} TechHub. All rights reserved.</p>
+                    </div>
+                </div>
+            </body>
+            </html>`
+        );
+
+        res.status(201).json({
+            message: 'Admin created successfully',
+            user: user
+        });
+    } catch (error) {
+        console.error('Create admin error:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+    try {
+        // Check if user is admin
+        if (!req.user.is_admin) {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
+
+        const userId = req.params.id;
+
+        // Don't allow deleting yourself
+        if (parseInt(userId) === parseInt(req.user.id)) {
+            return res.status(400).json({ error: 'Cannot delete your own account' });
+        }
+
+        const db = require('../database');
+        await db.runAsync('DELETE FROM users WHERE id = ?', [userId]);
+
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error('Delete user error:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 exports.getAdminStats = async (req, res) => {
     try {
         const stats = await User.getStats();

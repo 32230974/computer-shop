@@ -46,8 +46,8 @@ class User {
 
     static async makeAdmin(userId) {
         await runAsync(
-            'UPDATE users SET is_admin = 1 WHERE id = ?',
-            [userId]
+            'UPDATE users SET is_admin = ? WHERE id = ?',
+            [true, userId]
         );
     }
 

@@ -11,8 +11,8 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81',950:'#1e1b4e' },
-                        accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' }
+                        primary: { 50:'#fff7ed',100:'#ffedd5',200:'#fed7aa',300:'#fdba74',400:'#fb923c',500:'#f97316',600:'#ea580c',700:'#c2410c',800:'#9a3412',900:'#7c2d12',950:'#431407' },
+                        accent: { 50:'#fef2f2',100:'#fee2e2',200:'#fecaca',300:'#fca5a5',400:'#f87171',500:'#ef4444',600:'#dc2626',700:'#b91c1c',800:'#991b1b',900:'#7f1d1d' }
                     },
                     fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
                 }
@@ -113,83 +113,137 @@
 
     <script src="config.js"></script>
     <script>
-        function verifyAdminAccess() {
-            const currentAdmin = localStorage.getItem('current_admin');
-            if (!currentAdmin) {
-                const password = prompt('Enter Master Admin Password:');
-                if (password !== 'moheidin2015') {
-                    alert('Incorrect password! Access denied.');
-                    window.location.href = 'index.html';
-                    return;
-                }
-            }
-        }
-        verifyAdminAccess();
-
-        function initializeAdminAccounts() {
-            const admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
-            if (admins.length === 0) {
-                admins.push({ id: 1, email: 'admin@techhub.com', password: 'admin123', name: 'Default Admin', createdAt: new Date().toISOString() });
-                localStorage.setItem('techhub_admins', JSON.stringify(admins));
-            }
-        }
-        initializeAdminAccounts();
-
-        function loadAdminList() {
-            const admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
-            const list = document.getElementById('admin-list');
-            if (admins.length === 0) {
-                list.innerHTML = '<p class="text-center text-gray-500 py-8">No admin accounts found</p>';
+        // Check if user is logged in and is admin
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (!token || !user.is_admin) {
+                alert('Admin access required');
+                window.location.href = 'admin-login.html';
                 return;
             }
-            list.innerHTML = admins.map(admin => `
-                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold text-sm">
-                            ${(admin.name || admin.email).charAt(0).toUpperCase()}
+        }
+        checkAuth();
+
+        async function loadAdminList() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/auth/users`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) throw new Error('Failed to load users');
+                
+                const users = await response.json();
+                const admins = users.filter(u => u.is_admin);
+                
+                const list = document.getElementById('admin-list');
+                if (admins.length === 0) {
+                    list.innerHTML = '<p class="text-center text-gray-500 py-8">No admin accounts found</p>';
+                    return;
+                }
+                
+                list.innerHTML = admins.map(admin => `
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold text-sm">
+                                ${(admin.name || admin.email).charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <p class="font-medium text-sm">${admin.name || 'Admin'}</p>
+                                <p class="text-xs text-gray-500">${admin.email}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="font-medium text-sm">${admin.name || 'Admin'}</p>
-                            <p class="text-xs text-gray-500">${admin.email}</p>
-                        </div>
+                        <button onclick="deleteAdmin(${admin.id})" class="w-8 h-8 flex items-center justify-center rounded-lg text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors" title="Delete">
+                            <i class="fas fa-trash text-xs"></i>
+                        </button>
                     </div>
-                    <button onclick="deleteAdmin(${admin.id})" class="w-8 h-8 flex items-center justify-center rounded-lg text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors" title="Delete">
-                        <i class="fas fa-trash text-xs"></i>
-                    </button>
-                </div>
-            `).join('');
+                `).join('');
+            } catch (error) {
+                console.error('Error loading admins:', error);
+                showMessage('Failed to load admin list', 'error');
+            }
         }
 
-        document.getElementById('create-admin-form').addEventListener('submit', function(e) {
+        document.getElementById('create-admin-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const name = document.getElementById('admin-name').value.trim();
             const email = document.getElementById('admin-email').value.trim();
             const password = document.getElementById('admin-password').value;
             const confirmPassword = document.getElementById('admin-confirm-password').value;
 
-            if (!email.includes('@')) { showMessage('Please enter a valid email', 'error'); return; }
-            if (password.length < 6) { showMessage('Password must be at least 6 characters', 'error'); return; }
-            if (password !== confirmPassword) { showMessage('Passwords do not match', 'error'); return; }
+            if (!email.includes('@')) { 
+                showMessage('Please enter a valid email', 'error'); 
+                return; 
+            }
+            if (password.length < 6) { 
+                showMessage('Password must be at least 6 characters', 'error'); 
+                return; 
+            }
+            if (password !== confirmPassword) { 
+                showMessage('Passwords do not match', 'error'); 
+                return; 
+            }
 
-            const admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
-            if (admins.find(a => a.email === email)) { showMessage('An admin with this email already exists', 'error'); return; }
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/auth/users/admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ name, email, password, phone: '' })
+                });
 
-            admins.push({ id: Date.now(), email, password, name, createdAt: new Date().toISOString() });
-            localStorage.setItem('techhub_admins', JSON.stringify(admins));
+                const data = await response.json();
 
-            showMessage('Admin account created successfully!', 'success');
-            this.reset();
-            loadAdminList();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to create admin');
+                }
+
+                showMessage('Admin account created successfully!', 'success');
+                this.reset();
+                loadAdminList();
+            } catch (error) {
+                console.error('Error creating admin:', error);
+                showMessage(error.message, 'error');
+            }
         });
 
-        function deleteAdmin(id) {
-            const admins = JSON.parse(localStorage.getItem('techhub_admins') || '[]');
-            if (admins.length <= 1) { showMessage('Cannot delete the last admin account!', 'error'); return; }
+        async function deleteAdmin(id) {
+            const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (id === currentUser.id) {
+                showMessage('Cannot delete your own account!', 'error');
+                return;
+            }
+            
             if (!confirm('Are you sure you want to delete this admin?')) return;
-            const updated = admins.filter(a => a.id !== id);
-            localStorage.setItem('techhub_admins', JSON.stringify(updated));
-            loadAdminList();
-            showMessage('Admin deleted successfully', 'success');
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/auth/users/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Failed to delete admin');
+                }
+
+                showMessage('Admin deleted successfully', 'success');
+                loadAdminList();
+            } catch (error) {
+                console.error('Error deleting admin:', error);
+                showMessage(error.message, 'error');
+            }
         }
 
         function showMessage(msg, type) {

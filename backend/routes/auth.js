@@ -13,6 +13,8 @@ router.post('/reset-password', authController.resetPassword);
 router.get('/profile', authenticateToken, authController.getProfile);
 router.put('/profile', authenticateToken, authController.updateProfile);
 router.get('/users', authenticateToken, authController.getAllUsers);
+router.post('/users/admin', authenticateToken, authController.createAdmin);
+router.delete('/users/:id', authenticateToken, authController.deleteUser);
 router.get('/stats', authenticateToken, authController.getAdminStats);
 
 // Address routes

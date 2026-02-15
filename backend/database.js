@@ -1,8 +1,10 @@
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
+let { Pool } = require('pg'); // PostgreSQL client
 
 let pool;
 let useInMemory = false;
+let dbType = 'mysql'; // 'mysql' or 'postgresql'
 
 // In-memory storage for serverless deployment (when MySQL is not available)
 const inMemoryDB = {
@@ -27,28 +29,62 @@ const inMemoryDB = {
 };
 
 async function initializeDatabase() {
-    // Check if MySQL environment variables are set
-    const hasMySQL = process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.MYSQL_URL || process.env.DB_HOST;
+    // Check for PostgreSQL/Supabase connection first
+    const hasPostgreSQL = process.env.DATABASE_URL || (process.env.DB_TYPE && process.env.DB_TYPE.toLowerCase() === 'postgresql') || process.env.DB_HOST;
+    const hasMySQL = !hasPostgreSQL && (process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.MYSQL_URL);
+    
+    if (hasPostgreSQL && (!process.env.DB_TYPE || process.env.DB_TYPE.toLowerCase() !== 'mysql')) {
+        console.log('🔧 Connecting to PostgreSQL/Supabase database...');
+        dbType = 'postgresql';
+        
+        try {
+            // Parse connection string or use individual variables
+            if (process.env.DATABASE_URL) {
+                pool = new Pool({
+                    connectionString: process.env.DATABASE_URL,
+                    ssl: process.env.DB_SSL !== 'false' ? { rejectUnauthorized: false } : false
+                });
+            } else {
+                // Configure for IPv4 + IPv6 support
+                const config = {
+                    host: process.env.DB_HOST,
+                    port: parseInt(process.env.DB_PORT || '5432'),
+                    user: process.env.DB_USER || 'postgres',
+                    password: process.env.DB_PASSWORD,
+                    database: process.env.DB_NAME || 'postgres',
+                    ssl: process.env.DB_SSL !== 'false' ? { rejectUnauthorized: false } : false,
+                    connectionTimeoutMillis: 10000,
+                    keepAlive: true
+                };
+                
+                console.log('🔍 Attempting connection to:', config.host + ':' + config.port);
+                pool = new Pool(config);
+            }
+            
+            // Test connection
+            const client = await pool.connect();
+            await client.query('SELECT NOW()');
+            client.release();
+            console.log('✅ Connected to PostgreSQL database');
+            return;
+        } catch (err) {
+            console.error('⚠️ PostgreSQL connection failed:', err.message);
+            console.log('Falling back to in-memory storage...');
+            useInMemory = true;
+            await initializeInMemoryData();
+            return;
+        }
+    }
     
     if (!hasMySQL) {
-        console.log('⚠️ No MySQL configuration found - using in-memory storage');
+        console.log('⚠️ No database configuration found - using in-memory storage');
         console.log('📦 Demo mode: Data will reset on server restart');
         useInMemory = true;
-        // Add test user to in-memory storage
-        const hashedPassword = await bcrypt.hash('12345678', 10);
-        inMemoryDB.users.push({
-            id: 1,
-            name: 'Test User',
-            email: 'mhmd12@gmail.com',
-            phone: '1234567890',
-            password: hashedPassword,
-            is_admin: 1,
-            created_at: new Date().toISOString()
-        });
-        console.log('✅ Test admin user created: mhmd12@gmail.com / 12345678');
+        await initializeInMemoryData();
         return;
     }
 
+    dbType = 'mysql';
     const dbConfig = {
         host: process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.DB_HOST || 'localhost',
         port: parseInt(process.env.MYSQLPORT || process.env.MYSQL_PORT || process.env.DB_PORT || '3306'),
@@ -60,7 +96,7 @@ async function initializeDatabase() {
         queueLimit: 0
     };
 
-    console.log('🔧 Connecting to database at:', dbConfig.host + ':' + dbConfig.port);
+    console.log('🔧 Connecting to MySQL database at:', dbConfig.host + ':' + dbConfig.port);
 
     try {
         if (process.env.MYSQL_URL || process.env.MYSQL_PUBLIC_URL) {
@@ -76,19 +112,23 @@ async function initializeDatabase() {
     } catch (err) {
         console.error('⚠️ MySQL connection failed, falling back to in-memory storage:', err.message);
         useInMemory = true;
-        // Add test user to in-memory storage
-        const hashedPassword = await bcrypt.hash('12345678', 10);
-        inMemoryDB.users.push({
-            id: 1,
-            name: 'Test User',
-            email: 'mhmd12@gmail.com',
-            phone: '1234567890',
-            password: hashedPassword,
-            is_admin: 1,
-            created_at: new Date().toISOString()
-        });
-        console.log('✅ Test admin user created: mhmd12@gmail.com / 12345678');
+        await initializeInMemoryData();
     }
+}
+
+async function initializeInMemoryData() {
+    // Add test user to in-memory storage
+    const hashedPassword = await bcrypt.hash('12345678', 10);
+    inMemoryDB.users.push({
+        id: 1,
+        name: 'Test User',
+        email: 'mhmd12@gmail.com',
+        phone: '1234567890',
+        password: hashedPassword,
+        is_admin: 1,
+        created_at: new Date().toISOString()
+    });
+    console.log('✅ Test admin user created: mhmd12@gmail.com / 12345678');
 }
 
 async function runAsync(query, params = []) {
@@ -96,8 +136,27 @@ async function runAsync(query, params = []) {
         return { id: Date.now(), changes: 1 };
     }
     try {
-        const [result] = await pool.execute(query, params);
-        return { id: result.insertId, changes: result.affectedRows };
+        if (dbType === 'postgresql') {
+            // Convert MySQL ? placeholders to PostgreSQL $1, $2, etc.
+            let paramIndex = 1;
+            let pgQuery = query.replace(/\?/g, () => `$${paramIndex++}`);
+            
+            // Add RETURNING id for INSERT statements
+            if (pgQuery.trim().toUpperCase().startsWith('INSERT') && !pgQuery.toUpperCase().includes('RETURNING')) {
+                pgQuery += ' RETURNING id';
+            }
+            
+            const result = await pool.query(pgQuery, params);
+            // PostgreSQL returns different structure
+            return { 
+                id: result.rows[0]?.id || null, 
+                changes: result.rowCount 
+            };
+        } else {
+            // MySQL
+            const [result] = await pool.execute(query, params);
+            return { id: result.insertId, changes: result.affectedRows };
+        }
     } catch (err) {
         throw err;
     }
@@ -108,8 +167,16 @@ async function getAsync(query, params = []) {
         return handleInMemoryQuery(query, params, 'get');
     }
     try {
-        const [rows] = await pool.execute(query, params);
-        return rows[0] || null;
+        if (dbType === 'postgresql') {
+            let paramIndex = 1;
+            const pgQuery = query.replace(/\?/g, () => `$${paramIndex++}`);
+            const result = await pool.query(pgQuery, params);
+            return result.rows[0] || null;
+        } else {
+            // MySQL
+            const [rows] = await pool.execute(query, params);
+            return rows[0] || null;
+        }
     } catch (err) {
         throw err;
     }
@@ -120,8 +187,16 @@ async function allAsync(query, params = []) {
         return handleInMemoryQuery(query, params, 'all');
     }
     try {
-        const [rows] = await pool.execute(query, params);
-        return rows;
+        if (dbType === 'postgresql') {
+            let paramIndex = 1;
+            const pgQuery = query.replace(/\?/g, () => `$${paramIndex++}`);
+            const result = await pool.query(pgQuery, params);
+            return result.rows;
+        } else {
+            // MySQL
+            const [rows] = await pool.execute(query, params);
+            return rows;
+        }
     } catch (err) {
         throw err;
     }

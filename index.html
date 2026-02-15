@@ -14,8 +14,8 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81' },
-                        accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' }
+                        primary: { 50:'#fff7ed',100:'#ffedd5',200:'#fed7aa',300:'#fdba74',400:'#fb923c',500:'#f97316',600:'#ea580c',700:'#c2410c',800:'#9a3412',900:'#7c2d12' },
+                        accent: { 50:'#fef2f2',100:'#fee2e2',200:'#fecaca',300:'#fca5a5',400:'#f87171',500:'#ef4444',600:'#dc2626',700:'#b91c1c',800:'#991b1b',900:'#7f1d1d' }
                     }
                 }
             }
@@ -30,7 +30,7 @@
         .float-anim-delay2 { animation: float 3s ease-in-out 2s infinite; }
         .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
         .hero-glow { animation: pulse-glow 3s ease-in-out infinite; }
-        .gradient-text { background: linear-gradient(135deg, #6366f1, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .gradient-text { background: linear-gradient(135deg, #f97316, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .bg-hero-gradient { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); }
         .glass { backdrop-filter: blur(12px); background: rgba(255,255,255,0.08); }
         .nav-glass { backdrop-filter: blur(20px); background: rgba(255,255,255,0.85); }
@@ -62,8 +62,8 @@
                     <a href="cart.html" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition text-primary-500 relative">
                         <i class="fas fa-shopping-cart text-lg"></i>
                     </a>
-                    <a href="login.html" id="login-btn" class="hidden sm:inline-flex text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 transition">Login</a>
-                    <a href="signup.html" id="signup-btn" class="hidden sm:inline-flex text-sm font-semibold bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition">Sign Up</a>
+                    <a href="login.html" id="login-btn" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 transition">Login</a>
+                    <a href="signup.html" id="signup-btn" class="text-sm font-semibold bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition">Sign Up</a>
                     <button id="logout-btn" onclick="logout()" class="hidden text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-500 transition">Logout</button>
                     <div id="user-profile" class="relative hidden">
                         <button type="button" onclick="showUserMenu(event)" class="user-menu-btn flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition text-sm font-medium">
