@@ -1,7 +1,19 @@
 // TechHub API Configuration
 // This file contains shared configuration for the frontend
 
+// 🔧 DEPLOYMENT CONFIGURATION:
+// For local development (running on your laptop):
+//   const API_URL = window.location.origin + '/api';
+// 
+// For production (after deploying backend to Render/Railway/Heroku):
+//   const API_URL = 'https://your-backend-url.onrender.com/api';
+//   Replace 'your-backend-url.onrender.com' with your actual deployed backend URL
+
+// Current configuration (using local for now):
 const API_URL = window.location.origin + '/api';
+
+// 💡 After deploying your backend, uncomment and update this line:
+// const API_URL = 'https://your-backend-url.onrender.com/api';
 
 // Helper function to get auth token
 function getAuthToken() {
